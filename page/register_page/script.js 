@@ -1,0 +1,29 @@
+function submitForm() {
+    const username = document.getElementById('username').value;
+    const firstname = document.getElementById('firstname').value;
+    const lastname = document.getElementById('lastname').value;
+    const email = document.getElementById('email').value;
+    const confirmEmail = document.getElementById('confirmEmail').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (email !== confirmEmail) {
+        alert("Emails do not match!");
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+    }
+
+    console.log("Form Submitted:", {
+        username,
+        firstname,
+        lastname,
+        email,
+        password
+    });
+
+    alert("Registration successful!");
+}

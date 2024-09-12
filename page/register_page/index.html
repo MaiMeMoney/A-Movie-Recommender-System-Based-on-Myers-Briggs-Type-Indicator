@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMingle Register</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Registration Form Section -->
+        <div class="register-container">
+            <h1>MOVIEMINGLE REGISTER</h1>
+            <form id="registerForm">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="text" id="firstname" placeholder="Firstname" required>
+                <input type="text" id="lastname" placeholder="Lastname" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="email" id="confirmEmail" placeholder="Confirm Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                <button type="button" onclick="submitForm()">REGISTER</button>
+            </form>
+            <div class="links">
+                <a href="#">Already have an account? Click Here</a><br />
+                <a href="#">How to take MBTI test? Click Here</a>
+            </div>
+        </div>
+        <!-- Image Slider Section -->
+        <div class="slider-container">
+            <div class="slider">
+                <img src="slide1.jpg" class="slide" alt="Slide 1">
+                <img src="slide2.jpg" class="slide" alt="Slide 2">
+                <img src="slide3.jpg" class="slide" alt="Slide 3">
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
