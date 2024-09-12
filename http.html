@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A Movie Recommender System based on Myers-Briggs Type Indicator (MBTI)">
+    <title>MBTI Movie Recommender System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+        }
+
+        .mbti-description {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .mbti-type {
+            background-color: #f0f0f0;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 8px;
+            flex: 1 1 30%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .movie-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .movie-list li {
+            background: #e0e0e0;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        h1, h2 {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Movie Recommender System</h1>
+        <p>Based on Myers-Briggs Type Indicator (MBTI)</p>
+    </header>
+
+    <main>
+        <section id="intro">
+            <h2>Introduction</h2>
+            <p>This system recommends movies based on your MBTI personality type. Select your type below to see the recommendations.</p>
+        </section>
+
+        <section id="mbti-types">
+            <h2>Select Your MBTI Type</h2>
+            <div class="mbti-description">
+                <div class="mbti-type">INTJ</div>
+                <div class="mbti-type">ENTP</div>
+                <div class="mbti-type">INFJ</div>
+                <div class="mbti-type">ESFP</div>
+                <!-- Add more MBTI types as needed -->
+            </div>
+        </section>
+
+        <section id="recommendations">
+            <h2>Movie Recommendations</h2>
+            <ul class="movie-list">
+                <li>Movie 1</li>
+                <li>Movie 2</li>
+                <li>Movie 3</li>
+                <!-- Add more recommended movies dynamically based on MBTI type -->
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Movie Recommender System. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>
