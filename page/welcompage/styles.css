@@ -1,0 +1,98 @@
+/* Full-screen setup */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-image: url('MOVIE_BG.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* Flexbox to center content */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/* Title styling */
+h1 {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #eab631;
+    font-size: 36px;
+    font-family: Arial, sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow for effect */
+}
+
+/* Center message box */
+.message-box {
+    text-align: center;
+    color: white;
+}
+
+.message-box .welcome, .message-box .moviemingle {
+    display: inline; 
+    font-weight: bold;
+}
+
+.message-box .welcome {
+    font-size: 48px;
+    font-weight: bold;
+    color: green;
+}
+
+.message-box .moviemingle {
+    font-size: 48px;
+    font-weight: bold;
+    color: purple;
+}
+
+.message-box .description {
+    font-size: 16px;
+    color: white;
+    margin-top: 10px;
+}
+
+
+/* Start button styling */
+.start-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 24px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.start-button:hover {
+    background-color: #218838;
+}
+
+/* Footer link styling */
+.footer-text {
+    color: white;
+    position: absolute;
+    bottom: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.footer-text a {
+    color: white;
+    text-decoration: none;
+    text-decoration: underline;
+    font-size: 16px;
+}
+
+.footer-text a:hover {
+    text-decoration: none;
+}

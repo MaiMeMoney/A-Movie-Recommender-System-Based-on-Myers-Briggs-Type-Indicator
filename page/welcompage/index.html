@@ -3,62 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVIE MIGGLE</title>
-    <style>
-        /* ปรับขนาดให้ตามหน้าต่างเบราว์เซอร์ */
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        body {
-            /* ตั้งค่าให้ภาพพื้นหลังปรับขนาดตามหน้าจอ */
-            background-image: url('/Users/natthapolcheaaem/Documents/GitHub/A-Movie-Recommender-System-Based-on-Myers-Briggs-Type-Indicator/page/welcompage/img/image.png');
-            background-size: cover; /* ทำให้ภาพพื้นหลังครอบคลุมเต็มหน้าจอ */
-            background-position: center; /* จัดตำแหน่งภาพให้อยู่ตรงกลาง */
-            background-repeat: no-repeat; /* ไม่ให้ภาพซ้ำ */
-            display: flex; /* ใช้ Flexbox เพื่อจัดการตำแหน่ง */
-            justify-content: center; /* จัดกลางตามแนวนอน */
-            align-items: center; /* จัดกลางตามแนวตั้ง */
-            height: 100vh; /* ใช้ความสูงทั้งหมดของหน้าต่าง */
-            text-align: center; /* จัดข้อความให้อยู่กลาง */
-        }
-
-        /* สไตล์ของกล่องข้อความกลาง */
-        .message-box {
-            background-color: rgba(0, 0, 0, 0.7); /* พื้นหลังโปร่งใส */
-            color: white;
-            padding: 200px;
-            border-radius: 8px; /* มุมโค้งมน */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* เงาของกล่อง */
-            max-width: 90%; /* ความกว้างสูงสุดของกล่อง */
-            width: 500px; /* ความกว้างของกล่อง */
-            font-family: Arial, sans-serif;
-        }
-
-        /* จัดการกับข้อความที่มุมซ้ายบน */
-        h1 {
-            position: absolute;
-            top: 20px;  /* ตั้งตำแหน่งให้อยู่ห่างจากด้านบน 20px */
-            left: 20px; /* ตั้งตำแหน่งให้อยู่ห่างจากด้านซ้าย 20px */
-            color: rgb(234, 182, 49);
-            font-size: 36px; /* ขนาดตัวอักษรที่ใหญ่กว่า */
-            font-family: Arial, sans-serif;
-            text-shadow: 2px 2px 4px rgba(223, 123, 22, 0.5); /* เงาข้อความ */
-        }
-    </style>
+    <title>MOVIE MINGLE</title>
+    <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
-    <!-- กล่องข้อความกลางหน้า -->
+    <!-- Left corner title -->
+    <h1>MOVIEMINGLE</h1>
+
+    <!-- Center message box -->
     <div class="message-box">
-        <p>WELCOME TO MOVIEMIGGLE</p>
-        <p>FIND OUT YOUR NEXT FAVOURITE MOVIES USING YOUR MBTI HERE</p>
+        <p>
+            <span class="welcome">WELCOME TO </span><span class="moviemingle">MOVIEMINGLE</span>
+        </p>
+        <p class="description">FIND OUT YOUR NEXT FAVOURITE MOVIES USING YOUR MBTI HERE</p>
+        <!-- Start button -->
+        <button class="start-button">START</button>
     </div>
     
-    
-    <!-- ข้อความที่มุมซ้ายบน -->
-    <h1>MOVIEMIGGLE</h1>
+
+    <!-- Footer link -->
+    <div class="footer-text">
+        <p>How to take MBTI test? <a href="https://www.16personalities.com/th" target="_blank">Click here</a></p>
+    </div>
 </body>
 </html>
