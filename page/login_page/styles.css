@@ -1,0 +1,153 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    /* เพิ่มภาพพื้นหลังให้กับทั้งหน้า */
+    background-image: url('/page/login_page/pic_back/pic_backgroud.jpg'); /* ใส่ภาพพื้นหลังของคุณ */
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    width: 1200px; /* กำหนดขนาดคงที่ให้ container */
+    max-width: 100%;
+    height: 700px; /* กำหนดความสูงคงที่ */
+    background-color: rgba(255, 255, 255, 0.8); /* พื้นหลังโปร่งใสเพื่อให้เห็นภาพพื้นหลัง */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-box {
+    padding: 40px;
+    width: 40%;
+    background-color: rgba(51, 51, 51, 0.9); /* ใส่ความโปร่งใส */
+    color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-box h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    position: absolute;
+    top: 30px;
+    left: 185px;
+    color: #FFA500;
+}
+
+.login-box h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-size: 60px;
+    text-align: center;
+    position: absolute;
+    top: 130px;
+    left: 320px;
+    color: #FFF;
+}
+
+.login-box input {
+    margin-bottom: 15px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+}
+
+.login-box button {
+    padding: 10px;
+    width: 50%;
+    text-align: center;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    display: block; /* กำหนดให้ปุ่มเป็น block element */
+    margin: 0 auto; /* จัดปุ่มให้อยู่กึ่งกลางโดยให้มีระยะห่างจากซ้ายและขวาเท่ากัน */
+}
+
+.login-box button:hover {
+    background-color: #218838;
+}
+
+.login-box p {
+    text-align: center;
+    margin-top: 20px;
+    color: rgb(255, 255, 255);
+    
+    
+}
+
+.login-box a {
+    color: #ffffff; /* สีของลิงก์ */
+    text-decoration: none; /* เอาเส้นใต้ของลิงก์ออก เพื่อใช้เส้นใต้จากแท็ก <p> */
+    margin-left: 5px; /* ระยะห่างระหว่างข้อความกับลิงก์ */
+    text-decoration: underline;
+    
+
+}
+
+.login-box a:hover {
+    text-decoration: underline;
+}
+
+.slider {
+    width: 60%; /* ปรับความกว้างของกล่องสไลด์ */
+    max-width: 720px; /* กำหนดความกว้างสูงสุด */
+    height: 700px; /* ปรับความสูงของกล่องสไลด์ */
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto; /* จัดกึ่งกลางกล่องสไลด์ */
+}
+
+.slides {
+    display: flex;
+    width: 410%; /* กำหนดให้กว้างพอสำหรับ 4 ภาพ */
+    transition: transform 1s ease-in-out; /* เพิ่มความนุ่มนวลในการสไลด์ */
+}
+
+.slides img {
+    width: 100%; /* กำหนดให้ภาพแต่ละภาพกินพื้นที่ทั้งหมดของ slider */
+    height: 100%;
+    object-fit: cover;
+}
+
+@keyframes slide {
+    0% { transform: translateX(0); }      /* แสดงภาพแรก */
+    25% { transform: translateX(0); }     /* ยังคงอยู่ที่ภาพแรก */
+    50% { transform: translateX(-100%); } /* เลื่อนไปที่ภาพที่สอง */
+    75% { transform: translateX(-200%); } /* เลื่อนไปที่ภาพที่สาม */
+    100% { transform: translateX(-100%); }/* เลื่อนไปที่ภาพที่สี่ */
+}
+
+.slider .slides {
+    animation: slide 20s forwards; /* แอนิเมชันจะหยุดเมื่อถึงจุดสุดท้าย (ภาพที่ 4) */
+}
+
+/* Media Query สำหรับหน้าจอขนาดเล็ก */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; 
+        height: 100%; 
+    }
+
+    .login-box, .slider {
+        width: 100%; 
+    }
+
+    .slides {
+        height: 400px; 
+    }
+}
