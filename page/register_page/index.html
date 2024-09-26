@@ -1,68 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MovieMingle Register</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <div class="container">
-        <!-- Registration Form Section -->
-        <div class="register-container">
-            <h1>MOVIEMINGLE REGISTER</h1>
-            <form id="registerForm">
-                <input type="text" id="username" placeholder="Username" required>
-                <input type="text" id="firstname" placeholder="Firstname" required>
-                <input type="text" id="lastname" placeholder="Lastname" required>
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="email" id="confirmEmail" placeholder="Confirm Email" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-                <button type="button" onclick="submitForm()">REGISTER</button>
-            </form>
-            <div class="links">
-                <a href="#">Already have an account? Click Here</a><br />
-                <a href="https://www.16personalities.com/th" target="_blank">How to take MBTI test? Click Here </a>
-            </div>
+      <!-- Registration Form Section -->
+      <div class="register-container">
+        <h1>MOVIEMINGLE REGISTER</h1>
+        <form id="registerForm">
+          <input type="text" id="username" placeholder="Username" required />
+          <input type="text" id="firstname" placeholder="Firstname" required />
+          <input type="text" id="lastname" placeholder="Lastname" required />
+          <input type="email" id="email" placeholder="Email" required />
+          <input
+            type="email"
+            id="confirmEmail"
+            placeholder="Confirm Email"
+            required
+          />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm Password"
+            required
+          />
+          <button type="button" onclick="submitForm()">REGISTER</button>
+        </form>
+        <div class="links">
+          <a href="#">Already have an account? Click Here</a><br />
+          <a href="https://www.16personalities.com/th" target="_blank"
+            >Want to learn more about MBTI? Click Here
+          </a>
         </div>
-        
-        <!-- Image Slider Section -->
-        <div class="slider-container">
-            <div class="slider">
-                <div class="slide active">
-                    <img src="slide1.jpg" alt="Movie Poster 1">
-                    <div class="caption">
-                        <h2>Movie Title 1</h2>
-                        <p>Release Date: January 1, 2025</p>
-                        <a href="#" class="button">More Details</a>
-                    </div>
-                </div>
-                <div class="slide">
-                    <img src="slide2.jpg" alt="Movie Poster 2">
-                    <div class="caption">
-                        <h2>Movie Title 2</h2>
-                        <p>Release Date: February 15, 2025</p>
-                        <a href="#" class="button">More Details</a>
-                    </div>
-                </div>
-                <div class="slide">
-                    <img src="slide3.jpg" alt="Movie Poster 3">
-                    <div class="caption">
-                        <h2>Movie Title 3</h2>
-                        <p>Release Date: March 20, 2025</p>
-                        <a href="#" class="button">More Details</a>
-                    </div>
-                </div>
+      </div>
+
+      <!-- Image Slider Section -->
+      <div class="slider-container">
+        <div class="slider">
+          <div class="slide active">
+            <img src="slide1.jpg" alt="Movie Poster 1" />
+            <div class="caption">
+              <h2>Movie Title 1</h2>
+              <p>Release Date: January 1, 2025</p>
+              <a href="#" class="button">More Details</a>
             </div>
-            <!-- Indicators -->
-            <div class="indicators">
-                <span class="dot active" onclick="currentSlide(0)"></span>
-                <span class="dot" onclick="currentSlide(1)"></span>
-                <span class="dot" onclick="currentSlide(2)"></span>
+          </div>
+          <div class="slide">
+            <img src="slide2.jpg" alt="Movie Poster 2" />
+            <div class="caption">
+              <h2>Movie Title 2</h2>
+              <p>Release Date: February 15, 2025</p>
+              <a href="#" class="button">More Details</a>
             </div>
+          </div>
+          <div class="slide">
+            <img src="slide3.jpg" alt="Movie Poster 3" />
+            <div class="caption">
+              <h2>Movie Title 3</h2>
+              <p>Release Date: March 20, 2025</p>
+              <a href="#" class="button">More Details</a>
+            </div>
+          </div>
         </div>
+        <!-- Indicators -->
+        <div class="indicators">
+          <span class="dot active" onclick="currentSlide(0)"></span>
+          <span class="dot" onclick="currentSlide(1)"></span>
+          <span class="dot" onclick="currentSlide(2)"></span>
+        </div>
+      </div>
     </div>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

@@ -21,6 +21,7 @@ body {
 }
 
 .register-container {
+    text-align: center;
     width: 35%;
     max-width: 400px;
     padding: 30px;
@@ -43,20 +44,21 @@ h1 {
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
+    width: 85%;               
+    padding: 15px;
+    margin: 15px auto;         
+    display: block;  
+    border-radius: 20px;
     border: 1px solid #ddd;
 }
 
 button {
-    width: 100%;
-    padding: 10px;
+    width: 60%;
+    padding: 15px;
     background-color: #28a745;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
     margin-top: 10px;
 }
