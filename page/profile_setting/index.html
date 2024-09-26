@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Edit - MovieMingle</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <h1>MOVIEMINGLE</h1>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="nav-buttons">
+                <button class="my-list">MY LIST</button>
+                <button class="profile-icon"><i class="fas fa-user-circle"></i></button>
+            </div>
+        </header>
+
+        <div class="profile-section">
+            <div class="profile-picture">
+                <div class="image-placeholder">
+                    <p>รูปภาพ<br> 228 x 228</p>
+                </div>
+                <h2>NAME</h2>
+                <button class="edit-btn"><i class="fas fa-edit"></i> Edit profile</button>
+                <button class="mbti-btn"><i class="fas fa-user-tag"></i> Change MBTI</button>
+                <button class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+
+            <div class="profile-details">
+                <h2>Your Profile</h2>
+                <form id="profileForm">
+                    <div class="form-row">
+                        <div class="column">
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username" required>
+
+                            <label for="firstName">First Name:</label>
+                            <input type="text" id="firstName" name="firstName" required>
+
+                            <label for="password">Password:</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <div class="column">
+                            <label for="email">Email:</label>
+                            <input type="email" id="email" name="email" required>
+
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" id="lastName" name="lastName" required>
+
+                            <label for="confirmPassword">Confirm Password:</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="update-btn"><i class="fas fa-check"></i> update</button>
+                        <button type="button" class="cancel-btn" onclick="cancelUpdate()"><i class="fas fa-times"></i> cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
