@@ -3,30 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>MOVIEMINGLE - Login</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <div class="login-box">
-            <h1>MOVIEMINGLE</h1>
-            <h2>Login</h2>
+        <!-- Left Login Section -->
+        <div class="login-container">
+            <div class="logo">MOVIEMINGLE</div>
+            <h2>LOGIN</h2>
             <form>
-                <input type="user" placeholder="Username" required>
-                <input type="password" placeholder="Password" required>
-                <button type="submit">LOGIN</button>
+                <input type="text" placeholder="Username">
+                <input type="password" placeholder="Password">
+                <button class="login-button">LOGIN</button>
             </form>
-            <!-- จัดให้ลิงก์ต่อท้ายข้อความ -->
-            <p>Don't have an account? <a href="/page/register_page/index.html">Click here</a></p>
-            <p>How to take MBTI test? <a href="https://www.16personalities.com/th" target="_blank">Click here</a></p>
-        </div>
-        <div class="slider">
-            <div class="slides">
-                <img src="/page/login_page/pic_slide/home_alone_slide_pic1.jpg" alt="Image 1">
-                <img src="/page/login_page/pic_slide/Deadpool 3_slide_2.jpg" alt="Image 2">
-                <img src="/page/login_page/pic_slide/Carteles _Interstellar_slide_pic3.jpg" alt="Image 3">
-                <img src="/page/login_page/pic_slide/Pirates of the Carribbean 4_slide_pic4.jpg" alt="Image 4">
+            <div class="links">
+                <p>Don't have an account? <a href="#">Click here</a></p>
+                <p>How to take MBTI test? <a href="#">Click here</a></p>
             </div>
+        </div>
+    
+        <!-- Right Image Section -->
+        <div class="image-container">
+            <img src="https://imageio.forbes.com/specials-images/imageserve/61116cea2313e8bae55a536a/-Dune-/0x0.jpg?format=jpg&width=960" alt="Desert image">
         </div>
     </div>
 </body>

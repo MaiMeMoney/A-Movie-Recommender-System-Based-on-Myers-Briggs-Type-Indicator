@@ -1,179 +1,194 @@
-/* ปรับการตั้งค่าพื้นฐาน */
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000;
-    overflow: hidden;
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+body, html {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  background-color: #000;
+}
+
+/* Main container - Flex layout for two columns */
 .container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    overflow: hidden;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
 }
 
+/* Top-Left MOVIEMINGLE Logo */
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #FFA500;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Left Section - Register Form */
 .register-container {
-    text-align: center;
-    width: 35%;
-    max-width: 400px;
-    padding: 30px;
-    background-color: #333;
-    color: white;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #333;
+  color: #fff;
+  padding: 50px;
+  width: 35%; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
+  height: 100vh;
 }
 
+/* REGISTER Heading */
 h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #FFA500;
+  margin-bottom: px;
+  font-size: 28px;
+  color: #ffffff;
+  text-align: center;
 }
 
+/* Input Fields */
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-    width: 85%;               
-    padding: 15px;
-    margin: 15px auto;         
-    display: block;  
-    border-radius: 20px;
-    border: 1px solid #ddd;
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-button {
-    width: 60%;
-    padding: 15px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-top: 10px;
+/* Register Button */
+.register-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background-color: #28a745;
+  color: white;
+  font-size: 18px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  text-align: center;
 }
 
-button:hover {
-    background-color: #218838;
+.register-button:hover {
+  background-color: #218838;
 }
 
+/* Links Styling */
 .links {
-    text-align: center;
-    margin-top: 20px;
+  text-align: center;
+  margin-top: 20px;
 }
 
 .links a {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
 }
 
 .links a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
+/* Right Section - Image Slider */
 .slider-container {
-    width: 65%;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
+  flex-grow: 1; 
+  position: relative;
+  overflow: hidden;
 }
 
 .slider {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
 }
 
 .slide {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    transition: opacity 1.5s ease-in-out;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .slide.active {
-    opacity: 1;
-    z-index: 10;
+  opacity: 1;
+  z-index: 10;
 }
 
-/* ทำให้ภาพขยายเต็มจอและไม่มีขอบดำ */
 .slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* ปรับภาพให้ขยายเต็มคอนเทนเนอร์โดยไม่สนอัตราส่วน */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .caption {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    color: white;
-    text-align: center;
-    width: 90%;
-    border-radius: 5px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  color: white;
+  text-align: center;
+  width: 90%;
+  border-radius: 5px;
 }
 
 .caption h2 {
-    margin: 0;
-    font-size: 24px;
+  margin: 0;
+  font-size: 24px;
 }
 
 .caption p {
-    margin: 5px 0;
-    font-size: 16px;
+  margin: 5px 0;
+  font-size: 16px;
 }
 
 .button {
-    display: inline-block;
-    padding: 5px 10px;
-    background-color: #FFA500;
-    color: #333;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 10px;
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #FFA500;
+  color: #333;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 10px;
 }
 
 .indicators {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
 }
 
 .dot {
-    height: 12px;
-    width: 12px;
-    margin: 0 5px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  height: 12px;
+  width: 12px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .dot.active {
-    background-color: #717171;
+  background-color: #717171;
 }
