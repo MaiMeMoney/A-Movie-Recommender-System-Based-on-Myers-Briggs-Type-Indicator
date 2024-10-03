@@ -56,3 +56,17 @@ h1 {
 .back-button:hover {
     background-color: #00cc00;
 }
+
+.mbti-type {
+    background-color: #555;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    display: block;
+}
+
+.mbti-type:hover {
+    background-color: #666;
+}

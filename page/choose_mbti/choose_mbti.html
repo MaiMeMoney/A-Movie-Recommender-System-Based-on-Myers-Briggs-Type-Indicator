@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your MBTI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>CHOOSE YOUR MBTI</h1>
+        <div class="mbti-grid">
+            <a href="#" class="mbti-type" data-type="INTJ">
+                <img src="Architect.png" alt="Architect">
+                <p>Architect<br>INTJ-A / INTJ-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="INTP">
+                <img src="logician.png" alt="Logician">
+                <p>Logician<br>INTP-A / INTP-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ENTJ">
+                <img src="commander.png" alt="Commander">
+                <p>Commander<br>ENTJ-A / ENTJ-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ENTP">
+                <img src="debater.png" alt="Debater">
+                <p>Debater<br>ENTP-A / ENTP-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="INFJ">
+                <img src="advocate.png" alt="Advocate">
+                <p>Advocate<br>INFJ-A / INFJ-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="INFP">
+                <img src="mediator.png" alt="Mediator">
+                <p>Mediator<br>INFP-A / INFP-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ENFJ">
+                <img src="protagonist.png" alt="Protagonist">
+                <p>Protagonist<br>ENFJ-A / ENFJ-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ENFP">
+                <img src="campaigner.png" alt="Campaigner">
+                <p>Campaigner<br>ENFP-A / ENFP-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ISTJ">
+                <img src="logistician.png" alt="Logistician">
+                <p>Logistician<br>ISTJ-A / ISTJ-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ISFJ">
+                <img src="defender.png" alt="Defender">
+                <p>Defender<br>ISFJ-A / ISFJ-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ESTJ">
+                <img src="executive.png" alt="Executive">
+                <p>Executive<br>ESTJ-A / ESTJ-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ESFJ">
+                <img src="consul.png" alt="Consul">
+                <p>Consul<br>ESFJ-A / ESFJ-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ISTP">
+                <img src="virtuoso.png" alt="Virtuoso">
+                <p>Virtuoso<br>ISTP-A / ISTP-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ISFP">
+                <img src="adventurer.png" alt="Adventurer">
+                <p>Adventurer<br>ISFP-A / ISFP-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ESTP">
+                <img src="entrepreneur.png" alt="Entrepreneur">
+                <p>Entrepreneur<br>ESTP-A / ESTP-T</p>
+            </a>
+            <a href="#" class="mbti-type" data-type="ESFP">
+                <img src="entertainer.png" alt="Entertainer">
+                <p>Entertainer<br>ESFP-A / ESFP-T</p>
+            </a>
+        </div>
+    </div>
+    <button class="back-button" onclick="goBack()">←</button>
+
+    <script src="mbti-data.js"></script>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        document.querySelectorAll('.mbti-type').forEach(item => {
+            item.addEventListener('click', event => {
+                event.preventDefault();
+                const mbtiType = item.getAttribute('data-type');
+                localStorage.setItem('selectedMBTI', mbtiType);
+                window.location.href = 'about_mbti.html';
+            });
+        });
+    </script>
+</body>
+</html>

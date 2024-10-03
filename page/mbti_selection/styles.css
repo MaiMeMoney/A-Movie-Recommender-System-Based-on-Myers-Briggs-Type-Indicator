@@ -1,0 +1,86 @@
+/* Full-screen setup */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #333;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logout-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.logout-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background-color: #218838;
+}
+
+.message-box {
+    text-align: center;
+}
+
+.mbti-header {
+    font-size: 45px;
+    color: #28a745;
+}
+
+.mbti-subtext {
+    font-size: 16px;
+    color: #ccc;
+    margin-top: 10px;
+}
+
+.mbti-list-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.mbti-list-button:hover {
+    background-color: #218838;
+}
+
+.footer-link {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-decoration: none;
+    text-align: center;
+}
+
+.footer-link a {
+    color: white;
+    text-decoration: none;
+    text-decoration: underline;
+    font-size: 16px;
+}
+
+.footer-link a:hover {
+    text-decoration: underline;
+}
