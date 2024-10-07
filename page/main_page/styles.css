@@ -1,0 +1,114 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2d6a4f;
+    padding: 10px 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f4a261;
+}
+
+.search-bar {
+    flex-grow: 1;
+    margin: 0 20px;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+}
+
+.my-list {
+    display: flex;
+    align-items: center;
+}
+
+.my-list button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    background-color: #e63946;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.account-icon {
+    font-size: 18px;
+}
+
+main {
+    padding: 20px;
+}
+
+.movie-hit {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.movie-hit-img {
+    width: 100%;
+    max-width: 1459px;
+    height: 496px;
+    background-color: #333;
+}
+
+.mbti-recommend,
+.movie-suggestions,
+.sci-fi {
+    margin-bottom: 30px;
+}
+
+.mbti-recommend h2,
+.movie-suggestions h2,
+.sci-fi h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #f4a261;
+}
+
+.movie-list {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.movie-item {
+    width: 282px;
+    height: 435px;
+    background-color: #333;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.recommend-me {
+    background-color: #e63946;
+    border: none;
+    padding: 10px 15px;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 20px;
+    display: block;
+}
+
+h2 a {
+    font-size: 14px;
+    color: #e9c46a;
+    text-decoration: none;
+}
