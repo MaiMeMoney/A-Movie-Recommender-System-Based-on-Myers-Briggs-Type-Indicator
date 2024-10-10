@@ -90,47 +90,41 @@ main {
     color: #f4a261;
 }
 
-/* Movie item with rounded corners */
 .movie-item {
     width: 282px;
     height: 435px;
     background-color: #fff;
-    border-radius: 10px; /* Rounded corners for thumbnails */
-    overflow: hidden; /* To prevent content from overflowing rounded corners */
+    border-radius: 10px; 
+    overflow: hidden;
     flex-shrink: 0;
 }
 
-/* Layout for movie list */
 .movie-list {
     display: flex;
-    gap: 10px; /* Space between movie items */
+    gap: 10px; 
     overflow-x: auto;
-    margin-top: 20px; /* Adjust as needed */
+    margin-top: 20px;
 }
 
-
-/* Container for heading and button */
 .recommend-header {
     display: flex;
     align-items: center;
-    gap: 10px; /* Small gap between header and button */
+    gap: 10px; 
 }
 
-/* Header style */
 .recommend-header h2 {
     font-size: 20px;
     color: #f4a261;
     margin: 0;
 }
 
-/* Button style */
 .recommend-me {
     background-color: #e63946;
     border: none;
     padding: 10px 15px;
     color: white;
     cursor: pointer;
-    border-radius: 20px; /* Rounded button */
+    border-radius: 20px;
     font-size: 14px;
 }
 
