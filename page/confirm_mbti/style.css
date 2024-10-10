@@ -84,12 +84,11 @@ header .quote {
 .confirm-btn {
     padding: 15px 30px;
     font-size: 18px;
-    font-weight: bold;
     cursor: pointer;
     border: none;
     border-radius: 50px;
     background-color: #2DBA4E;
-    color: white;
+    color: black;
     width: 25%;
 }
 
