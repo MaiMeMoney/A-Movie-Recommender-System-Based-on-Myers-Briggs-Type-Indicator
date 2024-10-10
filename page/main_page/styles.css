@@ -23,7 +23,6 @@ body {
     z-index: 1000;
 }
 
-
 .logo {
     font-size: 24px;
     font-weight: bold;
@@ -55,13 +54,12 @@ body {
 }
 
 .account-icon {
-    font-size: 18px;
+    font-size: 15px;
 }
 
 main {
     padding: 80px 20px 20px;
 }
-
 
 .movie-hit {
     display: flex;
@@ -78,13 +76,45 @@ main {
 
 .mbti-recommend,
 .movie-suggestions,
-.sci-fi {
+.sci-fi,
+.action,
+.fantasy,
+.drama,
+.horror,
+.thriller,
+.comedy,
+.romance,
+.mystery,
+.history,
+.adventure,
+.animation,
+.biography,
+.family,
+.crime,
+.sport,
+.musical {
     margin-bottom: 30px;
 }
 
 .mbti-recommend h2,
 .movie-suggestions h2,
-.sci-fi h2 {
+.sci-fi h2,
+.action h2,
+.fantasy h2,
+.drama h2,
+.horror h2,
+.thriller h2,
+.comedy h2,
+.romance h2,
+.mystery h2,
+.history h2,
+.adventure h2,
+.animation h2,
+.biography h2,
+.family h2,
+.crime h2,
+.sport h2,
+.musical h2 {
     font-size: 20px;
     margin-bottom: 10px;
     color: #f4a261;

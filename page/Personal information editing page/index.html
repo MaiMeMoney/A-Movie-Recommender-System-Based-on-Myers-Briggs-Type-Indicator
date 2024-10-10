@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a></div>
+            <input type="text" class="search-bar" placeholder="Search for movies...">
+            <div class="my-list">
+                <button>MY LIST</button>
+                <button class="account-icon">👤</button>
+            </div>
+            <div class="back-button">
+                <button class="back-btn" onclick="goBack()">&#x21A9;</button>
+            </div>
+        </div>
+    </header>
+    
+
+    <main>
+        <section class="profile-section">
+            <div class="sidebar">
+                <div class="profile-pic">
+                    <div class="img-placeholder">รูปภาพ<br>228 x 228</div>
+                </div>
+                <div class="profile-name">NAME</div>
+                <button class="edit-profile">Edit profile</button>
+                <a href="/page/mbti_selec_page/mbti_selection.html">
+                    <button class="change-mbti">Change MBTI</button>
+                </a>
+                <a href="/page/login_page/index.html">
+                    <button class="logout">Logout</button>
+                </a>
+            </div>
+            
+            <div class="profile-form">
+                <h1>Your Profile</h1>
+                <form>
+                    <div class="form-group">
+                        <input type="text" placeholder="Username">
+                        <input type="email" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="First Name">
+                        <input type="text" placeholder="Last Name">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" placeholder="Password">
+                        <input type="password" placeholder="Confirm Password">
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit" class="update">update</button>
+                        <button type="button" class="cancel">cancel</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+    <script>
+function goBack() {
+    window.history.back();
+}
+</script>
+
+</body>
+</html>

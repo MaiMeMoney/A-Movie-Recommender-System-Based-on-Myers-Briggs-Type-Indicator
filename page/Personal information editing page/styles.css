@@ -1,0 +1,217 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #3d3d3d;
+    color: #ffffff;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2d6a4f;
+    padding: 10px 20px;
+    z-index: 1000;
+}
+
+.search-bar {
+    flex-grow: 1;
+    margin: 0 20px;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+}
+
+.my-list {
+    display: flex;
+    align-items: center;
+}
+
+.my-list button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    background-color: #e63946;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+header .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4caf50;
+    padding: 10px;
+}
+
+header .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f4a261;
+}
+
+header .search-bar {
+    display: flex;
+    align-items: center;
+}
+
+header .search-bar input {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    margin-right: 5px;
+}
+
+header .menu {
+    display: flex;
+    align-items: center;
+}
+
+header .menu button {
+    margin-left: 10px;
+    padding: 8px 15px;
+    background-color: #e63946;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    width: 100%;
+    max-width: 1500px;
+    margin: 120px auto 0 auto; /* เพิ่มระยะห่างระหว่าง Navbar กับ profile section */
+    background-color: #2f2f2f;
+    border-radius: 10px;
+    align-items: flex-start;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #2f2f2f;
+    padding: 20px;
+    border-radius: 10px;
+    width: 40%;
+}
+
+.sidebar .profile-pic {
+    background-color: white;
+    width: 228px;
+    height: 228px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #3d3d3d;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.sidebar .profile-name {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.sidebar button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 18px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.sidebar button.logout {
+    background-color: #e63946;
+}
+
+.profile-form {
+    flex-grow: 1;
+    background-color: #2f2f2f;
+    padding: 30px;
+    border-radius: 10px;
+    width: 60%;
+}
+
+.profile-form h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+.profile-form .form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    gap: 10px;
+}
+
+.profile-form .form-group input {
+    width: 48%;
+    padding: 10px;
+    border-radius: 18px;
+    border: none;
+    font-size: 16px;
+}
+
+.profile-form .form-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.profile-form .form-buttons button {
+    padding: 10px 20px;
+    border-radius: 18px;
+    border: none;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.profile-form .form-buttons .update {
+    background-color: #4caf50;
+    color: white;
+}
+
+.profile-form .form-buttons .cancel {
+    background-color: black;
+    color: white;
+}
+
+.back-button {
+    position: absolute;
+    right: 20px;
+    top: 70px; /* Adjust the top value to be right below the navbar */
+}
+
+.back-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
