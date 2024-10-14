@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieMingle Watchlist</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a>
+            </div>
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search for movies...">
+            </div>
+            <div class="my-list-section">
+                <button class="my-list-btn">MY LIST</button>
+                <button class="profile-btn">👤</button>
+            </div>
+        </div>
+    </header>
+    
+
+    <div class="watchlist">
+        <div class="sidebar">
+            <h3>WATCHLIST</h3>
+            <div class="list-name">list1</div>
+            <button class="create-list">Create List</button>
+        </div>
+
+        <div class="main-content">
+            <div class="movie-grid">
+                <div class="movie-item">
+                    <div class="movie-image">รูปภาพ<br>282 x 435</div>
+                    <div class="movie-name">MOVIE NAME</div>
+                </div>
+                <div class="movie-item">
+                    <div class="movie-image">รูปภาพ<br>282 x 435</div>
+                    <div class="movie-name">MOVIE NAME</div>
+                </div>
+                <div class="movie-item">
+                    <div class="movie-image">รูปภาพ<br>282 x 435</div>
+                    <div class="movie-name">MOVIE NAME</div>
+                </div>
+                <div class="movie-item">
+                    <div class="movie-image">รูปภาพ<br>282 x 435</div>
+                    <div class="movie-name">MOVIE NAME</div>
+                </div>
+                <div class="movie-item">
+                    <div class="movie-image">รูปภาพ<br>282 x 435</div>
+                    <div class="movie-name">MOVIE NAME</div>
+                </div>
+                <div class="movie-item add-new">
+                    <div class="movie-image">+</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="update">Update</button>
+                <button class="delete">Delete</button>
+                <button class="exit" onclick="goBack()">Exit</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MBTI Personality Detail</title>
     <link rel="stylesheet" href="style.css">
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -28,7 +33,9 @@
 
 
         <div class="buttons">
-            <button class="confirm-btn">CONFIRM YOUR MBTI</button>
+            <a href="/page/main_page/mainpage.html">
+                <button class="confirm-btn">CONFIRM YOUR MBTI</button>
+            </a>
         </div>
         <div class="back-button">
             <button class="back-btn" onclick="goBack()">&#x21A9;</button>

@@ -18,7 +18,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #2d6a4f;
+    background-color: #4caf50;
     padding: 10px 20px;
     z-index: 1000;
 }
