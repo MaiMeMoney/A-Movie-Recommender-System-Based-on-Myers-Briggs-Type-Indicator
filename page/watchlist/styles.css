@@ -1,4 +1,4 @@
-/* General reset and styling */
+/* รีเซ็ตค่าพื้นฐาน */
 * {
     margin: 0;
     padding: 0;
@@ -11,41 +11,44 @@ body {
     color: white;
 }
 
-/* Navbar styling */
-header {
-    background-color: #4caf50; /* สีเขียวสำหรับพื้นหลัง */
-    padding: 10px 20px; /* ปรับ padding เพื่อขยายขนาด navbar */
-    z-index: 1000;
-}
-
+/* การจัดสไตล์ Navbar */
 .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #4caf50;
+    padding: 10px 20px;
+    z-index: 1000;
 }
 
 .search-bar {
     flex-grow: 1;
     margin: 0 20px;
-    padding: 8px; /* เพิ่มขนาด padding เพื่อให้ search bar ใหญ่ขึ้น */
+    padding: 8px;
     border-radius: 5px;
     border: none;
-    font-size: 16px; /* ขยายขนาดตัวอักษรใน search bar */
-    width: 1100px;
+    font-size: 16px;
+    min-width: 200px;
+    max-width: 600px;
 }
 
-header .logo {
-    font-size: 24px; /* ขยายขนาดโลโก้ */
+.logo {
+    font-size: 24px;
     font-weight: bold;
-    color: #f4a261; /* สีโลโก้ */
+    color: #f4a261;
 }
 
-.my-list-section {
+.my-list {
     display: flex;
     align-items: center;
 }
 
-.my-list-btn {
+.my-list button {
     margin-left: 10px;
     padding: 8px 12px;
     background-color: #e63946;
@@ -53,38 +56,41 @@ header .logo {
     border-radius: 5px;
     color: white;
     cursor: pointer;
-    margin-right: 20px; /* เพิ่มระยะห่างระหว่างปุ่ม My List กับปุ่ม Profile */
 }
 
-.profile-btn {
-    background-color: #e63946;
-    padding: 7px 10px;
-    border-radius: 5px;
-    border: none;
-    color: white;
+.account-icon {
     font-size: 15px;
-    cursor: pointer;
 }
 
-
-/* Sidebar styling */
+/* การจัดสไตล์ Sidebar */
 .sidebar {
     background-color: #333;
     width: 200px;
     padding: 20px;
-    height: 150vh;
+    padding-top: 80px;
+    height: 100vh;
     float: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
 }
 
-.sidebar h3 {
+#list-container {
     margin-bottom: 20px;
 }
 
-.list-name {
-    margin-bottom: 10px;
-    background-color: #555;
+#create-list-container {
+    margin-top: 20px;
+}
+
+#create-list-container input {
+    width: 100%;
     padding: 10px;
-    border-radius: 4px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
 }
 
 .create-list {
@@ -95,18 +101,45 @@ header .logo {
     color: white;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* Main content and movie grid styling */
+.create-list:hover {
+    background-color: #45a049;
+}
+
+/* ลิสต์ที่สามารถคลิกขวาเพื่อจัดการ */
+.list-name {
+    margin-bottom: 10px;
+    background-color: #555;
+    padding: 10px;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.list-name:hover {
+    background-color: #777;
+}
+
+/* การจัดสไตล์เนื้อหาหลัก */
 .main-content {
     margin-left: 220px;
     padding: 20px;
+    padding-top: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .movie-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
+    margin-top: 20px;
 }
 
 .movie-item {
@@ -114,6 +147,11 @@ header .logo {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.movie-item:hover {
+    transform: scale(1.05);
 }
 
 .movie-image {
@@ -132,23 +170,30 @@ header .logo {
     margin-top: 10px;
 }
 
-.movie-item.add-new .movie-image {
-    font-size: 50px;
+/* สีเมื่อเลือกหนัง */
+.selected {
+    background-color: #007bff;
+    color: white;
 }
 
-/* Action buttons styling */
+/* ปุ่มต่าง ๆ */
 .actions {
     margin-top: 20px;
     display: flex;
-    justify-content: flex-end; /* จัดปุ่มให้ชิดด้านขวา */
+    gap: 10px;
+    justify-content: center;
 }
 
 .actions button {
     padding: 10px 20px;
-    margin-left: 10px; /* เพิ่มช่องว่างระหว่างปุ่ม */
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.actions button:hover {
+    transform: scale(1.05);
 }
 
 .update {
@@ -156,12 +201,24 @@ header .logo {
     color: white;
 }
 
+.update:hover {
+    background-color: #45a049;
+}
+
 .delete {
     background-color: #d9534f;
     color: white;
 }
 
+.delete:hover {
+    background-color: #c9302c;
+}
+
 .exit {
     background-color: black;
     color: white;
+}
+
+.exit:hover {
+    background-color: #333;
 }

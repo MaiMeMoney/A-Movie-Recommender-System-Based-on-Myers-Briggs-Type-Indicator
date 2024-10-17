@@ -5,65 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MovieMingle Watchlist</title>
     <link rel="stylesheet" href="styles.css">
-    <script>
-        function goBack() {
-            window.history.back();
-        }
-    </script>
+    <script defer src="script.js"></script>
 </head>
 <body>
     <header>
         <div class="navbar">
-            <div class="logo">
-                <a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a>
-            </div>
-            <div class="search-container">
-                <input type="text" class="search-bar" placeholder="Search for movies...">
-            </div>
-            <div class="my-list-section">
-                <button class="my-list-btn">MY LIST</button>
-                <button class="profile-btn">👤</button>
+            <div class="logo"><a href="mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a></div>
+            <input type="text" class="search-bar" placeholder="Search for movies...">
+            <div class="my-list">
+                <a href="/page/watchlist/index.html">
+                    <button>MY LIST</button>
+                </a>
+                <button class="account-icon">👤</button>
             </div>
         </div>
     </header>
-    
 
     <div class="watchlist">
         <div class="sidebar">
             <h3>WATCHLIST</h3>
-            <div class="list-name">list1</div>
-            <button class="create-list">Create List</button>
+            <div id="list-container">
+                <!-- ลิสต์จะถูกสร้างและเพิ่มเข้ามาที่นี่ -->
+            </div>
+            <div id="create-list-container">
+                <input type="text" id="new-list-name" placeholder="New List Name">
+                <button class="create-list" onclick="createList()">Create List</button>
+            </div>
         </div>
 
         <div class="main-content">
-            <div class="movie-grid">
-                <div class="movie-item">
-                    <div class="movie-image">รูปภาพ<br>282 x 435</div>
-                    <div class="movie-name">MOVIE NAME</div>
-                </div>
-                <div class="movie-item">
-                    <div class="movie-image">รูปภาพ<br>282 x 435</div>
-                    <div class="movie-name">MOVIE NAME</div>
-                </div>
-                <div class="movie-item">
-                    <div class="movie-image">รูปภาพ<br>282 x 435</div>
-                    <div class="movie-name">MOVIE NAME</div>
-                </div>
-                <div class="movie-item">
-                    <div class="movie-image">รูปภาพ<br>282 x 435</div>
-                    <div class="movie-name">MOVIE NAME</div>
-                </div>
-                <div class="movie-item">
-                    <div class="movie-image">รูปภาพ<br>282 x 435</div>
-                    <div class="movie-name">MOVIE NAME</div>
-                </div>
-                <div class="movie-item add-new">
+            <div id="movie-list" class="movie-grid">
+                <!-- เมื่อไม่มีหนังจะแสดงปุ่ม + -->
+                <div class="movie-item add-new" onclick="addMovie()">
                     <div class="movie-image">+</div>
                 </div>
             </div>
             <div class="actions">
-                <button class="update">Update</button>
-                <button class="delete">Delete</button>
+                <button class="update" onclick="updateMovies()">Update</button>
+                <button class="delete" onclick="deleteSelectedMovie()">Delete</button>
                 <button class="exit" onclick="goBack()">Exit</button>
             </div>
         </div>
