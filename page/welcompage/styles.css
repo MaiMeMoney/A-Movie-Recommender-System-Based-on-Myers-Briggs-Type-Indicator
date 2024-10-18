@@ -7,7 +7,7 @@ body {
   height: 100%;
   font-family: Arial, sans-serif;
   /* background-image: url("MOVIE_BG.png"); */
-  background-color: black;
+  background-color: #333;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

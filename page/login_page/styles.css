@@ -8,6 +8,7 @@
 body, html {
     height: 100%;
     font-family: 'Roboto', sans-serif;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Main container - Flex layout for two columns */
@@ -15,6 +16,7 @@ body, html {
     display: flex;
     height: 100vh;
     width: 100vw;
+    overflow: hidden; /* Prevent the container from overflowing */
 }
 
 /* Left Section - Login Form */
@@ -28,7 +30,8 @@ body, html {
     justify-content: center;
     align-items: center;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
-    position: relative; /* Allow absolute positioning inside */
+    position: relative;
+    min-width: 320px; /* Prevents form from becoming too narrow */
 }
 
 /* Position MOVIEMINGLE in the top-left */
@@ -59,6 +62,13 @@ input[type="password"] {
     border: 1px solid #ddd;
     font-size: 16px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #FFA500;
+    outline: none;
 }
 
 /* Login Button */
@@ -73,6 +83,7 @@ input[type="password"] {
     border-radius: 20px;
     cursor: pointer;
     text-align: center;
+    transition: background-color 0.3s ease;
 }
 
 .login-button:hover {
@@ -97,25 +108,67 @@ input[type="password"] {
 
 /* Right Section - Background Image */
 .image-container {
-    flex-grow: 1; /* Fills the remaining space */
+    flex-grow: 1;
     position: relative;
+    overflow: hidden; /* Ensure no overflow from image */
 }
 
 .image-container img {
     width: 100%;
     height: 100vh;
     object-fit: cover;
+    display: block; /* Prevent any overflow or scrollbars */
 }
 
-/* Optional Caption Styling (if you need the text over the image) */
-.caption {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
+/* Responsive Media Queries */
+
+/* As the screen gets smaller, the left container starts expanding */
+@media (max-width: 1024px) {
+    .login-container {
+        width: 45%; /* Increase the width of the login container */
+    }
+    
+    .image-container {
+        flex-grow: 0.8; /* Reduce the space taken by the image */
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        width: 60%; /* Further increase the width */
+    }
+
+    .image-container {
+        flex-grow: 0.4; /* The image gets smaller */
+    }
+}
+
+@media (max-width: 600px) {
+    .login-container {
+        width: 80%; /* Almost fill the screen */
+    }
+
+    .image-container {
+        flex-grow: 0.2; /* The image takes very little space */
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        width: 100%; /* Fill the entire screen */
+        padding: 20px;
+    }
+
+    .image-container {
+        display: none; /* Hide the image on very small screens */
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        font-size: 14px;
+    }
+
+    .login-button {
+        font-size: 16px;
+    }
 }
