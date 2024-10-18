@@ -14,19 +14,27 @@ body, html {
 /* Main container - Flex layout for two columns */
 .container {
   display: flex;
+  flex-wrap: wrap; /* Allow wrapping for responsiveness */
   height: 100vh;
   width: 100vw;
   position: relative;
 }
 
-/* Top-Left MOVIEMINGLE Logo */
+/* MOVIEMINGLE Logo inside the container */
 .logo {
-  position: absolute;
-  top: 20px;
-  left: 20px;
   color: #FFA500;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px; /* Ensure spacing between logo and the form */
+}
+
+/* Logo Link Styling */
+.logo a {
+  color: #FFA500;
+  text-decoration: none; /* Remove underline from the link */
+  font-size: inherit;
+  font-weight: inherit;
 }
 
 /* Left Section - Register Form */
@@ -34,18 +42,19 @@ body, html {
   background-color: #333;
   color: #fff;
   padding: 50px;
-  width: 35%; 
+  width: 35%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
   height: 100vh;
+  max-width: 400px;
 }
 
 /* REGISTER Heading */
 h1 {
-  margin-bottom: px;
+  margin-bottom: 20px;
   font-size: 28px;
   color: #ffffff;
   text-align: center;
@@ -89,20 +98,26 @@ input[type="password"] {
 }
 
 .links a {
-  color: #ffffff;
+  color: #ffffff; /* White color for the regular text */
   text-decoration: none;
   font-size: 14px;
 }
 
-.links a:hover {
-  text-decoration: underline;
+.links .highlight {
+  color: #FFA500; /* Yellow color for the "Click Here" part */
+  text-decoration: none; /* No underline by default */
+}
+
+.links .highlight:hover {
+  text-decoration: underline; /* Underline only when hovered */
 }
 
 /* Right Section - Image Slider */
 .slider-container {
-  flex-grow: 1; 
+  flex-grow: 1;
   position: relative;
   overflow: hidden;
+  height: 100vh;
 }
 
 .slider {
@@ -191,4 +206,45 @@ input[type="password"] {
 
 .dot.active {
   background-color: #717171;
+}
+
+/* Media Query for smaller screens */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column; /* Stack vertically on smaller screens */
+  }
+
+  .register-container {
+    width: 100%; /* Take full width */
+    height: auto; /* Adjust height for content */
+    padding: 20px;
+  }
+
+  .slider-container {
+    height: 50vh; /* Reduce the height of the slider on smaller screens */
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 10px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    font-size: 14px;
+  }
+
+  .register-button {
+    font-size: 16px;
+  }
+
+  .slider-container {
+    height: 40vh; /* Further reduce the height on very small screens */
+  }
 }

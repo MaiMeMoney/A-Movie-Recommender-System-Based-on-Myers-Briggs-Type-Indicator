@@ -8,11 +8,11 @@
   </head>
   <body>
     <div class="container">
-      <!-- Logo at the Top-Left -->
-      <div class="logo">MOVIEMINGLE</div>
-
       <!-- Registration Form Section -->
       <div class="register-container">
+        <div class="logo">
+          <a href="..\welcompage\index.html">MOVIEMINGLE</a>
+        </div>
         <h1>REGISTER</h1>
         <form id="registerForm">
           <input type="text" id="username" placeholder="Username" required />
@@ -25,9 +25,10 @@
           <button type="button" class="register-button" onclick="submitForm()">REGISTER</button>
         </form>
         <div class="links">
-          <a href="#">Already have an account? Click Here</a><br />
-          <a href="https://www.16personalities.com/th" target="_blank">Want to learn more about MBTI? Click Here</a>
+          <a href="..\login_page\index.html">Already have an account? <span class="highlight">Click Here</span></a><br />
+          <a href="https://www.16personalities.com/th" target="_blank">Want to learn more about MBTI? <span class="highlight">Click Here</span></a>
         </div>
+        
       </div>
 
       <!-- Image Slider Section -->
@@ -35,27 +36,13 @@
         <div class="slider">
           <div class="slide active">
             <img src="slide1.jpg" alt="Movie Poster 1" />
-            <div class="caption">
-              <h2>Movie Title 1</h2>
-              <p>Release Date: January 1, 2025</p>
-              <a href="#" class="button">More Details</a>
-            </div>
           </div>
           <div class="slide">
             <img src="slide2.jpg" alt="Movie Poster 2" />
-            <div class="caption">
-              <h2>Movie Title 2</h2>
-              <p>Release Date: February 15, 2025</p>
-              <a href="#" class="button">More Details</a>
-            </div>
           </div>
           <div class="slide">
             <img src="slide3.jpg" alt="Movie Poster 3" />
-            <div class="caption">
-              <h2>Movie Title 3</h2>
-              <p>Release Date: March 20, 2025</p>
-              <a href="#" class="button">More Details</a>
-            </div>
+
           </div>
         </div>
         <!-- Indicators -->
