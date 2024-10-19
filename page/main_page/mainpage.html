@@ -12,13 +12,11 @@
             <div class="logo"><a href="mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a></div>
             <input type="text" class="search-bar" placeholder="Search for movies...">
             <div class="my-list">
+                <span id="username-display" class="username-display"></span> <!-- แสดงชื่อผู้ใช้ -->
                 <a href="/page/watchlist/index.html">
                     <button>MY LIST</button>
                 </a>
-                <a href="..\Personal information editing page\index.html">
-                    <button class="account-icon">👤</button>
-                </a>
-                
+                <button class="account-icon" onclick="goToProfile()">👤</button>
             </div>
         </div>
     </header>
@@ -28,6 +26,7 @@
             <img src="placeholder.png" alt="Movie Hit" class="movie-hit-img">
         </section>
 
+        <!-- Section MBTI Recommendations -->
         <section class="mbti-recommend">
             <div class="recommend-header">
                 <h2>RECOMMENDED BY YOUR MBTI TYPE</h2>
@@ -36,6 +35,7 @@
                 </a>
             </div>
             <div class="movie-list">
+                <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
                 <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
                 <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
                 <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
@@ -229,6 +229,24 @@
         </section>
         
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('username');
+    
+            if (!username) {
+                alert('You are not logged in!');
+                window.location.href = '/page/login_page/index.html';
+                return;
+            }
+    
+            // แสดงชื่อผู้ใช้ในแถบเมนู
+            document.getElementById('username-display').textContent = `Welcome, ${username}`;
+    
+            // ฟังก์ชันสำหรับไปยังหน้าแก้ไขข้อมูลส่วนตัว
+            window.goToProfile = function() {
+                window.location.href = `/page/Personal information editing page/index.html?username=${username}`;
+            };
+        });
+    </script>
 </body>
 </html>
-

@@ -26,7 +26,10 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(nextSlide, 5000); // เปลี่ยนภาพทุกๆ 5 วินาที
 });
 
-function submitForm() {
+// ฟังก์ชันสำหรับการส่งฟอร์ม
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
     const username = document.getElementById('username').value;
     const firstname = document.getElementById('firstname').value;
     const lastname = document.getElementById('lastname').value;
@@ -45,13 +48,37 @@ function submitForm() {
         return;
     }
 
-    console.log("Form Submitted:", {
-        username,
-        firstname,
-        lastname,
-        email,
-        password
-    });
+    try {
+        const response = await fetch('http://127.0.0.1:3000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, firstname, lastname, email, password })
+        });
 
-    alert("Registration successful!");
+        const result = await response.text();
+
+        if (response.ok) {
+            showToast(result);
+            setTimeout(() => {
+                window.location.href = '../login_page/index.html';  // เปลี่ยนไปหน้า login
+            }, 3000);
+        } else {
+            alert(result);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Failed to connect to the server');
+    }
+});
+
+// ฟังก์ชันสำหรับแสดง Toast Notification
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 4000);  // ซ่อน Toast หลังจาก 4 วินาที
 }

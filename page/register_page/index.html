@@ -1,58 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MovieMingle Register</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
+    <link rel="stylesheet" href="styles.css">
+    <!-- เพิ่ม CSS สำหรับ Toast Notification -->
+    <style>
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4BB543; /* สีเขียวสำหรับความสำเร็จ */
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            display: none;  /* ซ่อนในตอนแรก */
+            z-index: 9999;
+            animation: fadeInOut 4s forwards;  /* แอนิเมชัน */
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
     <div class="container">
-      <!-- Registration Form Section -->
-      <div class="register-container">
-        <div class="logo">
-          <a href="..\welcompage\index.html">MOVIEMINGLE</a>
+        <!-- Registration Form Section -->
+        <div class="register-container">
+            <div class="logo">
+                <a href="..\welcompage\index.html">MOVIEMINGLE</a>
+            </div>
+            <h1>REGISTER</h1>
+            <form id="registerForm">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="text" id="firstname" placeholder="Firstname" required>
+                <input type="text" id="lastname" placeholder="Lastname" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="email" id="confirmEmail" placeholder="Confirm Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                <button type="submit" class="register-button">REGISTER</button>
+            </form>
+            <div class="links">
+                <a href="..\login_page\index.html">Already have an account? <span class="highlight">Click Here</span></a><br>
+                <a href="https://www.16personalities.com/th" target="_blank">Want to learn more about MBTI? <span class="highlight">Click Here</span></a>
+            </div>
         </div>
-        <h1>REGISTER</h1>
-        <form id="registerForm">
-          <input type="text" id="username" placeholder="Username" required />
-          <input type="text" id="firstname" placeholder="Firstname" required />
-          <input type="text" id="lastname" placeholder="Lastname" required />
-          <input type="email" id="email" placeholder="Email" required />
-          <input type="email" id="confirmEmail" placeholder="Confirm Email" required />
-          <input type="password" id="password" placeholder="Password" required />
-          <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
-          <button type="button" class="register-button" onclick="submitForm()">REGISTER</button>
-        </form>
-        <div class="links">
-          <a href="..\login_page\index.html">Already have an account? <span class="highlight">Click Here</span></a><br />
-          <a href="https://www.16personalities.com/th" target="_blank">Want to learn more about MBTI? <span class="highlight">Click Here</span></a>
-        </div>
-        
-      </div>
 
-      <!-- Image Slider Section -->
-      <div class="slider-container">
-        <div class="slider">
-          <div class="slide active">
-            <img src="slide1.jpg" alt="Movie Poster 1" />
-          </div>
-          <div class="slide">
-            <img src="slide2.jpg" alt="Movie Poster 2" />
-          </div>
-          <div class="slide">
-            <img src="slide3.jpg" alt="Movie Poster 3" />
+        <!-- Toast Notification -->
+        <div id="toast" class="toast">✅ Registration successful! Redirecting...</div>
 
-          </div>
+        <!-- Image Slider Section -->
+        <div class="slider-container">
+            <div class="slider">
+                <div class="slide active">
+                    <img src="slide1.jpg" alt="Movie Poster 1">
+                </div>
+                <div class="slide">
+                    <img src="slide2.jpg" alt="Movie Poster 2">
+                </div>
+                <div class="slide">
+                    <img src="slide3.jpg" alt="Movie Poster 3">
+                </div>
+            </div>
+            <!-- Indicators -->
+            <div class="indicators">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+            </div>
         </div>
-        <!-- Indicators -->
-        <div class="indicators">
-          <span class="dot active" onclick="currentSlide(0)"></span>
-          <span class="dot" onclick="currentSlide(1)"></span>
-          <span class="dot" onclick="currentSlide(2)"></span>
-        </div>
-      </div>
     </div>
+
     <script src="script.js"></script>
-  </body>
+</body>
 </html>

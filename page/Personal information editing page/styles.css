@@ -116,20 +116,44 @@ header .menu button {
 }
 
 .sidebar .profile-pic {
-    background-color: white;
+    background-size: cover;
+    background-position: center;
     width: 228px;
     height: 228px;
+    border-radius: 50%;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     color: #3d3d3d;
     font-size: 14px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+}
+
+.sidebar .img-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #3d3d3d;
+    font-size: 14px;
+    text-align: center;
 }
 
 .sidebar .profile-name {
     font-size: 18px;
     margin-bottom: 10px;
+}
+
+.sidebar .upload-btn {
+    display: block;
+    background-color: #4caf50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    cursor: pointer;
+    width: 150px;
 }
 
 .sidebar button {
@@ -140,6 +164,7 @@ header .menu button {
     border-radius: 18px;
     margin: 10px 0;
     cursor: pointer;
+    width: 150px;  /* ตั้งความกว้างให้เหมือนกับปุ่มอื่น */
 }
 
 .sidebar button.logout {
@@ -189,12 +214,12 @@ header .menu button {
     cursor: pointer;
 }
 
-.profile-form .form-buttons .update {
+.form-buttons .update {
     background-color: #4caf50;
     color: white;
 }
 
-.profile-form .form-buttons .cancel {
+.form-buttons .cancel {
     background-color: black;
     color: white;
 }
@@ -215,3 +240,28 @@ header .menu button {
     font-size: 18px;
 }
 
+.image-crop-container {
+    position: relative;
+    max-width: 400px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#profileImage {
+    max-width: 100%;
+    border-radius: 50%;
+}
+
+.upload-btn {
+    display: block;
+    background-color: #4caf50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 150px;
+}
