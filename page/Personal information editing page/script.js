@@ -40,9 +40,10 @@ async function cropImage() {
         height: 300,
     });
 
+    // แปลง canvas เป็น Blob
     croppedCanvas.toBlob(async (blob) => {
         const formData = new FormData();
-        formData.append('image', blob);
+        formData.append('image', blob, 'cropped-image.jpg');  // ระบุชื่อไฟล์และ extension
         formData.append('username', localStorage.getItem('username'));
 
         try {
@@ -55,14 +56,26 @@ async function cropImage() {
                 const result = await response.json();
                 document.getElementById('profileImage').src = result.imageUrl;
                 alert('✅ Image uploaded and cropped successfully!');
+                location.reload();  // รีเฟรชหน้าอัตโนมัติ
             } else {
-                alert('❌ Failed to upload cropped image');
+                const errorText = await response.text();
+                alert(`❌ Failed to upload cropped image: ${errorText}`);
             }
         } catch (error) {
             console.error('Error:', error);
             alert('❌ Error uploading cropped image');
         }
-    }, 'image/jpeg');
+    }, 'image/jpeg');  // ตั้งค่า MIME type เป็น jpeg
+}
+
+// ฟังก์ชันแสดง Toast Notification
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 4000);  // แสดง Toast เป็นเวลา 4 วินาที
 }
 
 // ฟังก์ชันยกเลิกการอัปเดต
