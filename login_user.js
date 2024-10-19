@@ -28,6 +28,58 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+// ฟังก์ชันสำหรับการสมัครสมาชิก (แก้ไขเพิ่มเติม)
+app.post('/register', 
+    [
+        body('username').trim().escape(),
+        body('firstname').trim().escape(),
+        body('lastname').trim().escape(),
+        body('email').isEmail().normalizeEmail(),
+        body('password').trim().escape()
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { username, firstname, lastname, email, password } = req.body;
+        const client = new MongoClient(uri);
+
+        try {
+            await client.connect();
+            console.log('✅ Connected to MongoDB for registration!');
+
+            const database = client.db('user');
+            const collection = database.collection('users');
+
+            // ตรวจสอบว่ามีผู้ใช้ที่มี username นี้อยู่แล้วหรือไม่
+            const existingUser = await collection.findOne({ username: username });
+            if (existingUser) {
+                return res.status(400).send('❌ Username already exists');
+            }
+
+            // แฮชรหัสผ่านก่อนบันทึกลงฐานข้อมูล
+            const hashedPassword = await bcrypt.hash(password, 10);
+            await collection.insertOne({
+                username, 
+                firstname, 
+                lastname, 
+                email, 
+                password: hashedPassword 
+            });
+
+            console.log('✅ User registered successfully!');
+            res.status(201).send('✅ Registration successful!');
+        } catch (error) {
+            console.error('❌ Error during registration:', error);
+            res.status(500).send('❌ Internal server error');
+        } finally {
+            await client.close();
+        }
+    }
+);
+
 // ฟังก์ชันสำหรับการล็อกอิน
 app.post('/login',
     [
