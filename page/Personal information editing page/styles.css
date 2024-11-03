@@ -93,6 +93,22 @@ header .menu button {
     cursor: pointer;
 }
 
+.profile-pic {
+    width: 228px;          /* ปรับขนาดความกว้างตามที่ต้องการ */
+    height: 228px;         /* ปรับขนาดความสูงตามที่ต้องการ */
+    border-radius: 50%;    /* ทำให้รูปภาพเป็นวงกลม */
+    overflow: hidden;      /* ซ่อนส่วนที่เกิน */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#profileImage {
+    width: 100%;           /* ให้รูปภาพขยายเต็มพื้นที่ของ container */
+    height: 100%;          /* ให้รูปภาพขยายเต็มพื้นที่ของ container */
+    object-fit: cover;     /* ปรับรูปภาพให้พอดีกับ container โดยไม่ยืดหรือบีบรูป */
+}
+
 .profile-section {
     display: flex;
     justify-content: space-between;

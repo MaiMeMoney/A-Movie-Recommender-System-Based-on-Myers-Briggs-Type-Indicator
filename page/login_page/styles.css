@@ -120,6 +120,32 @@ input[type="password"]:focus {
     display: block; /* Prevent any overflow or scrollbars */
 }
 
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4BB543; /* สีเขียวสำหรับความสำเร็จ */
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    display: none;
+    z-index: 9999;
+    animation: fadeInOut 4s forwards;
+}
+
+.toast.error {
+    background-color: #f44336; /* สีแดงสำหรับข้อผิดพลาด */
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
 /* Responsive Media Queries */
 
 /* As the screen gets smaller, the left container starts expanding */

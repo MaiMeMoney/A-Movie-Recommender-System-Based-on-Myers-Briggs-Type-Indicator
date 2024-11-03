@@ -5,29 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MOVIEMINGLE - Login</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #4BB543; /* สีเขียวสำหรับความสำเร็จ */
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-            font-size: 16px;
-            display: none;
-            z-index: 9999;
-            animation: fadeInOut 4s forwards;
-        }
-
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -49,7 +26,8 @@
             <img src="https://imageio.forbes.com/specials-images/imageserve/61116cea2313e8bae55a536a/-Dune-/0x0.jpg?format=jpg&width=960" alt="Desert image">
         </div>
 
-        <div id="toast" class="toast">✅ Login successful! Redirecting...</div>
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
     </div>
 
     <script>
@@ -72,26 +50,29 @@
 
                 if (response.ok) {
                     localStorage.setItem('username', result.username);
-                    showToast(result.message);
+                    showToast(result.message, 'success'); // Toast สำหรับกรณีสำเร็จ
                     setTimeout(() => {
                         window.location.href = '../main_page/mainpage.html';
                     }, 3000);
                 } else {
-                    alert(result); 
+                    const errorMessage = result.message || '❌ Invalid username or password';
+                    showToast(errorMessage, 'error'); // Toast สำหรับกรณีเกิดข้อผิดพลาด
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('❌ Failed to connect to the server');
+                showToast('❌ Failed to connect to the server', 'error'); // Toast สำหรับกรณีเชื่อมต่อไม่ได้
             }
         });
 
-        function showToast(message) {
+        function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
+            toast.className = 'toast ' + type;
             toast.textContent = message;
             toast.style.display = 'block';
+
             setTimeout(() => {
                 toast.style.display = 'none';
-            }, 4000);
+            }, 4000); // แสดง toast เป็นเวลา 4 วินาที
         }
     </script>
 </body>
