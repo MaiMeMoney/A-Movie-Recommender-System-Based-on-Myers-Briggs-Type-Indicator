@@ -14,27 +14,46 @@ body, html {
 /* Main container - Flex layout for two columns */
 .container {
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping for responsiveness */
+  flex-wrap: nowrap; /* Fixed to prevent wrapping */
   height: 100vh;
   width: 100vw;
   position: relative;
 }
 
-/* MOVIEMINGLE Logo inside the container */
+/* MOVIEMINGLE Logo */
 .logo {
   color: #FFA500;
   font-size: 32px;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 20px; /* Ensure spacing between logo and the form */
+  margin-bottom: 20px;
 }
 
-/* Logo Link Styling */
 .logo a {
   color: #FFA500;
-  text-decoration: none; /* Remove underline from the link */
+  text-decoration: none;
   font-size: inherit;
   font-weight: inherit;
+}
+
+/* Label and required asterisk */
+.form-group label {
+  font-size: 14px;
+  padding: 0 35px;
+  color: #ffffff;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.required {
+  color: red;
+  font-weight: bold;
+}
+
+/* Input fields */
+.form-group {
+  margin-bottom: 15px;
 }
 
 /* Left Section - Register Form */
@@ -42,17 +61,16 @@ body, html {
   background-color: #333;
   color: #fff;
   padding: 50px;
-  width: 35%;
+  width: 40%; /* เพิ่มความกว้างให้ฟอร์มด้านซ้าย */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.5);
   height: 100vh;
-  max-width: 400px;
+  margin: 0 auto; /* จัดให้อยู่ตรงกลาง */
+  max-width: 2500px; /* เพิ่มขนาดความกว้างสูงสุด */
 }
 
-/* REGISTER Heading */
 h1 {
   margin-bottom: 20px;
   font-size: 28px;
@@ -60,20 +78,23 @@ h1 {
   text-align: center;
 }
 
-/* Input Fields */
+input.error {
+  border-color: red;
+  background-color: #ffe6e6;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-  width: 100%;
+  width: 90%;
   padding: 12px;
-  margin: 10px 0;
+  margin: 10px 30px;
   border-radius: 20px;
   border: 1px solid #ddd;
   font-size: 16px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Register Button */
 .register-button {
   width: 100%;
   padding: 12px;
@@ -98,18 +119,17 @@ input[type="password"] {
 }
 
 .links a {
-  color: #ffffff; /* White color for the regular text */
+  color: #ffffff;
   text-decoration: none;
   font-size: 14px;
 }
 
 .links .highlight {
-  color: #FFA500; /* Yellow color for the "Click Here" part */
-  text-decoration: none; /* No underline by default */
+  color: #FFA500;
 }
 
 .links .highlight:hover {
-  text-decoration: underline; /* Underline only when hovered */
+  text-decoration: underline;
 }
 
 /* Right Section - Image Slider */
@@ -151,6 +171,7 @@ input[type="password"] {
   object-fit: cover;
 }
 
+/* Caption Styling */
 .caption {
   position: absolute;
   bottom: 20px;
@@ -205,23 +226,23 @@ input[type="password"] {
 }
 
 .dot.active {
-  background-color: #717171;
+  background-color: #FFA500;
 }
 
 /* Media Query for smaller screens */
 @media (max-width: 768px) {
   .container {
-    flex-direction: column; /* Stack vertically on smaller screens */
+    flex-direction: column;
   }
 
   .register-container {
-    width: 100%; /* Take full width */
-    height: auto; /* Adjust height for content */
+    width: 100%;
+    height: auto;
     padding: 20px;
   }
 
   .slider-container {
-    height: 50vh; /* Reduce the height of the slider on smaller screens */
+    height: 50vh;
   }
 
   .logo {
@@ -245,6 +266,6 @@ input[type="password"] {
   }
 
   .slider-container {
-    height: 40vh; /* Further reduce the height on very small screens */
+    height: 40vh;
   }
 }
