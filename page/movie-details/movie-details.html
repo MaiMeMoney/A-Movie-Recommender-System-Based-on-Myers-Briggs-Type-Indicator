@@ -9,7 +9,7 @@
 <body>
     <header>
         <div class="navbar">
-            <div class="logo"><a href="index.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a></div>
+            <div class="logo"><a href="/page/main_page/mainpage.html">MOVIEMINGLE</a></div>
             <input type="text" class="search-bar" placeholder="Search for movies...">
             <div class="my-list">
                 <button>MY LIST</button>
@@ -20,29 +20,32 @@
 
     <main>
         <section class="movie-details">
-            <h1>MOVIE NAME</h1>
-            <p>2024 2 HR 30</p>
+            <h1 id="movie-name">Movie Name</h1>
+            <p id="movie-info">Release Year | Runtime</p>
             <div class="movie-rating">
-                <span>⭐ Movie rating 7/10</span>
-                <span>⭐ Your rating 6.5/10 <button class="rate-button">RATE</button></span>
+                <span id="movie-rating">⭐ Movie rating 7/10</span>
+                <span id="meta-score">Metascore: 80</span>
             </div>
             <div class="media-section">
-                <img src="placeholder.png" alt="Movie Poster" class="movie-poster">
-                <img src="video_placeholder.png" alt="Movie Trailer" class="movie-video">
+                <img id="movie-poster" src="placeholder.png" alt="Movie Poster" class="movie-poster">
                 <div class="see-more">
-                    <button>See more Picture</button>
+                    <button>See more Pictures</button>
                 </div>
             </div>
             <div class="description-section">
                 <h3>Description</h3>
-                <p>Lorem Ipsum is simply dummy text...</p>
+                <p id="movie-description">Lorem Ipsum is simply dummy text...</p>
                 <h3>Director</h3>
-                <p>Director1</p>
+                <p id="movie-director">Director Name</p>
                 <h3>Actor/Actress</h3>
-                <p>Actor1, Actor2, Actor3</p>
+                <p id="movie-actors">Actor1, Actor2, Actor3, Actor4</p>
+                <h3>Gross Revenue</h3>
+                <p id="movie-gross">Gross: $500 million</p>
                 <button class="add-watchlist">Add to Watchlist</button>
             </div>
         </section>
     </main>
+
+    <script src="movie_details.js"></script>
 </body>
 </html>

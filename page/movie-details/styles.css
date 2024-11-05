@@ -1,7 +1,7 @@
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #f4a261;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -18,11 +18,44 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #2d6a4f;
+    background-color: #4caf50;
     padding: 10px 20px;
     z-index: 1000;
 }
 
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f4a261;
+}
+
+.search-bar {
+    flex-grow: 1;
+    margin: 0 20px;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+}
+
+.my-list {
+    display: flex;
+    align-items: center;
+}
+
+.my-list button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    background-color: #e63946;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.account-icon {
+    font-size: 15px;
+}
 .movie-details h1 {
     font-size: 32px;
     color: #f4a261;
