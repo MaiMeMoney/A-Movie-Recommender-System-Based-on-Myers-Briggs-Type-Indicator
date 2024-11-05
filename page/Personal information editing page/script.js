@@ -40,9 +40,10 @@ async function cropImage() {
         height: 300,
     });
 
+    // แปลง canvas เป็น Blob
     croppedCanvas.toBlob(async (blob) => {
         const formData = new FormData();
-        formData.append('image', blob);
+        formData.append('image', blob, 'cropped-image.jpg');  // ระบุชื่อไฟล์และ extension
         formData.append('username', localStorage.getItem('username'));
 
         try {
@@ -53,17 +54,117 @@ async function cropImage() {
 
             if (response.ok) {
                 const result = await response.json();
-                document.getElementById('profileImage').src = result.imageUrl;
+                
+                // อัปเดต src ของรูปภาพโดยตรงเพื่อแสดงภาพที่อัปโหลดใหม่
+                const profileImage = document.getElementById('profileImage');
+                profileImage.src = result.imageUrl + `?timestamp=${new Date().getTime()}`; // เพิ่ม timestamp เพื่อบังคับให้โหลดรูปใหม่
                 alert('✅ Image uploaded and cropped successfully!');
             } else {
-                alert('❌ Failed to upload cropped image');
+                const errorText = await response.text();
+                alert(`❌ Failed to upload cropped image: ${errorText}`);
             }
         } catch (error) {
             console.error('Error:', error);
             alert('❌ Error uploading cropped image');
         }
-    }, 'image/jpeg');
+    }, 'image/jpeg');  // ตั้งค่า MIME type เป็น jpeg
 }
+
+// ฟังก์ชันสำหรับปุ่ม Logout
+document.getElementById('logoutButton').addEventListener('click', function () {
+    localStorage.removeItem('username');  // ลบข้อมูล username จาก localStorage
+    window.location.href = '/page/login_page/index.html';  // เปลี่ยนไปยังหน้าล็อกอิน
+});
+
+// ฟังก์ชันแสดง Toast Notification
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 4000);  // แสดง Toast เป็นเวลา 4 วินาที
+}
+
+async function loadUserProfile() {
+    const username = localStorage.getItem('username');
+
+    if (!username) {
+        alert('You are not logged in!');
+        window.location.href = '/page/login_page/index.html';
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://127.0.0.1:3000/user/${username}`);
+        const userData = await response.json();
+
+        if (response.ok) {
+            document.getElementById('username').value = userData.username || '';
+            document.getElementById('email').value = userData.email || '';
+            document.getElementById('firstName').value = userData.firstname || '';
+            document.getElementById('lastName').value = userData.lastname || '';
+            document.getElementById('profileName').textContent = `${userData.firstname || ''} ${userData.lastname || ''}`;
+
+            const profileImage = document.getElementById('profileImage');
+            profileImage.src = userData.profileImage || 'https://www.gravatar.com/avatar/?d=mp&f=y'; // รูปพื้นฐาน
+        } else {
+            console.error('Failed to fetch user data:', userData.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// เรียกใช้ฟังก์ชันนี้เมื่อโหลดหน้าโปรไฟล์
+document.addEventListener('DOMContentLoaded', loadUserProfile);
+
+// ฟังก์ชันอัปเดตโปรไฟล์
+async function updateProfile(event) {
+    event.preventDefault();
+
+    const username = localStorage.getItem('username'); // ตรวจสอบว่าได้ค่าจาก localStorage หรือไม่
+    const email = document.getElementById('email').value;
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    // ตรวจสอบว่ารหัสผ่านและการยืนยันรหัสผ่านตรงกันหรือไม่
+    if (password && password !== confirmPassword) {
+        alert('❌ Passwords do not match!');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:3000/update-profile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, firstName, lastName, password })
+        });
+
+        const result = await response.text();
+
+        if (response.ok) {
+            alert('✅ Profile updated successfully!');
+            document.getElementById('password').value = '';
+            document.getElementById('confirmPassword').value = ''; // ล้างข้อมูลในฟิลด์รหัสผ่านหลังอัปเดต
+
+            // โหลดข้อมูลผู้ใช้ใหม่เพื่อรีเฟรชหน้าโปรไฟล์ทันที
+            await loadUserProfile();
+        } else {
+            alert(`❌ Failed to update profile: ${result}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Error updating profile');
+    }
+}
+
+// เพิ่ม event listener ให้กับปุ่ม "Update"
+document.getElementById('profileForm').addEventListener('submit', updateProfile);
 
 // ฟังก์ชันยกเลิกการอัปเดต
 function cancelUpdate() {
@@ -72,12 +173,7 @@ function cancelUpdate() {
     }
 }
 
-// ฟังก์ชันย้อนกลับ
-function goBack() {
-    window.history.back();
-}
-
-// ดึงข้อมูลผู้ใช้เมื่อโหลดหน้า
+// ฟังก์ชันดึงข้อมูลผู้ใช้เมื่อโหลดหน้า
 document.addEventListener('DOMContentLoaded', async function() {
     const username = localStorage.getItem('username');
 
@@ -92,14 +188,18 @@ document.addEventListener('DOMContentLoaded', async function() {
         const userData = await response.json();
 
         if (response.ok) {
-            document.getElementById('username').value = userData.username;
-            document.getElementById('email').value = userData.email;
-            document.getElementById('firstName').value = userData.firstname;
-            document.getElementById('lastName').value = userData.lastname;
-            document.getElementById('profileName').textContent = `${userData.firstname} ${userData.lastname}`;
+            document.getElementById('username').value = userData.username || '';
+            document.getElementById('email').value = userData.email || '';
+            document.getElementById('firstName').value = userData.firstname || '';
+            document.getElementById('lastName').value = userData.lastname || '';
+            document.getElementById('profileName').textContent = `${userData.firstname || ''} ${userData.lastname || ''}`;
 
-            if (userData.profileImage) {
-                document.getElementById('profileImage').src = userData.profileImage;
+            // ตรวจสอบว่ามีรูปภาพหรือไม่ ถ้าไม่มีให้ใช้รูปเริ่มต้น
+            const profileImage = document.getElementById('profileImage');
+            if (userData.profileImage && userData.profileImage.trim() !== "") {
+                profileImage.src = userData.profileImage;
+            } else {
+                profileImage.src = 'https://www.gravatar.com/avatar/?d=mp&f=y'; // รูปพื้นฐาน
             }
         } else {
             console.error('Failed to fetch user data:', userData.message);

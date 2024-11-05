@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Profile</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- เพิ่มการเชื่อมต่อกับ Cropper.js -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
 </head>
 <body>
@@ -24,15 +23,15 @@
         <section class="profile-section">
             <div class="sidebar">
                 <div class="profile-pic">
-                    <img id="profileImage" src="placeholder.png" alt="Profile Image">
+                    <!-- เปลี่ยน src ของรูปภาพเริ่มต้นเป็น URL ของรูปโปรไฟล์พื้นฐาน -->
+                    <img id="profileImage" src="https://www.gravatar.com/avatar/?d=mp&f=y" alt="Profile Image">
                 </div>
                 <button class="upload-btn" onclick="document.getElementById('fileInput').click();">Upload Image</button>
                 <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)" style="display: none;">
-
                 <button id="cropButton" class="upload-btn" style="display: none;" onclick="cropImage()">Crop & Save</button>
                 <div class="profile-name" id="profileName">NAME</div>
                 <button class="edit-profile">Edit profile</button>
-                <button class="logout">Logout</button>
+                <button class="logout" id="logoutButton">Logout</button>
             </div>
             
             <div class="profile-form">
@@ -45,6 +44,10 @@
                     <div class="form-group">
                         <input type="text" id="firstName" placeholder="First Name" required>
                         <input type="text" id="lastName" placeholder="Last Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="password" placeholder="New Password">
+                        <input type="password" id="confirmPassword" placeholder="Confirm New Password">
                     </div>
                     <div class="form-buttons">
                         <button type="submit" class="update">Update</button>

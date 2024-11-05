@@ -127,6 +127,19 @@ main {
     border-radius: 10px; 
     overflow: hidden;
     flex-shrink: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* เพิ่มการเปลี่ยนแปลงสำหรับเอฟเฟกต์ hover */
+}
+
+.movie-item:hover {
+    transform: scale(1.05); /* ขยายเล็กน้อยเมื่อวางเมาส์ */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* เพิ่มเงาเมื่อวางเมาส์ */
+}
+
+/* การจัดการภาพ */
+.movie-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* รักษาสัดส่วน */
 }
 
 .movie-list {
@@ -163,8 +176,21 @@ h2 a {
     color: #e9c46a;
     text-decoration: none;
 }
+
 .username-display {
     margin-right: 15px;
     font-size: 16px;
     color: #fff;
+}
+
+/* ปรับความไวต่อการตอบสนอง */
+@media (max-width: 768px) {
+    .movie-item {
+        width: 100%; /* เต็มความกว้างบนหน้าจอเล็ก */
+        height: auto; /* ความสูงอัตโนมัติเพื่อรักษาสัดส่วน */
+    }
+
+    .movie-list {
+        flex-direction: column; /* จัดเรียงรายการในแนวตั้งบนหน้าจอเล็ก */
+    }
 }
