@@ -15,7 +15,7 @@ mongoose.connect('mongodb+srv://bankweerpt:ohMpYPUHkNoz0Ba3@movie-mbti.k3yt3.mon
     .then(() => console.log('Connected to MongoDB'))
     .catch((err) => console.log('MongoDB connection error:', err));
 
-const { ObjectId } = mongoose.Types; // นำเข้า ObjectId จาก mongoose
+const { ObjectId } = mongoose.Types;
 
 // Define Movie Schema and Model
 const movieSchema = new mongoose.Schema({
@@ -37,13 +37,12 @@ const movieSchema = new mongoose.Schema({
     Gross: String
 });
 
-// ใช้คอลเลกชัน "movies_list.movies"
 const Movie = mongoose.model('movies_list', movieSchema, 'movies');
 
 // API to fetch a movie by movieId
 app.get('/movies_list/movies/:movieId', async (req, res) => {
     try {
-        const movieId = req.params.movieId; // แก้ไขเป็น req.params._id
+        const movieId = req.params.movieId;
         console.log(`Fetching movie with movieId: ${movieId}`);
 
         const movie = await Movie.findOne({ _id: new ObjectId(movieId) });
@@ -57,6 +56,31 @@ app.get('/movies_list/movies/:movieId', async (req, res) => {
     } catch (error) {
         console.error("Error fetching movie data:", error);
         res.status(500).json({ message: 'Error fetching movie details' });
+    }
+});
+
+// Define MBTI Schema and Model
+const mbtiSchema = new mongoose.Schema({
+    mbti_type: String,
+    createdAt: { type: Date, default: Date.now }
+});
+
+const MBTI = mongoose.model('mbti_list', mbtiSchema, 'mbti_list');
+
+// API Endpoint เพื่อเพิ่มข้อมูล MBTI
+app.post('/api/saveMBTI', async (req, res) => {
+    try {
+        const { mbtiType } = req.body;
+
+        // สร้างเอกสารใหม่ใน Collection mbti_list
+        const newMBTI = new MBTI({ mbti_type: mbtiType });
+
+        const result = await newMBTI.save();
+        console.log(`New MBTI document inserted with _id: ${result._id}`);
+        res.status(201).json({ message: 'MBTI added successfully', id: result._id });
+    } catch (error) {
+        console.error("Error inserting MBTI:", error);
+        res.status(500).json({ message: 'Failed to add MBTI' });
     }
 });
 

@@ -15,7 +15,6 @@
     <div class="container">
         <header>
             <h1 id="mbti-title">CHOOSE YOUR MBTI</h1>
-            <!-- <p class="quote">THOUGHT CONSTITUTES THE GREATNESS OF MAN. MAN IS A REED, THE FEEBLEST THING IN NATURE, BUT HE IS A THINKING REED.</p> -->
         </header>
 
         <div class="personality-box">
@@ -26,7 +25,7 @@
             </div>
             <div class="description">
                 <p id="mbti-description" class="personality-text">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry.
                 </p>
             </div>
         </div>
@@ -75,21 +74,23 @@
                 document.getElementById('character-img').alt = mbtiInfo.name;
             }
         }
-
         // Function to confirm MBTI and save to database
         function confirmMBTI() {
             const mbtiType = localStorage.getItem('selectedMBTI');
+            const username = localStorage.getItem('username'); // สมมติว่าชื่อผู้ใช้เก็บใน localStorage
             if (mbtiType) {
-                fetch('http://localhost:3000/api/saveMBTI', {
+                fetch('http://localhost:5000/api/saveMBTI', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                    'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ mbtiType })
                 })
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
+                    // หลังจากการยืนยันสำเร็จ นำผู้ใช้ไปยังหน้าใหม่
+                    window.location.href = '/page/main_page/mainpage.html'; // แก้ไข URL ให้เป็นหน้าที่ต้องการ
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -97,5 +98,6 @@
             }
         }
     </script>
+
 </body>
 </html>

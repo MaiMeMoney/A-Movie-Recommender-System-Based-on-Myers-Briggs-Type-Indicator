@@ -9,7 +9,7 @@
 <body>
     <header>
         <div class="navbar">
-            <div class="logo"><a href="/page/main_page/mainpage.html">MOVIEMINGLE</a></div>
+            <div class="logo"><a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a></div>
             <input type="text" class="search-bar" placeholder="Search for movies...">
             <div class="my-list">
                 <button>MY LIST</button>
@@ -29,7 +29,7 @@
             <div class="media-section">
                 <img id="movie-poster" src="placeholder.png" alt="Movie Poster" class="movie-poster">
                 <div class="see-more">
-                    <button>See more Pictures</button>
+                    <button id="see-more-button">See more Pictures</button>
                 </div>
             </div>
             <div class="description-section">
@@ -45,6 +45,17 @@
             </div>
         </section>
     </main>
+
+    <!-- Popup overlay and content for "See More Pictures" -->
+    <div id="popup-overlay" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <button id="close-popup" class="close-popup">&times;</button>
+            <h2>See More Pictures</h2>
+            <div id="see-more-posters" class="see-more-posters">
+                <!-- Images from MongoDB will be injected here -->
+            </div>
+        </div>
+    </div>
 
     <script src="movie_details.js"></script>
 </body>
