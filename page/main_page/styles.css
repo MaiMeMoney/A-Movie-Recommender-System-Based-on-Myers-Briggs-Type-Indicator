@@ -131,9 +131,10 @@ main {
 }
 
 .movie-item:hover {
-    transform: scale(1.05); /* ขยายเล็กน้อยเมื่อวางเมาส์ */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* เพิ่มเงาเมื่อวางเมาส์ */
+    transform: scale(1); /* ยกเลิกการขยาย */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* เงาที่เบาลง */
 }
+
 
 /* การจัดการภาพ */
 .movie-item img {
@@ -144,10 +145,16 @@ main {
 
 .movie-list {
     display: flex;
-    gap: 10px; 
+    gap: 10px;
     overflow-x: auto;
     margin-top: 20px;
+    scrollbar-width: none; /* สำหรับ Firefox */
 }
+
+.movie-list::-webkit-scrollbar {
+    display: none; /* สำหรับ Chrome, Safari และ Edge */
+}
+
 
 .recommend-header {
     display: flex;

@@ -12,36 +12,75 @@
     </script>
 </head>
 <body>
+    <!-- Navbar -->
     <header>
         <div class="navbar">
-            <div class="logo">MOVIEMINGLE</div>
+            <div class="logo"><a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a></div>
             <input type="text" class="search-bar" placeholder="Search for movies...">
             <div class="my-list">
-                <button>MY LIST</button>
-                <button class="account-icon">👤</button>
+                <span id="username-display" class="username-display"></span> <!-- แสดงชื่อผู้ใช้ -->
+                <a href="/page/watchlist/index.html">
+                    <button>MY LIST</button>
+                </a>
+                <button class="account-icon" onclick="goToProfile()">👤</button>
             </div>
         </div>
     </header>
 
+    <!-- Movie Details Section -->
     <main>
-        <section class="movie-category">
-            <h2>RECOMMENDED BY YOUR MBTI TYPE</h2>
-            <div class="movie-list">
-                <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
-                <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
-                <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
-                <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
-                <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
-                <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
-                <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
-                <div class="movie-item"><img src="placeholder.png" alt="Movie"></div>
+        <div class="movie-details-container">
+            <!-- Movie Poster Section -->
+            <div class="movie-poster">
+                <img src="placeholder.png" alt="Movie Poster">
             </div>
-        </section>
 
-        <section class="filter-search">
-            <input type="text" class="filter-bar" placeholder="Filter movies...">
-            <button class="back-button" onclick="goBack()">←</button>
-        </section>
+            <!-- Movie Information Section -->
+            <div class="movie-info">
+                <h2>The Shawshank Redemption</h2>
+                <p><strong>IMDB Rating:</strong> 9.3/10</p>
+                <p><strong>Metascore:</strong> 80</p>
+
+                <div class="divider"></div>
+
+                <h3>Description</h3>
+                <p>Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.</p>
+
+                <h3>Director</h3>
+                <p>Frank Darabont</p>
+
+                <h3>Actors/Actresses</h3>
+                <p>Tim Robbins, Morgan Freeman, Bob Gunton, William Sadler</p>
+
+                <h3>Gross Revenue</h3>
+                <p>$28,341,469</p>
+
+                <!-- Add to Watchlist Button -->
+                <div class="add-to-watchlist">Add to Watchlist</div>
+            </div>
+        </div>
+
+        <!-- See More Pictures Section -->
+        <div class="see-more">See More Pictures</div>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('username');
+    
+            if (!username) {
+                alert('You are not logged in!');
+                window.location.href = '/page/login_page/index.html';
+                return;
+            }
+    
+            // แสดงชื่อผู้ใช้ในแถบเมนู
+            document.getElementById('username-display').textContent = `Welcome, ${username}`;
+    
+            // ฟังก์ชันสำหรับไปยังหน้าแก้ไขข้อมูลส่วนตัว
+            window.goToProfile = function() {
+                window.location.href = `/page/Personal information editing page/index.html?username=${username}`;
+            };
+        });
+    </script>
 </body>
 </html>

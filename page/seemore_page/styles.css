@@ -1,3 +1,4 @@
+/* Reset & Basic Styling */
 * {
     margin: 0;
     padding: 0;
@@ -5,11 +6,13 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #1a1a1a;
     color: #fff;
+    line-height: 1.6;
 }
 
+/* Navbar Styling */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -21,7 +24,7 @@ body {
 .logo {
     font-size: 24px;
     font-weight: bold;
-    color: #f4a261;
+    color: #ffdd57;
 }
 
 .search-bar {
@@ -31,6 +34,8 @@ body {
     border-radius: 5px;
     border: none;
     font-size: 16px;
+    background-color: #333;
+    color: #fff;
 }
 
 .my-list {
@@ -52,57 +57,98 @@ body {
     font-size: 18px;
 }
 
-main {
-    padding: 20px;
-}
-
-.movie-category {
-    margin-bottom: 30px;
-}
-
-.movie-category h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #f4a261;
-}
-
-.movie-list {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* แสดงแถวละ 4 เรื่อง */
-    gap: 10px; /* ระยะห่างระหว่างภาพยนตร์ */
-    grid-auto-rows: auto; /* เพิ่มแถวอัตโนมัติ */
-}
-
-.movie-item {
-    width: 80%; /* ขยายให้เต็มช่อง */
-    height: 435px;
-    background-color: #333;
-    border-radius: 5px;
-    text-align: center;
-}
-
-.filter-search {
+/* Container for movie details */
+.movie-details-container {
     display: flex;
-    justify-content: flex-end;
-    position: absolute;
-    top: 70px;
-    right: 20px;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    background: #1f1f1f;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-.filter-bar {
-    width: 200px;
-    padding: 8px;
-    border-radius: 5px;
-    border: none;
+/* Movie Poster */
+.movie-poster {
+    flex: 1;
+    margin-right: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.movie-poster img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Movie Info */
+.movie-info {
+    flex: 2;
+    color: #f0f0f0;
     font-size: 16px;
 }
 
-.back-button {
-    background-color: #333;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
+.movie-info h2 {
+    color: #ffdd57;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.movie-info h3 {
+    color: #f4a261;
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.movie-info p {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+/* Divider */
+.divider {
+    height: 1px;
+    background-color: #444;
+    margin: 15px 0;
+}
+
+/* Add to Watchlist Button */
+.add-to-watchlist {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #e63946;
     color: white;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
     cursor: pointer;
-    margin-left: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.add-to-watchlist:hover {
+    background: #d62828;
+    transform: scale(1.05);
+}
+
+/* "See More Pictures" Button */
+.see-more {
+    background-color: #e63946;
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
+}
+
+.see-more:hover {
+    background-color: #c53030;
+    transform: scale(1.05);
 }

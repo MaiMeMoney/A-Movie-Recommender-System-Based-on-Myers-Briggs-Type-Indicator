@@ -18,7 +18,19 @@ body {
     width: 50vw;
     height: 80vh; /* กำหนดความสูงของกล่อง */
     overflow-y: auto; /* เปิดการเลื่อนในแนวตั้ง */
+    overflow: auto; /* ยังคงสามารถเลื่อนได้ */
+    scrollbar-width: none; /* สำหรับ Firefox */
+    overflow-y: scroll; /* เปิดการเลื่อนในแนวตั้ง */
+    scrollbar-width: none;
 }
+
+
+.container::-webkit-scrollbar {
+    width: 0; /* สำหรับ Chrome, Safari และ Edge */
+    background: transparent; /* ทำให้ scrollbar โปร่งใส */
+    display: none;
+}
+
 
 h1 {
     color: #28a745;
@@ -36,15 +48,23 @@ h1 {
     padding: 10px;
     border-radius: 10px;
     text-align: center;
+    text-decoration: none;
+    color: #fff;
+    display: block;
 }
 
 .mbti-type img {
-    width: 100px;
-    height: auto;
+    width: 100px; /* ขนาดความกว้าง */
+    height: 100px; /* ขนาดความสูง */
+    object-fit: contain; /* แสดงรูปภาพทั้งหมดภายในกรอบ */
 }
 
+
+
 .back-button {
-    margin-top: 100px;
+    position: absolute;
+    top: 20px; /* ปรับค่าตามต้องการ */
+    right: 20px; /* ปรับค่าตามต้องการ */
     padding: 10px 20px;
     background-color: #28a745;
     color: #000;
@@ -57,15 +77,6 @@ h1 {
     background-color: #00cc00;
 }
 
-.mbti-type {
-    background-color: #555;
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-    text-decoration: none;
-    color: #fff;
-    display: block;
-}
 
 .mbti-type:hover {
     background-color: #666;

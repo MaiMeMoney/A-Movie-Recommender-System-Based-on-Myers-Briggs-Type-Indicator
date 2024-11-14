@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     try {
-        const response = await fetch(`http://localhost:5000/movies_list/movies/${movieId}`);
+        const response = await fetch(`http://localhost:5001/movies_list/movies/${movieId}`);
         if (!response.ok) throw new Error('Movie not found');
         
         const movie = await response.json();
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const seeMorePosters = document.getElementById('see-more-posters');
 
             // Fetch additional posters from the database
-            const posterResponse = await fetch(`http://localhost:5000/movies_list/movies/${movieId}/posters`);
+            const posterResponse = await fetch(`http://localhost:5001/movies_list/movies/${movieId}/posters`);
             const posters = await posterResponse.json();
 
             // Clear previous content and add new posters

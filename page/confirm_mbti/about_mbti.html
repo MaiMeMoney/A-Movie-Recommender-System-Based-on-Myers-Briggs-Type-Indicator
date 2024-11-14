@@ -19,7 +19,7 @@
 
         <div class="personality-box">
             <div class="character-image">
-                <img id="character-img" src="architect.png" alt="Architect" class="character-img">
+                <img id="character-img" src="pic.png" alt="Architect" class="character-img">
                 <h2 id="character-name">ARCHITECT</h2>
                 <p id="subtext" class="subtext">INTJ-A / INTJ-T</p>
             </div>
@@ -39,7 +39,6 @@
     </div>
 
     <script>
-        // Load the selected MBTI type and set it to the page
         document.addEventListener('DOMContentLoaded', () => {
             const mbtiType = localStorage.getItem('selectedMBTI');
             if (mbtiType) {
@@ -47,54 +46,139 @@
             }
         });
 
-        // Function to update MBTI info dynamically
         function updateMBTIInfo(type) {
             const descriptions = {
                 "INTJ": {
                     name: "ARCHITECT",
                     subtext: "INTJ-A / INTJ-T",
-                    description: "Architects are strategic, creative, and enjoy planning for the future.",
-                    img: "architect.png"
+                    description: "Architect are Realistic and detail-oriented, they stay present and learn from experience. Clear and precise in decision-making, they are logical and view things objectively.",
+                    img: "../choose_mbti/pic_mbti_type/intj.png"
                 },
                 "INTP": {
                     name: "LOGICIAN",
                     subtext: "INTP-A / INTP-T",
-                    description: "Logicians are analytical, abstract thinkers who value independence.",
-                    img: "logician.png"
+                    description: "Logician are Sensitive to emotions and understanding of people, they are true to their feelings and personal values. Visionary and able to see the big picture, they are creative and open to new possibilities.",
+                    img: "../choose_mbti/pic_mbti_type/INTP.png"
                 },
-                // Add more MBTI types as needed
+                "ENTJ": {
+                    name: "COMMANDER",
+                    subtext: "ENTJ-A / ENTJ-T",
+                    description: "Commander are Creative and imaginative, they see opportunities in every change and challenge. Charming, friendly, and gentle with others, they are supportive and work exceptionally well with people.",
+                    img: "../choose_mbti/pic_mbti_type/ENTJ.png"
+                },
+                "ENTP": {
+                    name: "DEBATER",
+                    subtext: "ENTP-A / ENTP-T",
+                    description: "Debater are Understanding of others and eager to help, they value harmony, unity, and mutual agreements. Creative and able to see possibilities and connections.",
+                    img: "../choose_mbti/pic_mbti_type/ENTP.png"
+                },
+                "INFJ": {
+                    name: "ADVOCATE",
+                    subtext: "INFJ-A / INFJ-T",
+                    description: "Advocate are Focused on the long-term vision, they value foresight and creativity, seeing new possibilities. Clear and precise in their decisions, they are rational and view things objectively.",
+                    img: "../choose_mbti/pic_mbti_type/infj.png"
+                },
+                "INFP": {
+                    name: "MEDIATOR",
+                    subtext: "INFP-A / INFP-T",
+                    description: "Mediator are insightful, altruistic, and idealistic with a desire to make a difference.",
+                    img: "../choose_mbti/pic_mbti_type/INFP.png"
+                },
+                "ENFJ": {
+                    name: "PROTAGONIST",
+                    subtext: "ENFJ-A / ENFJ-T",
+                    description: "Protagonist are insightful, altruistic, and idealistic with a desire to make a difference.",
+                    img: "../choose_mbti/pic_mbti_type/ENFJ.png"
+                },
+                "ENFP": {
+                    name: "CAMPAIGNER",
+                    subtext: "ENFP-A / ENFP-T",
+                    description: "Campaigner are Creative and interested in systems, big-picture perspectives, theories, and possibilities. They use logic and reason, questioning things to discover new perspectives, and maintain an objective viewpoint.",
+                    img: "../choose_mbti/pic_mbti_type/ENFP.png"
+                },
+                "ISTJ": {
+                    name: "LOGISTICIAN",
+                    subtext: "ISTJ-A / ISTJ-T",
+                    description: "Logistician are Realistic and attentive to detail, they stay present and learn from experience. Clear and precise in decision-making, they are logical and view things objectively.",
+                    img: "../choose_mbti/pic_mbti_type/ISTJ.png"
+                },
+                "ISFJ": {
+                    name: "DEFENDER",
+                    subtext: "ISFJ-A / ISFJ-T",
+                    description: "Defender are Realistic and detail-focused, they stay present and learn from experience. They make decisions with consideration for their impact on others, seeking solutions that promote harmony, unity, and avoid conflict.",
+                    img: "../choose_mbti/pic_mbti_type/ISFJ.png"
+                },
+                "ESTJ": {
+                    name: "EXECUTIVE",
+                    subtext: "ESTJ-A / ESTJ-T",
+                    description: "Executive are Observant of what happens around them, they notice details and analyze situations with reason. They use logic and solve problems with straightforward processes.",
+                    img: "../choose_mbti/pic_mbti_type/ESTJ.png"
+                },
+                "ESFJ": {
+                    name: "CONSUL",
+                    subtext: "ESFJ-A / ESFJ-T",
+                    description: "Consul are They learn through hands-on experience, view the world realistically, and focus on practical actions. Understanding others' feelings, they possess strong social skills.",
+                    img: "../choose_mbti/pic_mbti_type/ESFJ.png"
+                },
+                "ISTP": {
+                    name: "VIRTUOSO",
+                    subtext: "ISTP-A / ISTP-T",
+                    description: "Virtuoso are Analytical in problem-solving and improvement, they approach things logically and stay grounded in practical realities. They place high importance on detailed information.",
+                    img: "../choose_mbti/pic_mbti_type/ISTP.png"
+                },
+                "ISFP": {
+                    name: "ADVENTURER",
+                    subtext: "ISFP-A / ISFP-T",
+                    description: "Adventurer are Empathetic, trustworthy, and friendly, they excel at noticing details and are sensitive to others' feelings, while maintaining a realistic outlook.",
+                    img: "../choose_mbti/pic_mbti_type/ISFP.png"
+                },
+                "ESTP": {
+                    name: "ENTREPRENEUR",
+                    subtext: "ESTP-A / ESTP-T",
+                    description: "Entrepreneur are They analyze things objectively, seeking clarity and adherence to logic or standards.",
+                    img: "../choose_mbti/pic_mbti_type/ESTP.png"
+                },
+                "ESFP": {
+                    name: "ENTERTAINER",
+                    subtext: "ESFP-A / ESFP-T",
+                    description: "Entertainer are Empathetic and helpful, they are friendly and enjoy interactions and teamwork. Grounded in reality and the present, they easily focus on details.",
+                    img: "../choose_mbti/pic_mbti_type/ESFP.png"
+                },
+                
             };
 
             const mbtiInfo = descriptions[type];
             if (mbtiInfo) {
+                document.getElementById('character-img').src = mbtiInfo.img;
+                document.getElementById('character-img').alt = mbtiInfo.name;
                 document.getElementById('character-name').innerText = mbtiInfo.name;
                 document.getElementById('subtext').innerText = mbtiInfo.subtext;
                 document.getElementById('mbti-description').innerText = mbtiInfo.description;
-                document.getElementById('character-img').src = mbtiInfo.img;
-                document.getElementById('character-img').alt = mbtiInfo.name;
             }
         }
-        // Function to confirm MBTI and save to database
+
         function confirmMBTI() {
             const mbtiType = localStorage.getItem('selectedMBTI');
-            const username = localStorage.getItem('username'); // สมมติว่าชื่อผู้ใช้เก็บใน localStorage
-            if (mbtiType) {
-                fetch('http://localhost:5000/api/saveMBTI', {
+            const username = localStorage.getItem('username'); // Get username from localStorage
+
+            if (mbtiType && username) {
+                fetch('http://localhost:5001/api/saveMBTI', {
                     method: 'POST',
                     headers: {
-                    'Content-Type': 'application/json'
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ mbtiType })
+                    body: JSON.stringify({ mbtiType, username })
                 })
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
-                    // หลังจากการยืนยันสำเร็จ นำผู้ใช้ไปยังหน้าใหม่
-                    window.location.href = '/page/main_page/mainpage.html'; // แก้ไข URL ให้เป็นหน้าที่ต้องการ
+                    window.location.href = '/page/main_page/mainpage.html';
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
+            } else {
+                alert("กรุณาเลือก MBTI และเข้าสู่ระบบก่อนทำการยืนยัน");
             }
         }
     </script>

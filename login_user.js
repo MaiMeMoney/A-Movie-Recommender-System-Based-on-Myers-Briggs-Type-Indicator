@@ -2,7 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { MongoClient } = require('mongodb');
 const { body, validationResult } = require('express-validator');
 const multer = require('multer');
