@@ -45,19 +45,44 @@ header .quote {
 }
 
 .character-image {
-    width: 25%;
+    width: 150px;
+    max-height: 200px;
+    overflow: hidden;
+    text-align: center;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .character-img {
-    width: 100%;
+    width: auto;
+    height: 100%;
+    max-height: 150px;
+    object-fit: contain; /* ปรับให้ภาพพอดีในกรอบโดยไม่ล้นออกมา */
     border-radius: 15px;
 }
 
+#character-name {
+    margin-top: 10px;
+    font-size: 18px;
+    color: white;
+}
+
+.subtext {
+    font-size: 16px;
+    color: #AAAAAA;
+    margin-top: 3px;
+}
+
+
+
+
 .description {
-    width: 70%;
-    padding-left: 20px;
+    flex: 1;
     text-align: left;
 }
+
 
 .description h2 {
     font-size: 18;

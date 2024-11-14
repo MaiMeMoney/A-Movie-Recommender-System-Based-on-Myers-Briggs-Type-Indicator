@@ -81,3 +81,13 @@ h1 {
 .mbti-type:hover {
     background-color: #666;
 }
+
+.character-img {
+    width: 150px;
+    height: 150px;
+    max-width: 100%; /* Limits the width */
+    max-height: 100%; /* Limits the height */
+    object-fit: cover;
+    border-radius: 15px;
+}
+
