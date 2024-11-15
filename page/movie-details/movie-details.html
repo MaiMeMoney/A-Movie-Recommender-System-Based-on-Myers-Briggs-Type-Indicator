@@ -12,8 +12,11 @@
             <div class="logo"><a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a></div>
             <input type="text" class="search-bar" placeholder="Search for movies...">
             <div class="my-list">
-                <button>MY LIST</button>
-                <button class="account-icon">👤</button>
+                <span id="username-display" class="username-display"></span> <!-- แสดงชื่อผู้ใช้ -->
+                <a href="/page/watchlist/index.html">
+                    <button>MY LIST</button>
+                </a>
+                <button class="account-icon" onclick="goToProfile()">👤</button>
             </div>
         </div>
     </header>
@@ -58,5 +61,24 @@
     </div>
 
     <script src="movie_details.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = localStorage.getItem('username');
+    
+            if (!username) {
+                alert('You are not logged in!');
+                window.location.href = '/page/login_page/index.html';
+                return;
+            }
+    
+            // แสดงชื่อผู้ใช้ในแถบเมนู
+            document.getElementById('username-display').textContent = `Welcome, ${username}`;
+    
+            // ฟังก์ชันสำหรับไปยังหน้าแก้ไขข้อมูลส่วนตัว
+            window.goToProfile = function() {
+                window.location.href = `/page/Personal information editing page/index.html?username=${username}`;
+            };
+        });
+    </script>
 </body>
 </html>
