@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MovieMingle</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- เพิ่ม FontAwesome สำหรับไอคอน -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -14,7 +16,9 @@
             <div class="my-list">
                 <span id="username-display" class="username-display"></span> <!-- แสดงชื่อผู้ใช้ -->
                 <a href="/page/watchlist/index.html">
-                    <button>MY LIST</button>
+                    <button>
+                        <i class="fas fa-bookmark"></i>
+                    </button>
                 </a>
                 <button class="account-icon" onclick="goToProfile()">👤</button>
             </div>
@@ -31,23 +35,23 @@
             <div class="recommend-header">
                 <h2>RECOMMENDED BY YOUR MBTI TYPE</h2>
                 <a href="/page/seemore_page/index.html">
-                    <button class="recommend-me">RECOMMEND ME</button>
+                    <button id="recommend-me-btn" class="recommend-me">RECOMMEND ME</button>
                 </a>
             </div>
             <div class="movie-list">
                 <div class="movie-item">
-                    <a href="/page/movie-details/movie-details.html?movieId=67129fc906dd23bb843c4435">
-                        <img src="https://m.media-amazon.com/images/I/71715eBi1sL._AC_SL1000_.jpg" alt="Movie">
+                    <a href="/page/movie-details/movie-details.html?genre=Action">
+                        <img src="Poster_Link" alt="Movie">
                     </a>
                 </div>
                 <div class="movie-item">
-                    <a href="/page/movie-details/movie-details.html?movieId=67129fc906dd23bb843c4436">
-                        <img src="https://m.media-amazon.com/images/I/71khjV-MoOS._AC_SY879_.jpg" alt="Movie">
+                    <a href="/page/movie-details/movie-details.html?genre=Action">
+                        <img src="Poster_Link" alt="Movie">
                     </a>
                 </div>
                 <div class="movie-item">
-                    <a href="/page/movie-details/movie-details.html?movieId=67129fc906dd23bb843c4437">
-                        <img src="https://image.tmdb.org/t/p/original/6IOvN7okabMadYJOznljdYq3cGV.jpg" alt="Movie">
+                    <a href="/page/movie-details/movie-details.html?genre=Action">
+                        <img src="Poster_Link" alt="Movie">
                     </a>
                 </div>
                 <div class="movie-item">
@@ -62,18 +66,18 @@
             <h2>MOVIE YOU MIGHT LIKE <a href="#">SEE MORE</a></h2>
             <div class="movie-list">
                 <div class="movie-item">
-                    <a href="/page/movie_details/index.html?movieId=4">
-                        <img src="placeholder.png" alt="Movie">
+                    <a href="/page/movie-details/movie-details.html?movieId=67129fc906dd23bb843c4435">
+                        <img src="https://m.media-amazon.com/images/I/71715eBi1sL._AC_SL1000_.jpg" alt="Movie">
                     </a>
                 </div>
                 <div class="movie-item">
-                    <a href="/page/movie_details/index.html?movieId=4">
-                        <img src="placeholder.png" alt="Movie">
+                    <a href="/page/movie-details/movie-details.html?movieId=67129fc906dd23bb843c4436">
+                        <img src="https://m.media-amazon.com/images/I/71khjV-MoOS._AC_SY879_.jpg" alt="Movie">
                     </a>
                 </div>
                 <div class="movie-item">
-                    <a href="/page/movie_details/index.html?movieId=4">
-                        <img src="placeholder.png" alt="Movie">
+                    <a href="/page/movie-details/movie-details.html?movieId=67129fc906dd23bb843c4437">
+                        <img src="https://image.tmdb.org/t/p/original/6IOvN7okabMadYJOznljdYq3cGV.jpg" alt="Movie">
                     </a>
                 </div>
                 <div class="movie-item">
@@ -313,23 +317,47 @@
         
     </main>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const username = localStorage.getItem('username');
-    
-            if (!username) {
-                alert('You are not logged in!');
-                window.location.href = '/page/login_page/index.html';
-                return;
+document.addEventListener('DOMContentLoaded', function () {
+    const username = localStorage.getItem('username');
+
+    if (!username) {
+        alert('You are not logged in!');
+        window.location.href = '/page/login_page/index.html';
+        return;
+    }
+
+    document.getElementById('username-display').textContent = `Welcome, ${username}`;
+
+    // ฟังก์ชันสำหรับไปยังหน้าแก้ไขข้อมูลส่วนตัว
+    window.goToProfile = function () {
+        window.location.href = `/page/Personal information editing page/index.html?username=${username}`;
+    };
+
+    // ตรวจสอบ MBTI เมื่อคลิกปุ่ม Recommend Me
+    document.getElementById('recommend-me-btn').addEventListener('click', async function () {
+        try {
+            const response = await fetch('http://localhost:5001/api/check-mbti', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            });
+
+            const data = await response.json();
+            if (data.hasMBTI) {
+                window.location.href = '/page/seemore_page/index.html'; // พาไปยังหน้าแนะนำหนัง
+            } else {
+                window.location.href = '/page/mbti_selection/mbti_selection.html'; // พาไปยังหน้าเลือก MBTI
             }
-    
-            // แสดงชื่อผู้ใช้ในแถบเมนู
-            document.getElementById('username-display').textContent = `Welcome, ${username}`;
-    
-            // ฟังก์ชันสำหรับไปยังหน้าแก้ไขข้อมูลส่วนตัว
-            window.goToProfile = function() {
-                window.location.href = `/page/Personal information editing page/index.html?username=${username}`;
-            };
-        });
-    </script>
+        } catch (error) {
+            console.error("Error checking MBTI:", error);
+            alert('An error occurred. Please try again later.');
+        }
+    });
+});
+
+
+    </script>    
 </body>
 </html>

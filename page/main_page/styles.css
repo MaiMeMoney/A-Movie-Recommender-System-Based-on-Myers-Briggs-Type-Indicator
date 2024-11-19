@@ -53,6 +53,13 @@ body {
     cursor: pointer;
 }
 
+.my-list i {
+    margin-right: 5px;
+    color: white; /* สีไอคอน */
+    font-size: 16px; /* ขนาดของไอคอน */
+}
+
+
 .account-icon {
     font-size: 15px;
 }
