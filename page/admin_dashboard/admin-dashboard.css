@@ -1,0 +1,56 @@
+/* admin-dashboard.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    background-color: #2d6a4f;
+    color: white;
+    padding: 20px;
+    width: 250px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+.sidebar button {
+    background-color: #d00000;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.sidebar button:hover {
+    background-color: #c1121f;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.content h1 {
+    color: #1d3557;
+}
+
+.hidden {
+    display: none;
+}
