@@ -197,6 +197,44 @@ h2 a {
     color: #fff;
 }
 
+.slider-container {
+    position: relative;
+}
+
+.movie-list {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.slide-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.slide-btn.left {
+    left: 10px;
+}
+
+.slide-btn.right {
+    right: 10px;
+}
+
+.slide-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+
 /* ปรับความไวต่อการตอบสนอง */
 @media (max-width: 768px) {
     .movie-item {
