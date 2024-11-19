@@ -256,6 +256,14 @@ header .menu button {
     font-size: 18px;
 }
 
+button {
+    transition: all 0.3s ease;
+}
+button:hover {
+    transform: scale(1.05);
+}
+
+
 .image-crop-container {
     position: relative;
     max-width: 400px;
@@ -280,4 +288,12 @@ header .menu button {
     margin-top: 10px;
     cursor: pointer;
     width: 150px;
+}
+
+.current-mbti {
+    font-size: 16px;
+    color: #f4a261;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
 }

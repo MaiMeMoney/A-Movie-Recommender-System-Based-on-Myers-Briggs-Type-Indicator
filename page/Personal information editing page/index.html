@@ -30,7 +30,10 @@
                 <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)" style="display: none;">
                 <button id="cropButton" class="upload-btn" style="display: none;" onclick="cropImage()">Crop & Save</button>
                 <div class="profile-name" id="profileName">NAME</div>
-                <button class="edit-profile">Edit profile</button>
+                <div id="currentMbti" class="current-mbti">Your MBTI: <span>Loading...</span></div>
+                <button id="changeMbtiButton" class="edit-profile">Change MBTI</button>
+
+
                 <button class="logout" id="logoutButton">Logout</button>
             </div>
             

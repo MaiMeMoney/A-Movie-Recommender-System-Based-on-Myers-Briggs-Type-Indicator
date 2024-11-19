@@ -65,7 +65,7 @@ app.get('/movies_list/movies/:movieId', async (req, res) => {
 
 // Define MBTI Schema and Model
 const mbtiSchema = new mongoose.Schema({
-    username: { type: String, required: true }, // เพิ่มฟิลด์ username
+    username: { type: String, required: true },
     mbti_type: { type: String, required: true },
     createdAt: { type: Date, default: Date.now }
 });
@@ -83,9 +83,9 @@ app.post('/api/saveMBTI', async (req, res) => {
 
         // อัปเดต mbti_type ของผู้ใช้ถ้ามีอยู่แล้วในฐานข้อมูล มิฉะนั้นให้สร้างใหม่
         const result = await MBTI.findOneAndUpdate(
-            { username }, // เงื่อนไขค้นหาตาม username
-            { mbti_type: mbtiType }, // ข้อมูลที่ต้องการอัปเดต
-            { new: true, upsert: true } // ถ้าไม่เจอให้สร้างใหม่ (upsert) และส่งข้อมูลที่อัปเดตกลับมา (new)
+            { username },
+            { mbti_type: mbtiType },
+            { new: true, upsert: true }
         );
 
         console.log(`MBTI for username ${username} updated/inserted with mbti_type: ${mbtiType}`);
@@ -93,6 +93,105 @@ app.post('/api/saveMBTI', async (req, res) => {
     } catch (error) {
         console.error("Error updating/inserting MBTI:", error);
         res.status(500).json({ message: 'Failed to update MBTI' });
+    }
+});
+
+// API เพื่อเช็ค MBTI ของผู้ใช้
+app.post('/api/check-mbti', async (req, res) => {
+    try {
+        const { username } = req.body;
+
+        if (!username) {
+            return res.status(400).json({ message: 'Username is required' });
+        }
+
+        // ค้นหาในฐานข้อมูล
+        const user = await MBTI.findOne({ username });
+        console.log('User data found:', user);
+
+        if (user && user.mbti_type) {
+            res.json({ hasMBTI: true });
+        } else {
+            res.json({ hasMBTI: false });
+        }
+    } catch (error) {
+        console.error("Error checking MBTI:", error);
+        res.status(500).json({ message: 'Failed to check MBTI', error: error.message });
+    }
+});
+//ดึงค่า MBTI ของผู้ใช้จาก mbti_list
+app.get('/api/mbti/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+        await client.connect();
+        const db = client.db(dbName);
+
+        // ค้นหาข้อมูลผู้ใช้ใน collection movies_list
+        const userMovieData = await db.collection('movies_list').findOne({ username });
+        if (!userMovieData) {
+            return res.status(404).json({ message: 'User not found in movies_list' });
+        }
+
+        // ค้นหา MBTI ที่เกี่ยวข้องใน mbti_list
+        const mbtiData = await db.collection('mbti_list').findOne({ mbti_id: userMovieData.mbti_id });
+        if (!mbtiData) {
+            return res.status(404).json({ message: 'MBTI not found in mbti_list' });
+        }
+
+        res.json({ mbti: mbtiData.mbti });
+    } catch (error) {
+        console.error('Error fetching MBTI:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Example API: Other existing APIs
+app.get('/api/example', (req, res) => {
+    res.json({ message: 'This is an example API.' });
+});
+
+app.post('/api/update-mbti', async (req, res) => {
+    try {
+        const { username, mbti } = req.body;
+
+        if (!username || !mbti) {
+            return res.status(400).json({ message: 'Username and MBTI are required' });
+        }
+
+        const updatedUser = await MBTI.findOneAndUpdate(
+            { username },
+            { mbti_type: mbti },
+            { new: true, upsert: true } // อัปเดตหรือเพิ่มข้อมูลใหม่ถ้าไม่พบ
+        );
+
+        if (updatedUser) {
+            res.json({ message: 'MBTI updated successfully', mbti: updatedUser.mbti_type });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error updating MBTI:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+app.get('/api/user-mbti/:username', async (req, res) => {
+    try {
+        const username = req.params.username;
+
+        if (!username) {
+            return res.status(400).json({ message: 'Username is required' });
+        }
+
+        const userMbti = await MBTI.findOne({ username });
+        if (!userMbti) {
+            return res.status(404).json({ message: 'MBTI not found' });
+        }
+
+        res.json({ mbti: userMbti.mbti_type });
+    } catch (error) {
+        console.error('Error fetching user MBTI:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 });
 

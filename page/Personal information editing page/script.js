@@ -75,6 +75,34 @@ document.getElementById('logoutButton').addEventListener('click', function () {
     localStorage.removeItem('username');  // ลบข้อมูล username จาก localStorage
     window.location.href = '/page/login_page/index.html';  // เปลี่ยนไปยังหน้าล็อกอิน
 });
+//ฟังก์ชันเพื่อดึงข้อมูล mbti_type
+async function loadUserMBTI() {
+    const username = localStorage.getItem('username');
+    if (!username) {
+        alert('You are not logged in!');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://127.0.0.1:5001/api/user-mbti/${username}`);
+        if (response.ok) {
+            const { mbti } = await response.json();
+            const mbtiDisplay = document.getElementById('currentMbti');
+            mbtiDisplay.querySelector('span').textContent = mbti || 'Not Set';
+        } else {
+            console.error('Failed to fetch MBTI');
+        }
+    } catch (error) {
+        console.error('Error fetching MBTI:', error);
+    }
+}
+
+// เรียกฟังก์ชันนี้ใน `DOMContentLoaded`
+document.addEventListener('DOMContentLoaded', () => {
+    loadUserProfile();
+    loadUserMBTI();
+});
+
 
 // ฟังก์ชันแสดง Toast Notification
 function showToast(message) {
@@ -96,6 +124,7 @@ async function loadUserProfile() {
     }
 
     try {
+        // ดึงข้อมูลผู้ใช้จากเซิร์ฟเวอร์
         const response = await fetch(`http://127.0.0.1:3000/user/${username}`);
         const userData = await response.json();
 
@@ -107,14 +136,26 @@ async function loadUserProfile() {
             document.getElementById('profileName').textContent = `${userData.firstname || ''} ${userData.lastname || ''}`;
 
             const profileImage = document.getElementById('profileImage');
-            profileImage.src = userData.profileImage || 'https://www.gravatar.com/avatar/?d=mp&f=y'; // รูปพื้นฐาน
+            profileImage.src = userData.profileImage || 'https://www.gravatar.com/avatar/?d=mp&f=y';
         } else {
             console.error('Failed to fetch user data:', userData.message);
+        }
+
+        // ดึง MBTI จาก collection mbti_list
+        const mbtiResponse = await fetch(`http://127.0.0.1:5001/api/user-mbti/${username}`);
+        const mbtiData = await mbtiResponse.json();
+
+        if (mbtiResponse.ok) {
+            document.getElementById('currentMbti').querySelector('span').textContent = mbtiData.mbti || 'Not Set';
+        } else {
+            console.error('Failed to fetch MBTI:', mbtiData.message);
+            document.getElementById('currentMbti').querySelector('span').textContent = 'Not Set';
         }
     } catch (error) {
         console.error('Error:', error);
     }
 }
+
 
 // เรียกใช้ฟังก์ชันนี้เมื่อโหลดหน้าโปรไฟล์
 document.addEventListener('DOMContentLoaded', loadUserProfile);
@@ -173,6 +214,35 @@ function cancelUpdate() {
     }
 }
 
+//ฟังก์ชันเปลี่ยน MBTI
+document.getElementById('changeMbtiButton').addEventListener('click', function () {
+    window.location.href = '/page/mbti_selection/mbti_selection.html';
+});
+
+// Toast Notification สำหรับ Error
+function showErrorToast(message) {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.backgroundColor = '#e63946';
+    toast.style.color = '#fff';
+    toast.style.padding = '10px';
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.borderRadius = '5px';
+    toast.style.zIndex = '1000';
+    document.body.appendChild(toast);
+    setTimeout(() => document.body.removeChild(toast), 4000);
+}
+
+// ตัวอย่างการใช้งาน showErrorToast
+try {
+    // code
+} catch (error) {
+    showErrorToast('❌ Error occurred!');
+}
+
 // ฟังก์ชันดึงข้อมูลผู้ใช้เมื่อโหลดหน้า
 document.addEventListener('DOMContentLoaded', async function() {
     const username = localStorage.getItem('username');
@@ -207,4 +277,5 @@ document.addEventListener('DOMContentLoaded', async function() {
     } catch (error) {
         console.error('Error:', error);
     }
+    
 });
