@@ -1,56 +1,133 @@
 /* admin-dashboard.css */
 
-body {
-    font-family: Arial, sans-serif;
+/* Reset styles */
+body, html {
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
+/* แถบด้านบน */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #202020;
+    color: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .logo-link {
+    text-decoration: none;
+    color: #f4a261;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar .navbar-right p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Layout หลัก */
 .dashboard-container {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 60px); /* ลบความสูงของแถบด้านบน */
 }
 
+/* แถบเมนูด้านซ้าย */
 .sidebar {
     background-color: #2d6a4f;
-    color: white;
-    padding: 20px;
     width: 250px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.sidebar .profile-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-pic img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    margin-bottom: 10px;
 }
 
 .sidebar h2 {
-    margin-top: 0;
-    margin-bottom: 30px;
+    font-size: 24px;
+    margin: 10px 0;
+    text-transform: uppercase;
 }
 
 .sidebar button {
-    background-color: #d00000;
+    background-color: #202020;
     color: white;
     border: none;
-    padding: 10px;
-    cursor: pointer;
+    padding: 10px 15px;
+    margin: 10px 0;
     width: 100%;
     text-align: left;
     border-radius: 5px;
-    margin-bottom: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .sidebar button:hover {
-    background-color: #c1121f;
+    background-color: #1b4332;
 }
 
+.logout-btn {
+    background-color: #e63946;
+    text-align: center;
+}
+
+/* Content Section */
 .content {
-    flex: 1;
+    flex-grow: 1;
+    background-color: #343a40;
+    color: white;
     padding: 20px;
     overflow-y: auto;
 }
 
 .content h1 {
-    color: #1d3557;
+    font-size: 28px;
+    margin-bottom: 20px;
 }
 
-.hidden {
-    display: none;
+.dropdown-section {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.dropdown-section label {
+    margin-right: 10px;
+}
+
+.dropdown-section select {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #495057;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.dashboard-content {
+    background-color: white;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

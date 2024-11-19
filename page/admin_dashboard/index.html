@@ -4,34 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="admin-dashboard.css"> <!-- ลิงก์ไฟล์ CSS -->
+    <link rel="stylesheet" href="admin-dashboard.css">
 </head>
 <body>
+    <!-- แถบด้านบน -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="../main_page/mainpage.html" class="logo-link">MOVIEMINGLE</a>
+        </div>
+        <div class="navbar-right">
+            <p>Admin Menu</p>
+        </div>
+    </header>
+
     <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h2>ADMIN</h2>
-            <p id="logged-in-user" class="user-info">Welcome, <span></span></p> <!-- เพิ่มส่วนแสดงชื่อ -->
+            <div class="profile-section">
+                <div class="profile-pic">
+                    <img src="https://via.placeholder.com/100" alt="Admin Profile Picture">
+                </div>
+                <h2>ADMIN</h2>
+                <button id="logout-btn" class="logout-btn">Logout</button>
+            </div>
             <button id="user-management-btn">User Account Management</button>
             <button id="movie-management-btn">Movie Management</button>
-            <button id="logout-btn">Logout</button>
         </div>
-        
 
         <!-- Content -->
         <div class="content">
             <h1>Admin Dashboard</h1>
-            <div id="user-management" class="hidden">
-                <h2>User Account Management</h2>
-                <p>Manage user accounts here.</p>
+            <div class="dropdown-section">
+                <!-- ส่วนสำหรับ Dropdown -->
+                <label for="data-selector">Select Data You Want to View</label>
+                <select id="data-selector">
+                    <option value="MBTI LIST">User MBTI LIST</option>
+                    <option value="movie-management">Most Rated Movie</option>
+                </select>
             </div>
-            <div id="movie-management" class="hidden">
-                <h2>Movie Management</h2>
-                <p>Manage movies here.</p>
+            <div class="dashboard-content">
+                <!-- พื้นที่แสดงข้อมูล Dashboard -->
+                <h2>DASHBOARD</h2>
+                <p>Here is the dashboard content.</p>
             </div>
         </div>
     </div>
 
-    <script src="admin-dashboard.js"></script> <!-- ลิงก์ไฟล์ JS -->
+    <script src="admin-dashboard.js"></script>
 </body>
 </html>
