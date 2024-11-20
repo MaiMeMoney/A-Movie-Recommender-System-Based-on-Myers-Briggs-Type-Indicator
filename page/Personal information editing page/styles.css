@@ -52,6 +52,17 @@ body {
     cursor: pointer;
 }
 
+.my-list i {
+    margin-right: 5px;
+    color: white; /* สีไอคอน */
+    font-size: 22px; /* ขนาดของไอคอน */
+}
+
+.my-list-icon:hover {
+   
+    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ Hover */
+}
+
 header .navbar {
     display: flex;
     justify-content: space-between;

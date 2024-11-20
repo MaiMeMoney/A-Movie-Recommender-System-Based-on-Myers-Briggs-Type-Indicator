@@ -34,7 +34,8 @@ const movieSchema = new mongoose.Schema({
     Star3: String,
     Star4: String,
     No_of_Votes: Number,
-    Gross: String
+    Gross: String,
+    link_movies: String
 });
 
 const Movie = mongoose.model('movies_list', movieSchema, 'movies');
@@ -44,18 +45,22 @@ app.get('/movies_list/movies/:movieId', async (req, res) => {
     try {
         const movieId = req.params.movieId;
 
+        // ตรวจสอบว่า movieId มีรูปแบบที่ถูกต้อง
         if (!ObjectId.isValid(movieId)) {
             return res.status(400).json({ message: 'Invalid movie ID format' });
         }
 
+        // ค้นหาใน MongoDB
         const movie = await Movie.findOne({ _id: new ObjectId(movieId) });
-        
+
         if (!movie) {
             console.log("Movie not found");
             return res.status(404).json({ message: 'Movie not found' });
         }
 
+        // Log ข้อมูลหนังเพื่อตรวจสอบว่ามี link_movies หรือไม่
         console.log("Fetched movie data:", movie);
+
         res.json(movie);
     } catch (error) {
         console.error("Error fetching movie data:", error);
@@ -193,6 +198,47 @@ app.get('/api/user-mbti/:username', async (req, res) => {
         console.error('Error fetching user MBTI:', error);
         res.status(500).json({ message: 'Server error' });
     }
+});
+
+// API to fetch video details from link_movies
+app.get('/movies_list/movies/:movieId/video', async (req, res) => {
+    try {
+        const movieId = req.params.movieId;
+
+        if (!ObjectId.isValid(movieId)) {
+            return res.status(400).json({ message: 'Invalid movie ID format' });
+        }
+
+        const movie = await Movie.findOne({ _id: new ObjectId(movieId) });
+        
+        if (!movie || !movie.link_movies) {
+            return res.status(404).json({ message: 'Video link not found' });
+        }
+
+        // Extract Video ID if link_movies is a full URL
+        let videoId = movie.link_movies;
+        const youtubeRegex = /(?:youtu\.be\/|youtube\.com\/(?:embed\/|watch\?v=))([\w-]+)/;
+        const match = videoId.match(youtubeRegex);
+
+        if (match) {
+            videoId = match[1]; // Extract Video ID
+        }
+
+        res.json({ link: videoId });
+    } catch (error) {
+        console.error("Error fetching video data:", error);
+        res.status(500).json({ message: 'Error fetching video details' });
+    }
+});
+
+const path = require('path'); // เพิ่มโมดูล path สำหรับจัดการเส้นทาง
+
+// ให้ Express ให้บริการไฟล์ static จากโฟลเดอร์ public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// เส้นทาง fallback สำหรับส่งไฟล์ movie-details.html หากไม่มี API ที่ตรงกับ URL
+app.get('/movie-details.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'movie-details.html'));
 });
 
 

@@ -15,11 +15,9 @@
             <input type="text" class="search-bar" placeholder="Search for movies...">
             <div class="my-list">
                 <span id="username-display" class="username-display"></span> <!-- แสดงชื่อผู้ใช้ -->
-                <a href="/page/watchlist/index.html">
-                    <button>
-                        <i class="fas fa-bookmark"></i>
-                    </button>
-                </a>
+                <a href="/page/watchlist/index.html" class="my-list-icon">
+                    <i class="fas fa-bookmark"></i>
+                </a>                
                 <button class="account-icon" onclick="goToProfile()">👤</button>
             </div>
         </div>
@@ -61,7 +59,7 @@
                 </div>
         </section>
         
-
+        
         <section class="movie-suggestions">
             <h2>MOVIE YOU MIGHT LIKE <a href="#">SEE MORE</a></h2>
             <div class="slider-container">
@@ -1006,18 +1004,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-    </script>    
-    <script>
-        function scrollLeft(sectionClass) {
-            const movieList = document.querySelector(`.${sectionClass} .movie-list`);
-            movieList.scrollBy({ left: -300, behavior: 'smooth' });
-        }
-    
-        function scrollRight(sectionClass) {
-            const movieList = document.querySelector(`.${sectionClass} .movie-list`);
-            movieList.scrollBy({ left: 300, behavior: 'smooth' });
-        }
     </script>
-    
+    <script src="script.js"></script>
 </body>
 </html>

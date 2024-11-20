@@ -1,11 +1,14 @@
+<!-- movie-details -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Details</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MovieMingle</title>
+        <link rel="stylesheet" href="styles.css">
+        <!-- เพิ่ม FontAwesome สำหรับไอคอน -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    </head>
 <body>
     <header>
         <div class="navbar">
@@ -13,72 +16,41 @@
             <input type="text" class="search-bar" placeholder="Search for movies...">
             <div class="my-list">
                 <span id="username-display" class="username-display"></span> <!-- แสดงชื่อผู้ใช้ -->
-                <a href="/page/watchlist/index.html">
-                    <button>MY LIST</button>
-                </a>
+                <a href="/page/watchlist/index.html" class="my-list-icon">
+                    <i class="fas fa-bookmark"></i>
+                </a>     
                 <button class="account-icon" onclick="goToProfile()">👤</button>
             </div>
         </div>
     </header>
 
-    <main>
-        <section class="movie-details">
-            <h1 id="movie-name">Movie Name</h1>
-            <p id="movie-info">Release Year | Runtime</p>
-            <div class="movie-rating">
-                <span id="movie-rating">⭐ Movie rating 7/10</span>
-                <span id="meta-score">Metascore: 80</span>
-            </div>
-            <div class="media-section">
-                <img id="movie-poster" src="placeholder.png" alt="Movie Poster" class="movie-poster">
-                <div class="see-more">
-                    <button id="see-more-button">See more Pictures</button>
-                </div>
-            </div>
-            <div class="description-section">
-                <h3>Description</h3>
-                <p id="movie-description">Lorem Ipsum is simply dummy text...</p>
-                <h3>Director</h3>
-                <p id="movie-director">Director Name</p>
-                <h3>Actor/Actress</h3>
-                <p id="movie-actors">Actor1, Actor2, Actor3, Actor4</p>
-                <h3>Gross Revenue</h3>
-                <p id="movie-gross">Gross: $500 million</p>
-                <button class="add-watchlist">Add to Watchlist</button>
-            </div>
-        </section>
-    </main>
 
-    <!-- Popup overlay and content for "See More Pictures" -->
-    <div id="popup-overlay" class="popup-overlay" style="display: none;">
-        <div class="popup-content">
-            <button id="close-popup" class="close-popup">&times;</button>
-            <h2>See More Pictures</h2>
-            <div id="see-more-posters" class="see-more-posters">
-                <!-- Images from MongoDB will be injected here -->
+    <!-- Movie Details Layout -->
+    <section class="movie-details-layout">
+        <div class="content-container">
+            <div class="left-section">
+                <img id="movie-poster" src="placeholder.png" alt="Movie Poster" class="movie-poster">
+                <button class="add-watchlist">+ Add to Watchlist</button>
+            </div>
+            <div class="right-section">
+                <h1 id="movie-name">Forrest Gump</h1>
+                <p id="movie-info">1994 · UA · 142 min</p>
+                <span id="movie-rating">⭐ IMDB Rating 8.8/10</span>
+                <div id="movie-video" class="movie-video">
+                    <iframe src="https://www.youtube.com/embed/video_id" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <p id="movie-description">
+                    The presidencies of Kennedy and Johnson, the events of Vietnam, Watergate and other historical events unfold...
+                </p>
+                <p id="movie-director">Director: Robert Zemeckis</p>
+                <p id="movie-actors">Stars: Tom Hanks, Robin Wright, Gary Sinise, Sally Field</p>
+                <p id="movie-genre">Genre: <span id="genre"></span></p> <!-- แสดงข้อมูล Genre -->
+                <p id="movie-gross">Gross: $<span id="gross-amount"></span></p> <!-- แสดงข้อมูล Gross -->
+                
+                <p id="meta-score">Metascore: ?</p>
             </div>
         </div>
-    </div>
-
+    </section>
     <script src="movie_details.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const username = localStorage.getItem('username');
-    
-            if (!username) {
-                alert('You are not logged in!');
-                window.location.href = '/page/login_page/index.html';
-                return;
-            }
-    
-            // แสดงชื่อผู้ใช้ในแถบเมนู
-            document.getElementById('username-display').textContent = `Welcome, ${username}`;
-    
-            // ฟังก์ชันสำหรับไปยังหน้าแก้ไขข้อมูลส่วนตัว
-            window.goToProfile = function() {
-                window.location.href = `/page/Personal information editing page/index.html?username=${username}`;
-            };
-        });
-    </script>
 </body>
 </html>

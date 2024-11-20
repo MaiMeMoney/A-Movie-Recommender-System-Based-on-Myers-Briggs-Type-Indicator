@@ -61,7 +61,7 @@ body {
 
 
 .account-icon {
-    font-size: 15px;
+    font-size: 18px;
 }
 
 main {
@@ -137,17 +137,16 @@ main {
     transition: transform 0.2s ease, box-shadow 0.2s ease; /* เพิ่มการเปลี่ยนแปลงสำหรับเอฟเฟกต์ hover */
 }
 
-.movie-item:hover {
-    transform: scale(1); /* ยกเลิกการขยาย */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* เงาที่เบาลง */
-}
-
-
 /* การจัดการภาพ */
 .movie-item img {
     width: 100%;
     height: 100%;
     object-fit: cover; /* รักษาสัดส่วน */
+}
+
+.movie-item:hover {
+    transform: scale(0.9); /* ขยายเล็กน้อย */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* เพิ่มเงา */
 }
 
 .movie-list {
@@ -162,6 +161,18 @@ main {
     display: none; /* สำหรับ Chrome, Safari และ Edge */
 }
 
+
+/* ปรับความไวต่อการตอบสนอง */
+@media (max-width: 768px) {
+    .movie-item {
+        width: 100%; /* เต็มความกว้างบนหน้าจอเล็ก */
+        height: auto; /* ความสูงอัตโนมัติเพื่อรักษาสัดส่วน */
+    }
+
+    .movie-list {
+        flex-direction: column; /* จัดเรียงรายการในแนวตั้งบนหน้าจอเล็ก */
+    }
+}
 
 .recommend-header {
     display: flex;
@@ -207,6 +218,8 @@ h2 a {
     scroll-behavior: smooth;
 }
 
+
+
 .slide-btn {
     position: absolute;
     top: 50%;
@@ -230,19 +243,36 @@ h2 a {
 }
 
 .slide-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
+}
+
+/* ปรับแต่งปุ่ม My List Icon */
+.my-list-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px; /* กำหนดขนาดปุ่ม */
+    height: 40px;
+    
+    border-radius: 10px; /* ทำให้เป็นวงกลม */
+    text-decoration: none; /* ลบเส้นใต้ */
+    color: white; /* สีของไอคอน */
+    
+    cursor: pointer;
+}
+
+.my-list-icon i {
+    font-size: 22px; /* ขนาดของไอคอน */
+}
+
+.my-list-icon:hover {
+   
+    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ Hover */
 }
 
 
 
-/* ปรับความไวต่อการตอบสนอง */
-@media (max-width: 768px) {
-    .movie-item {
-        width: 100%; /* เต็มความกว้างบนหน้าจอเล็ก */
-        height: auto; /* ความสูงอัตโนมัติเพื่อรักษาสัดส่วน */
-    }
 
-    .movie-list {
-        flex-direction: column; /* จัดเรียงรายการในแนวตั้งบนหน้าจอเล็ก */
-    }
-}
+
+
