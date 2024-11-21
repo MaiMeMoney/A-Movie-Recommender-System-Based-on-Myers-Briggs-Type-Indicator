@@ -10,7 +10,9 @@
 <body>
     <header>
         <div class="navbar">
-            <div class="logo"><a href="../main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a></div>
+            <div class="logo">
+                <a href="../main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a>
+            </div>
             <input type="text" class="search-bar" placeholder="Search for movies...">
             <div class="my-list">
                 <a href="/page/watchlist/index.html">
@@ -25,20 +27,18 @@
         <div class="sidebar">
             <h3>WATCHLIST</h3>
             <div id="list-container">
-                <!-- ลิสต์จะถูกสร้างและเพิ่มเข้ามาที่นี่ -->
+                <!-- ลิสต์ Favorite ที่สร้างโดยค่าเริ่มต้น -->
             </div>
             <div id="create-list-container">
                 <input type="text" id="new-list-name" placeholder="New List Name">
+                <button class="favorite-button" onclick="loadWatchlist('Favorite')">Favorite</button>
                 <button class="create-list" onclick="createList()">Create List</button>
             </div>
         </div>
 
         <div class="main-content">
             <div id="movie-list" class="movie-grid">
-                <!-- เมื่อไม่มีหนังจะแสดงปุ่ม + -->
-                <div class="movie-item add-new" onclick="addMovie()">
-                    <div class="movie-image">+</div>
-                </div>
+                <!-- หนังในลิสต์จะแสดงที่นี่ -->
             </div>
             <div class="actions">
                 <button class="update" onclick="updateMovies()">Update</button>

@@ -241,6 +241,119 @@ app.get('/movie-details.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'movie-details.html'));
 });
 
+const watchlistSchema = new mongoose.Schema({
+    username: { type: String, required: true },
+    listName: { type: String, default: 'Favorite' }, // ตั้งชื่อ Watchlist
+    movies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'movies_list' }]
+});
+
+
+const Watchlist = mongoose.model('Watchlist', watchlistSchema);
+
+// API สำหรับเพิ่มหนังใน Watchlist "Favorite"
+app.post('/watchlist/add', async (req, res) => {
+    const { username, movieId } = req.body;
+
+    if (!username || !movieId) {
+        return res.status(400).json({ message: 'Username and Movie ID are required' });
+    }
+
+    try {
+        let favoriteList = await Watchlist.findOne({ username, listName: 'Favorite' });
+        if (!favoriteList) {
+            favoriteList = new Watchlist({ username, listName: 'Favorite', movies: [] });
+            await favoriteList.save();
+        }
+
+        if (favoriteList.movies.includes(movieId)) {
+            return res.status(400).json({ message: 'Movie already in Favorite Watchlist' });
+        }
+
+        favoriteList.movies.push(movieId);
+        await favoriteList.save();
+
+        res.status(201).json({ message: 'Movie added to Favorite Watchlist' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Failed to add movie to Watchlist' });
+    }
+});
+
+
+app.get('/watchlist/:username', async (req, res) => {
+    const { username } = req.params;
+
+    try {
+        const watchlist = await Watchlist.find({ username }).populate({
+            path: 'movieId',
+            model: 'Movie', // ใช้ model ของ movies
+        });
+        res.status(200).json(watchlist);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Failed to fetch Watchlist' });
+    }
+});
+
+// API สำหรับดึง Watchlist "Favorite"
+app.get('/watchlist/:username/:listName', async (req, res) => {
+    const { username, listName } = req.params;
+
+    try {
+        const watchlist = await Watchlist.findOne({ username, listName })
+            .populate({
+                path: 'movies',
+                model: 'movies_list', // ระบุโมเดลที่ต้องการ populate
+            });
+        if (!watchlist) {
+            return res.status(404).json({ message: 'Watchlist not found' });
+        }
+        res.status(200).json(watchlist.movies);
+    } catch (error) {
+        console.error("Error fetching Watchlist:", error);
+        res.status(500).json({ message: 'Failed to fetch Watchlist' });
+    }
+});
+
+app.post('/watchlist/create', async (req, res) => {
+    const { username, listName } = req.body;
+
+    if (!username || !listName) {
+        return res.status(400).json({ message: "Username and list name are required!" });
+    }
+
+    try {
+        // ตรวจสอบว่ามี Watchlist อยู่แล้วหรือไม่
+        const existingList = await Watchlist.findOne({ username, listName });
+        if (existingList) {
+            return res.status(400).json({ message: "This Watchlist already exists." });
+        }
+
+        // สร้าง Watchlist ใหม่
+        const newList = new Watchlist({ username, listName, movies: [] });
+        await newList.save();
+
+        res.status(201).json({ message: "Watchlist created successfully!" });
+    } catch (error) {
+        console.error("Error creating Watchlist:", error);
+        res.status(500).json({ message: "Failed to create Watchlist." });
+    }
+});
+
+app.delete('/watchlist/delete/:listName', async (req, res) => {
+    const { username } = req.body; // รับ username
+    const { listName } = req.params;
+
+    try {
+        await Watchlist.deleteOne({ username, listName });
+        res.status(200).send({ message: "Watchlist deleted successfully." });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: "Error deleting Watchlist." });
+    }
+});
+
+
 
 // Start the server on port 5001
 const PORT = process.env.PORT || 5001;

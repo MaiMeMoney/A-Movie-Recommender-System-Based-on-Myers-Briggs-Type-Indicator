@@ -46,3 +46,37 @@ document.addEventListener('DOMContentLoaded', async function () {
         alert("Failed to load movie details.");
     }
 });
+
+document.getElementById('add-to-watchlist').addEventListener('click', async function () {
+    const username = localStorage.getItem('username'); // ใช้ username ที่ล็อกอิน
+    if (!username) {
+        alert("Please login first!");
+        return;
+    }
+
+    const movieId = new URLSearchParams(window.location.search).get('movieId');
+    if (!movieId) {
+        alert("Movie ID is missing.");
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5001/watchlist/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, movieId }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert("Added to Watchlist!");
+            location.reload(); // รีโหลดหน้าหลังเพิ่ม
+        } else {
+            alert(result.message || "Failed to add to Watchlist.");
+        }
+    } catch (error) {
+        console.error("Error adding to Watchlist:", error);
+    }
+});
