@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Account Management</title>
+    <link rel="stylesheet" href="user-management.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="/main_page/mainpage.html" class="logo-link">MOVIEMINGLE</a>
+        </div>
+        <div class="navbar-right">
+            <h1>User Account Management</h1>
+        </div>
+    </header>
+
+    <main class="user-management-container">
+        <section class="table-section">
+            <div class="table-header">
+                <h2>USER</h2>
+                <div class="filter-container">
+                    <label for="filter">Filter by:</label>
+                    <input type="text" id="filter" placeholder="Search by username...">
+                </div>
+            </div>
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>USER ID</th>
+                        <th>USERNAME</th>
+                        <th>MBTI</th>
+                        <th>REGISTER DATE</th>
+                        <th>MOVIE RATED</th>
+                        <th>STATUS</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                    <!-- ข้อมูลจะโหลดจาก API -->
+                </tbody>
+            </table>
+            <div class="pagination">
+                <button id="prev-page">Previous</button>
+                <span id="current-page">Page 1</span>
+                <button id="next-page">Next</button>
+            </div>
+        </section>
+        <button class="exit-btn" onclick="window.location.href='../admin-dashboard.html'">Exit</button>
+    </main>
+
+    <script src="user-management.js"></script>
+</body>
+</html>
