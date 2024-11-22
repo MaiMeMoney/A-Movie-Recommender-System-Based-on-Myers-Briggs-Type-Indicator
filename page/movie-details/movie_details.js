@@ -80,3 +80,42 @@ document.getElementById('add-to-watchlist').addEventListener('click', async func
         console.error("Error adding to Watchlist:", error);
     }
 });
+document.getElementById('submit-rating').addEventListener('click', async function () {
+    const username = localStorage.getItem('username'); // ใช้ username ที่ล็อกอิน
+    if (!username) {
+        alert("Please login first!");
+        return;
+    }
+
+    const movieId = new URLSearchParams(window.location.search).get('movieId');
+    const score = document.getElementById('rating-input').value;
+
+    if (!movieId) {
+        alert("Movie ID is missing.");
+        return;
+    }
+    if (!score || score < 1 || score > 10) {
+        alert("Please provide a valid score between 1 and 10.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:5001/movies_list/movies/${movieId}/rate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, score }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert("Rating submitted successfully!");
+        } else {
+            alert(result.message || "Failed to submit rating.");
+        }
+    } catch (error) {
+        console.error("Error submitting rating:", error);
+    }
+});
+

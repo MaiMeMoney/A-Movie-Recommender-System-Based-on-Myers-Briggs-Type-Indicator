@@ -353,6 +353,44 @@ app.delete('/watchlist/delete/:listName', async (req, res) => {
     }
 });
 
+// Define Movie Score Schema and Model
+const movieScoreSchema = new mongoose.Schema({
+    movieId: { type: mongoose.Schema.Types.ObjectId, ref: 'movies_list', required: true },
+    username: { type: String, required: true },
+    score: { type: Number, required: true }
+});
+
+const MovieScore = mongoose.model('movies_scores', movieScoreSchema);
+
+// API Endpoint เพื่อให้ผู้ใช้ให้คะแนนหนัง
+app.post('/movies_list/movies/:movieId/rate', async (req, res) => {
+    try {
+        const { movieId } = req.params;
+        const { username, score } = req.body;
+
+        if (!ObjectId.isValid(movieId)) {
+            return res.status(400).json({ message: 'Invalid movie ID format' });
+        }
+        if (!username || score == null) {
+            return res.status(400).json({ message: 'Username and score are required' });
+        }
+        if (score < 1 || score > 10) {
+            return res.status(400).json({ message: 'Score must be between 1 and 10' });
+        }
+
+        // ค้นหาและอัปเดตคะแนนของผู้ใช้ถ้ามีอยู่แล้ว มิฉะนั้นสร้างใหม่
+        const movieScore = await MovieScore.findOneAndUpdate(
+            { movieId: new ObjectId(movieId), username },
+            { score },
+            { new: true, upsert: true }
+        );
+
+        res.status(200).json({ message: 'Score submitted successfully', data: movieScore });
+    } catch (error) {
+        console.error("Error submitting movie score:", error);
+        res.status(500).json({ message: 'Failed to submit score' });
+    }
+});
 
 
 // Start the server on port 5001

@@ -35,7 +35,15 @@
             <div class="right-section">
                 <h1 id="movie-name">Forrest Gump</h1>
                 <p id="movie-info">1994 · UA · 142 min</p>
-                <span id="movie-rating">⭐ IMDB Rating 8.8/10</span>
+                <div class="rating-container">
+                    <span id="movie-rating">⭐ IMDB Rating 8.8/10</span>
+                    <div class="rating-section">
+                        <label for="rating-input">Your Rating (1-10):</label>
+                        <input type="number" id="rating-input" min="1" max="10">
+                        <button id="submit-rating" class="submit-rating">Submit</button>
+                    </div>
+                </div>
+                <!-- Movie video and other details -->
                 <div id="movie-video" class="movie-video">
                     <iframe src="https://www.youtube.com/embed/video_id" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
                 </div>
@@ -44,12 +52,11 @@
                 </p>
                 <p id="movie-director">Director: Robert Zemeckis</p>
                 <p id="movie-actors">Stars: Tom Hanks, Robin Wright, Gary Sinise, Sally Field</p>
-                <p id="movie-genre">Genre: <span id="genre"></span></p> <!-- แสดงข้อมูล Genre -->
-                <p id="movie-gross">Gross: $<span id="gross-amount"></span></p> <!-- แสดงข้อมูล Gross -->
-                
+                <p id="movie-genre">Genre: <span id="genre"></span></p>
+                <p id="movie-gross">Gross: $<span id="gross-amount"></span></p>
                 <p id="meta-score">Metascore: ?</p>
             </div>
-        </div>
+            
     </section>
     <script src="movie_details.js"></script>
 </body>
