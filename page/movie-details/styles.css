@@ -9,7 +9,17 @@ body {
     font-family: Arial, sans-serif;
     background-color: #1a1a1a;
     color: #fff;
-    padding-top: 60px; /* เพิ่มระยะห่างด้านบนเพื่อให้เนื้อหาหลักไม่ถูกทับจาก navbar */
+    padding-top: 60px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+    display: none; /* สำหรับเบราว์เซอร์ Chrome และ Edge */
+}
+
+body.popup-open {
+    overflow: hidden; /* ปิดการเลื่อน */
 }
 
 .navbar {
@@ -32,9 +42,9 @@ body {
     padding: 20px;
     background-color: #1a1a1a;
     color: #fff;
-    margin-top: 60px; /* เพิ่มระยะห่างจาก navbar */
+    margin-top: 60px;
+    overflow: visible;
 }
-
 
 .logo {
     font-size: 24px;
@@ -107,6 +117,7 @@ body {
     padding: 20px;
     background-color: #1a1a1a;
     color: #fff;
+    overflow: visible;
 }
 
 .content-container {
@@ -114,6 +125,7 @@ body {
     gap: 20px;
     max-width: 1200px;
     width: 100%;
+    overflow: visible;
 }
 
 /* Left section */
@@ -233,18 +245,20 @@ body {
 
 .submit-rating {
     background-color: #f4a261;
-    color: #000;
+    color: #1a1a1a;
     border: none;
-    padding: 5px 10px; /* ปรับขนาดปุ่มเพื่อให้เหมาะสมกับพื้นที่ */
+    padding: 8px 16px;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .submit-rating:hover {
-    background-color: #e63946;
-    color: #fff;
+    background-color: #e63946; /* สีแดงตอน hover */
+    color: white;
+    transform: scale(1.1); /* ขยายเล็กน้อย */
 }
 
 .rating-container {
@@ -253,3 +267,84 @@ body {
     gap: 15px;
     margin-top: 10px; /* เพิ่มระยะห่างจากส่วนอื่นเล็กน้อย */
 }
+
+/* ปิดการแสดงป๊อปอัปเมื่อมี class hidden */
+.hidden {
+    display: none;
+}
+
+.navbar {
+    z-index: 1000;
+}
+
+/* ป๊อปอัป */
+#rating-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1050;
+    color: #fff;
+    width: 300px;
+    text-align: center;
+}
+
+.rating-stars {
+    position: relative;
+    z-index: 1060;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+body.popup-open {
+    overflow: hidden; /* ปิดการเลื่อน */
+}
+
+
+.popup-content h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #f4a261;
+}
+
+.rating-stars span {
+    font-size: 30px;
+    cursor: pointer;
+    color: #ccc; /* สีเริ่มต้น */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.rating-stars span:hover,
+.rating-stars span.selected {
+    color: #f4a261;
+    transform: scale(1.2); /* ขยายเล็กน้อยเมื่อเลือกหรือ hover */
+}
+
+
+.hidden {
+    display: none;
+}
+
+.close-popup {
+    background-color: #e63946;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.close-popup:hover {
+    background-color: #f4a261;
+    color: #000;
+    transform: scale(1.1);
+}
+
+

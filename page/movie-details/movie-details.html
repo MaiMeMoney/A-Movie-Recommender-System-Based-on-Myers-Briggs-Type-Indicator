@@ -29,7 +29,7 @@
     <section class="movie-details-layout">
         <div class="content-container">
             <div class="left-section">
-                <img id="movie-poster" src="placeholder.png" alt="Movie Poster" class="movie-poster">
+                <img id="movie-poster" src="#" alt="Movie Poster" class="movie-poster">
                 <button id="add-to-watchlist" class="add-watchlist">+ Add to Watchlist</button>
             </div>
             <div class="right-section">
@@ -38,10 +38,9 @@
                 <div class="rating-container">
                     <span id="movie-rating">⭐ IMDB Rating 8.8/10</span>
                     <div class="rating-section">
-                        <label for="rating-input">Your Rating (1-10):</label>
-                        <input type="number" id="rating-input" min="1" max="10">
-                        <button id="submit-rating" class="submit-rating">Submit</button>
+                        <button id="open-rating-popup" class="submit-rating">Rate Movie</button>
                     </div>
+                    
                 </div>
                 <!-- Movie video and other details -->
                 <div id="movie-video" class="movie-video">
@@ -58,6 +57,15 @@
             </div>
             
     </section>
+    <div id="rating-popup" class="popup hidden">
+        <div class="popup-content">
+            <h2>Rate this Movie</h2>
+            <div id="popup-rating-stars" class="rating-stars"></div>
+            <button id="close-rating-popup" class="close-popup">Close</button>
+        </div>
+    </div>
+    
+
     <script src="movie_details.js"></script>
 </body>
 </html>

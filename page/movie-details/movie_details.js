@@ -80,42 +80,194 @@ document.getElementById('add-to-watchlist').addEventListener('click', async func
         console.error("Error adding to Watchlist:", error);
     }
 });
-document.getElementById('submit-rating').addEventListener('click', async function () {
-    const username = localStorage.getItem('username'); // ใช้ username ที่ล็อกอิน
-    if (!username) {
-        alert("Please login first!");
-        return;
+
+document.addEventListener('DOMContentLoaded', function () {
+    const openPopupBtn = document.getElementById('open-rating-popup');
+    const ratingPopup = document.getElementById('rating-popup');
+    const closePopupBtn = document.getElementById('close-rating-popup');
+    const ratingStarsContainer = document.getElementById('popup-rating-stars');
+
+
+    openPopupBtn.addEventListener('click', function () {
+        console.log("Open popup button clicked!"); // Debugging
+        ratingPopup.classList.remove('hidden');
+    });
+    closePopupBtn.addEventListener('click', function () {
+        console.log("Close popup button clicked!"); // Debugging
+        ratingPopup.classList.add('hidden');
+    });
+
+
+    const stars = Array.from({ length: 10 }, (_, index) => {
+        const star = document.createElement('span');
+        star.textContent = '★';
+        star.dataset.value = index + 1;
+        star.addEventListener('click', function () {
+            selectedRating = parseInt(star.dataset.value);
+            stars.forEach((s, idx) => {
+                s.classList.toggle('selected', idx < selectedRating);
+            });
+            console.log(`Selected Rating: ${selectedRating}`);
+            submitRating(selectedRating);
+        });
+        return star;
+    });
+
+    stars.forEach(star => ratingStarsContainer.appendChild(star));
+
+    async function submitRating(rating) {
+        const username = localStorage.getItem('username'); // ใช้ username จาก LocalStorage
+        const movieId = new URLSearchParams(window.location.search).get('movieId'); // รับ movieId จาก URL
+    
+        console.log('Submit Rating Data:', { username, movieId, rating }); // Debugging
+    
+        if (!username || !movieId) {
+            alert('Please login and select a movie.');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`http://localhost:5001/movies_list/movies/${movieId}/rate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, score: rating }),
+            });
+    
+            const result = await response.json();
+    
+            if (response.ok) {
+                console.log('API Response:', result); // Debugging
+                alert('Thank you for rating!');
+                const ratingPopup = document.getElementById('rating-popup'); // ดึง element ของป๊อปอัป
+                ratingPopup.classList.add('hidden'); // ซ่อนป๊อปอัป
+            } else {
+                console.error('API Error:', result); // Debugging
+                alert(result.message || 'Failed to submit rating.');
+            }
+        } catch (error) {
+            console.error('Error while submitting:', error);
+        }
+    }
+        
+        
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const openPopupBtn = document.getElementById('open-rating-popup');
+    const ratingPopup = document.getElementById('rating-popup');
+    const closePopupBtn = document.getElementById('close-rating-popup');
+    const ratingStarsContainer = document.getElementById('popup-rating-stars'); // คอนเทนเนอร์สำหรับดาว
+    
+    openPopupBtn.addEventListener('click', function () {
+        console.log("Open popup button clicked!");
+        ratingPopup.classList.remove('hidden');
+        document.body.classList.add('popup-open'); // ปิดการเลื่อนหน้าเว็บ
+        createStars(); // เรียกฟังก์ชันสร้างดาว
+    });
+
+    closePopupBtn.addEventListener('click', function () {
+        console.log("Close popup button clicked!");
+        ratingPopup.classList.add('hidden');
+        document.body.classList.remove('popup-open'); // เปิดการเลื่อนหน้าเว็บ
+    });
+
+    function createStars() {
+        // ลบดาวเก่าทั้งหมดก่อนเพิ่มใหม่
+        while (ratingStarsContainer.firstChild) {
+            ratingStarsContainer.removeChild(ratingStarsContainer.firstChild);
+        }
+
+        // สร้างดาวใหม่ 10 ดวง
+        const stars = Array.from({ length: 10 }, (_, index) => {
+            const star = document.createElement('span');
+            star.textContent = '★';
+            star.dataset.value = index + 1;
+            star.addEventListener('click', function () {
+                const selectedRating = parseInt(star.dataset.value);
+                console.log(`Selected Rating: ${selectedRating}`);
+                submitRating(selectedRating);
+                updateStarSelection(stars, selectedRating);
+            });
+            return star;
+        });
+
+        // เพิ่มดาวใหม่เข้าไปในคอนเทนเนอร์
+        stars.forEach(star => ratingStarsContainer.appendChild(star));
     }
 
+    function updateStarSelection(stars, selectedRating) {
+        stars.forEach((star, index) => {
+            star.classList.toggle('selected', index < selectedRating); // เพิ่มคลาส selected
+        });
+    }
+
+    async function submitRating(rating) {
+        const username = localStorage.getItem('username');
+        const movieId = new URLSearchParams(window.location.search).get('movieId');
+        const movieName = document.getElementById('movie-name').textContent;
+    
+        console.log('Sending Data:', { username, score: rating, movieName }); // Debugging
+    
+        if (!username || !movieId || !movieName) {
+            alert('Please login, select a movie, and try again.');
+            return;
+        }
+    
+        try {
+            const response = await fetch(`http://localhost:5001/movies_list/movies/${movieId}/rate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, score: rating, movieName }), // ส่ง movieName ไปด้วย
+            });
+    
+            const result = await response.json();
+    
+            if (response.ok) {
+                alert('Rating submitted successfully!');
+            } else {
+                console.error('API Error:', result);
+                alert(result.message || 'Failed to submit rating.');
+            }
+        } catch (error) {
+            console.error('Error submitting rating:', error);
+        }
+    }
+    
+    
+    
+});
+
+
+async function submitRating(rating) {
+    const username = localStorage.getItem('username'); // ใช้ username จาก localStorage
     const movieId = new URLSearchParams(window.location.search).get('movieId');
-    const score = document.getElementById('rating-input').value;
 
-    if (!movieId) {
-        alert("Movie ID is missing.");
-        return;
-    }
-    if (!score || score < 1 || score > 10) {
-        alert("Please provide a valid score between 1 and 10.");
+    if (!username || !movieId) {
+        alert('Please login and select a movie.');
         return;
     }
 
     try {
+        console.log('Submitting Rating:', { username, movieId, score: rating }); // Debugging
+
         const response = await fetch(`http://localhost:5001/movies_list/movies/${movieId}/rate`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, score }),
+            body: JSON.stringify({ username, score: rating }), // ส่งคะแนน
         });
 
         const result = await response.json();
+
         if (response.ok) {
-            alert("Rating submitted successfully!");
+            alert('Rating submitted successfully!');
+            console.log('Response:', result); // Debugging
         } else {
-            alert(result.message || "Failed to submit rating.");
+            alert(result.message || 'Failed to submit rating.');
+            console.error('Error Response:', result); // Debugging
         }
     } catch (error) {
-        console.error("Error submitting rating:", error);
+        console.error('Error submitting rating:', error);
     }
-});
-
+}

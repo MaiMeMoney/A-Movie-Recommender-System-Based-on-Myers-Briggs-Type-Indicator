@@ -11,7 +11,10 @@ app.use(cors({
 app.use(express.json());
 
 // MongoDB connection using environment variable
-mongoose.connect('mongodb+srv://bankweerpt:ohMpYPUHkNoz0Ba3@movie-mbti.k3yt3.mongodb.net/movies_list?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://bankweerpt:ohMpYPUHkNoz0Ba3@movie-mbti.k3yt3.mongodb.net/movies_list?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
     .then(() => console.log('Connected to MongoDB'))
     .catch((err) => console.log('MongoDB connection error:', err));
 
@@ -353,45 +356,43 @@ app.delete('/watchlist/delete/:listName', async (req, res) => {
     }
 });
 
-// Define Movie Score Schema and Model
+// สร้าง Schema สำหรับเก็บคะแนน
 const movieScoreSchema = new mongoose.Schema({
-    movieId: { type: mongoose.Schema.Types.ObjectId, ref: 'movies_list', required: true },
+    movieId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    movieName: { type: String, required: true },
     username: { type: String, required: true },
-    score: { type: Number, required: true }
+    score: { type: Number, required: true, min: 1, max: 10 }
+    
 });
 
+// สร้าง Model
 const MovieScore = mongoose.model('movies_scores', movieScoreSchema);
 
 // API Endpoint เพื่อให้ผู้ใช้ให้คะแนนหนัง
 app.post('/movies_list/movies/:movieId/rate', async (req, res) => {
+    const { movieId } = req.params;
+    const { username, score, movieName } = req.body;
+
+    console.log('Received Data:', { username, score, movieName }); // Debugging
+
+    if (!username || !score || !movieName) {
+        return res.status(400).json({ message: 'Username, score, and movieName are required.' });
+    }
+
     try {
-        const { movieId } = req.params;
-        const { username, score } = req.body;
-
-        if (!ObjectId.isValid(movieId)) {
-            return res.status(400).json({ message: 'Invalid movie ID format' });
-        }
-        if (!username || score == null) {
-            return res.status(400).json({ message: 'Username and score are required' });
-        }
-        if (score < 1 || score > 10) {
-            return res.status(400).json({ message: 'Score must be between 1 and 10' });
-        }
-
-        // ค้นหาและอัปเดตคะแนนของผู้ใช้ถ้ามีอยู่แล้ว มิฉะนั้นสร้างใหม่
         const movieScore = await MovieScore.findOneAndUpdate(
-            { movieId: new ObjectId(movieId), username },
-            { score },
+            { movieId: new mongoose.Types.ObjectId(movieId), username },
+            { score, movieName }, // รวม movieName ที่นี่
             { new: true, upsert: true }
         );
 
+        console.log('Saved to DB:', movieScore); // Debugging
         res.status(200).json({ message: 'Score submitted successfully', data: movieScore });
     } catch (error) {
-        console.error("Error submitting movie score:", error);
+        console.error('Error while saving:', error);
         res.status(500).json({ message: 'Failed to submit score' });
     }
 });
-
 
 // Start the server on port 5001
 const PORT = process.env.PORT || 5001;
