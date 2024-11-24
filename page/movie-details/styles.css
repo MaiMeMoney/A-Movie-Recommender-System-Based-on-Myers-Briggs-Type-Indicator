@@ -294,11 +294,32 @@ body.popup-open {
 }
 
 .rating-stars {
-    position: relative;
-    z-index: 1060;
-    display: inline-block;
+    display: flex; /* Arrange stars in a row */
+    justify-content: center; /* Center the stars */
+    align-items: center; /* Align vertically */
+    gap: 5px; /* Add spacing between stars */
     margin: 10px 0;
 }
+
+
+#rating-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1050;
+    color: #fff;
+    width: 500px; /* ขยายความกว้าง */
+    max-width: 90%; /* ให้เล็กลงเมื่อจอเล็ก */
+    text-align: center;
+}
+
+
+
 
 body.popup-open {
     overflow: hidden; /* ปิดการเลื่อน */
@@ -312,16 +333,16 @@ body.popup-open {
 }
 
 .rating-stars span {
-    font-size: 30px;
+    font-size: 30px; /* Adjust size */
     cursor: pointer;
-    color: #ccc; /* สีเริ่มต้น */
+    color: #ccc; /* Default color */
     transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .rating-stars span:hover,
 .rating-stars span.selected {
-    color: #f4a261;
-    transform: scale(1.2); /* ขยายเล็กน้อยเมื่อเลือกหรือ hover */
+    color: #f4a261; /* Highlight color for hover/selected */
+    transform: scale(1.2); /* Slight enlargement */
 }
 
 
@@ -347,4 +368,10 @@ body.popup-open {
     transform: scale(1.1);
 }
 
+@supports (-webkit-touch-callout: none) {
+    .rating-stars span {
+        transform: none !important; /* Disable scaling if needed */
+        overflow: hidden; /* Ensure no overflowing */
+    }
+}
 
