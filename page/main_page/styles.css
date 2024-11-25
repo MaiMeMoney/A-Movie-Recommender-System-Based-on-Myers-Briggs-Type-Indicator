@@ -21,6 +21,8 @@ body {
     background-color: #4caf50;
     padding: 10px 20px;
     z-index: 1000;
+    border: none; /* ลบเส้นขอบของ navbar */
+    box-shadow: none; /* ลบเงา */
 }
 
 .logo {
@@ -36,6 +38,13 @@ body {
     border-radius: 5px;
     border: none;
     font-size: 16px;
+    box-shadow: none; /* ลบเงาของ input */
+}
+
+.search-bar, #search-category, #search-button {
+    border: none; /* ลบเส้นขอบทั้งหมด */
+    outline: none; /* ลบเส้นไฮไลต์ที่เกิดจากการโฟกัส */
+    box-shadow: none; /* ลบเงา */
 }
 
 .my-list {
@@ -143,6 +152,7 @@ main {
     height: 100%;
     object-fit: cover; /* รักษาสัดส่วน */
 }
+
 
 .movie-item:hover {
     transform: scale(0.9); /* ขยายเล็กน้อย */
@@ -275,6 +285,8 @@ h2 a {
     display: flex;
     gap: 10px;
     align-items: center;
+    background-color: transparent; /* ลบสีพื้นหลัง */
+    gap: 10px; /* เพิ่มระยะห่างระหว่างองค์ประกอบ */
 }
 
 #search-category {
@@ -284,6 +296,8 @@ h2 a {
     font-size: 16px;
     background-color: #f4a261;
     color: #fff;
+    box-shadow: none; /* ลบเงาของ select */
+    appearance: none; /* ซ่อนลูกศรของ select */
 }
 
 #search-button {
@@ -316,30 +330,81 @@ h2 a {
 }
 
 #search-results .movie-item {
-    width: 200px;
-    background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
+    width: 300px;
     text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 20px;
 }
 
 #search-results .movie-item img {
-    width: 100%;
-    height: auto;
+    border-radius: 10px;
+    transition: transform 0.2s;
 }
 
+#search-results .movie-item img:hover {
+    transform: scale(1.05);
+}
 #search-results .movie-item p {
-    margin: 10px 0;
-    font-size: 16px;
-    color: #000;
+    color: #333;
+    font-size: 14px;
 }
-
 #search-results .movie-item:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+#search-results .no-results {
+    text-align: center;
+    color: #f4a261;
+    margin-top: 20px;
+}
 
+
+/* Autocomplete Suggestion Box */
+#autocomplete-list {
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 300px;
+    border-radius: 5px;
+}
+
+#autocomplete-list div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+#autocomplete-list div:hover {
+    background-color: #f0f0f0;
+}
+
+#suggestion-box {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    width: calc(100% - 30px);
+    z-index: 1000;
+    color: black;
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f4a261;
+}
+
+.search-caption {
+    font-size: 18px;
+    color: #ffffff;
+    margin-top: 3px;
+}
 
 

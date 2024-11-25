@@ -417,7 +417,6 @@ body.popup-open {
     transform: translateY(0); /* ย้ายกลับไปที่ตำแหน่งเดิม */
 }
 
-
 @supports (-webkit-touch-callout: none) {
     .rating-stars span {
         transform: none !important; /* Disable scaling if needed */
