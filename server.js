@@ -516,13 +516,13 @@ app.get('/api/search', async (req, res) => {
     }
 
     try {
-        let searchCondition;
+        let searchField;
         if (category === 'title') {
-            searchCondition = { Series_Title: { $regex: query, $options: 'i' } };
+            searchField = 'Series_Title';
         } else if (category === 'director') {
-            searchCondition = { Director: { $regex: query, $options: 'i' } };
+            searchField = 'Director';
         } else if (category === 'actor') {
-            searchCondition = { 
+            searchField = {
                 $or: [
                     { Star1: { $regex: query, $options: 'i' } },
                     { Star2: { $regex: query, $options: 'i' } },
@@ -530,19 +530,23 @@ app.get('/api/search', async (req, res) => {
                     { Star4: { $regex: query, $options: 'i' } }
                 ]
             };
+        } else if (category === 'genre') {
+            searchField = 'Genre'; // ตรวจสอบให้รองรับ genre
         } else {
             return res.status(400).send({ message: 'Invalid search category' });
         }
 
-        console.log('Searching with condition:', searchCondition);
+        // ค้นหาข้อมูลในฐานข้อมูล
+        const searchQuery = category === 'actor' ? searchField : { [searchField]: { $regex: query, $options: 'i' } };
+        const movies = await Movie.find(searchQuery);
 
-        const movies = await Movie.find(searchCondition);
         res.status(200).json(movies);
     } catch (error) {
         console.error('Error searching movies:', error);
         res.status(500).json({ message: 'Failed to search movies' });
     }
 });
+
 
 
 
