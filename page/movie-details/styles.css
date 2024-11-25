@@ -398,6 +398,26 @@ body.popup-open {
     transform: scale(1.1);
 }
 
+.tooltip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none; /* ไม่ให้ขัดขวางการโต้ตอบ */
+    z-index: 1000;
+}
+
+.tooltip.visible {
+    opacity: 1;
+    transform: translateY(0); /* ย้ายกลับไปที่ตำแหน่งเดิม */
+}
+
+
 @supports (-webkit-touch-callout: none) {
     .rating-stars span {
         transform: none !important; /* Disable scaling if needed */

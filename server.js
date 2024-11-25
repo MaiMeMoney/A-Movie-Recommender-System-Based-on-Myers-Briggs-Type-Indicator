@@ -1,7 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path'); // ประกาศที่นี่เพียงครั้งเดียว
 require('dotenv').config();
+
 
 const app = express();
 app.use(cors({
@@ -234,7 +236,7 @@ app.get('/movies_list/movies/:movieId/video', async (req, res) => {
     }
 });
 
-const path = require('path'); // เพิ่มโมดูล path สำหรับจัดการเส้นทาง
+
 
 // ให้ Express ให้บริการไฟล์ static จากโฟลเดอร์ public
 app.use(express.static(path.join(__dirname, 'public')));
@@ -506,5 +508,40 @@ app.delete('/watchlist/delete/:listName', async (req, res) => {
 
 
 // Start the server on port 5001
+app.get('/api/search', async (req, res) => {
+    const { category, query } = req.query;
+
+    if (!category || !query) {
+        return res.status(400).json({ message: 'Category and query are required' });
+    }
+
+    try {
+        let filter = {};
+        if (category === 'title') {
+            filter.Series_Title = { $regex: query, $options: 'i' };
+        } else if (category === 'director') {
+            filter.Director = { $regex: query, $options: 'i' };
+        } else if (category === 'actor') {
+            filter.$or = [
+                { Star1: { $regex: query, $options: 'i' } },
+                { Star2: { $regex: query, $options: 'i' } },
+                { Star3: { $regex: query, $options: 'i' } },
+                { Star4: { $regex: query, $options: 'i' } },
+            ];
+        }
+
+        const movies = await Movie.find(filter);
+        res.json(movies);
+    } catch (error) {
+        console.error('Error fetching movies:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// เสิร์ฟไฟล์ static ทั้งหมดจากโฟลเดอร์ page
+app.use(express.static(path.join(__dirname, 'page')));
+
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});

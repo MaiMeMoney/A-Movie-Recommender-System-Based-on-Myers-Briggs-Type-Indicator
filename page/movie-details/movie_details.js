@@ -212,18 +212,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const openPopupBtn = document.getElementById('open-rating-popup');
     const ratingPopup = document.getElementById('rating-popup');
     const closePopupBtn = document.getElementById('close-rating-popup');
-    const ratingStarsContainer = document.getElementById('popup-rating-stars'); // คอนเทนเนอร์สำหรับดาว
-    
+    const ratingStarsContainer = document.getElementById('popup-rating-stars');
+    const tooltip = document.createElement('div'); // สร้าง tooltip สำหรับบอกคะแนน
+    tooltip.classList.add('tooltip');
+    document.body.appendChild(tooltip);
+
+    // ซ่อน popup เมื่อโหลดหน้าเว็บ
+    ratingPopup.classList.add('hidden');
+
+    // Event listener เมื่อกดปุ่ม "Rate Movie"
     openPopupBtn.addEventListener('click', function () {
         console.log("Open popup button clicked!");
-        ratingPopup.classList.remove('hidden');
+        ratingPopup.classList.remove('hidden'); // แสดง popup
         document.body.classList.add('popup-open'); // ปิดการเลื่อนหน้าเว็บ
-        createStars(); // เรียกฟังก์ชันสร้างดาว
+        createStars(); // สร้างดาว
     });
 
+    // Event listener เมื่อกดปุ่ม "Close"
     closePopupBtn.addEventListener('click', function () {
         console.log("Close popup button clicked!");
-        ratingPopup.classList.add('hidden');
+        ratingPopup.classList.add('hidden'); // ซ่อน popup
         document.body.classList.remove('popup-open'); // เปิดการเลื่อนหน้าเว็บ
     });
 
@@ -238,12 +246,30 @@ document.addEventListener('DOMContentLoaded', function () {
             const star = document.createElement('span');
             star.textContent = '★';
             star.dataset.value = index + 1;
+            star.classList.add('star');
+            
+            // เพิ่ม event สำหรับการชี้เมาส์
+            star.addEventListener('mouseover', function (event) {
+                const starValue = parseInt(star.dataset.value);
+                tooltip.textContent = `Star ${starValue}`;
+                tooltip.style.left = `${event.pageX}px`;
+                tooltip.style.top = `${event.pageY - 30}px`;
+                tooltip.classList.add('visible'); // แสดง tooltip
+            });
+
+            // ซ่อน tooltip เมื่อเมาส์ออก
+            star.addEventListener('mouseout', function () {
+                tooltip.classList.remove('visible'); // ซ่อน tooltip
+            });
+
+            // Event สำหรับการคลิกดาว
             star.addEventListener('click', function () {
                 const selectedRating = parseInt(star.dataset.value);
-                console.log(`Selected Rating: ${selectedRating}`);
-                submitRating(selectedRating);
-                updateStarSelection(stars, selectedRating);
+                submitRating(selectedRating); // ส่งคะแนน
+                updateStarSelection(stars, selectedRating); // อัปเดตการเลือก
+                alert(`You rated this movie: ${selectedRating} stars`);
             });
+
             return star;
         });
 
@@ -261,23 +287,23 @@ document.addEventListener('DOMContentLoaded', function () {
         const username = localStorage.getItem('username');
         const movieId = new URLSearchParams(window.location.search).get('movieId');
         const movieName = document.getElementById('movie-name').textContent;
-    
+
         console.log('Sending Data:', { username, score: rating, movieName }); // Debugging
-    
+
         if (!username || !movieId || !movieName) {
             alert('Please login, select a movie, and try again.');
             return;
         }
-    
+
         try {
             const response = await fetch(`http://localhost:5001/movies_list/movies/${movieId}/rate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, score: rating, movieName }), // ส่ง movieName ไปด้วย
+                body: JSON.stringify({ username, score: rating, movieName }),
             });
-    
+
             const result = await response.json();
-    
+
             if (response.ok) {
                 alert('Rating submitted successfully!');
             } else {
@@ -288,9 +314,6 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error submitting rating:', error);
         }
     }
-    
-    
-    
 });
 
 

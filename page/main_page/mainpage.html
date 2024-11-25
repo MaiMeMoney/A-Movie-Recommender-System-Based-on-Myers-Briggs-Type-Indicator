@@ -11,23 +11,31 @@
 <body>
     <header>
         <div class="navbar">
-            <div class="logo"><a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a></div>
-            <input type="text" class="search-bar" placeholder="Search for movies...">
+            <div class="logo">
+                <a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a>
+            </div>
+            <!-- เพิ่มส่วน Search Container -->
+            <div class="search-container">
+                <select id="search-category">
+                    <option value="title">Movie Title</option>
+                    <option value="director">Director</option>
+                    <option value="actor">Actor</option>
+                </select>
+                <input type="text" id="search-bar" class="search-bar" placeholder="Search for movies...">
+                <button id="search-button">Search</button>
+            </div>            
             <div class="my-list">
                 <span id="username-display" class="username-display"></span> <!-- แสดงชื่อผู้ใช้ -->
                 <a href="/page/watchlist/index.html" class="my-list-icon">
                     <i class="fas fa-bookmark"></i>
-                </a>                
+                </a>
                 <button class="account-icon" onclick="goToProfile()">👤</button>
             </div>
         </div>
     </header>
+    
 
     <main> 
-        <section class="movie-hit">
-            <img src="#" alt="Movie Hit" class="movie-hit-img">
-        </section>
-
         <!-- Section MBTI Recommendations -->
         <section class="mbti-recommend">
             <div class="recommend-header">
@@ -813,6 +821,7 @@
         </section>
         
         <section class="crime">
+            <h2>CRIME <a href="#">SEE MORE</a></h2>
             <div class="slider-container">
                 <button class="slide-btn left" onclick="scrollLeft('crime')">❮</button>
                 <div class="movie-list">

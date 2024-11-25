@@ -271,7 +271,74 @@ h2 a {
     transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ Hover */
 }
 
+.search-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
 
+#search-category {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    background-color: #f4a261;
+    color: #fff;
+}
+
+#search-button {
+    padding: 8px 12px;
+    background-color: #e63946;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    background-color: #d62828;
+}
+
+#search-results {
+    padding: 20px;
+}
+
+#search-results h2 {
+    font-size: 24px;
+    color: #f4a261;
+    margin-bottom: 20px;
+}
+
+#search-results .movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+#search-results .movie-item {
+    width: 200px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#search-results .movie-item img {
+    width: 100%;
+    height: auto;
+}
+
+#search-results .movie-item p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #000;
+}
+
+#search-results .movie-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
 
 
 
