@@ -290,56 +290,93 @@ const Watchlist = mongoose.model('Watchlist', watchlistSchema);
 
 // API สำหรับเพิ่มหนังใน Watchlist "Favorite"
 app.post('/watchlist/add', async (req, res) => {
-    const { username, movieId } = req.body;
+    const { username, listName, movieId } = req.body;
 
-    if (!username || !movieId) {
-        return res.status(400).json({ message: 'Username and Movie ID are required' });
+    console.log('API ได้รับพารามิเตอร์:', { username, listName, movieId });
+
+    // ตรวจสอบว่ามีพารามิเตอร์ที่จำเป็นครบถ้วนหรือไม่
+    if (!username || !listName || !movieId) {
+        return res.status(400).json({ message: 'กรุณาระบุชื่อผู้ใช้, ชื่อ Watchlist และ Movie ID!' });
     }
 
     try {
-        let favoriteList = await Watchlist.findOne({ username, listName: 'Favorite' });
-        if (!favoriteList) {
-            favoriteList = new Watchlist({ username, listName: 'Favorite', movies: [] });
-            await favoriteList.save();
+        // ตรวจสอบว่า Watchlist มีอยู่แล้วหรือไม่
+        let watchlist = await Watchlist.findOne({ username, listName });
+
+        // ถ้าไม่มี Watchlist ให้สร้างใหม่
+        if (!watchlist) {
+            console.log(`ไม่พบ Watchlist "${listName}". กำลังสร้าง Watchlist ใหม่...`);
+            watchlist = new Watchlist({ username, listName, movies: [] });
+            await watchlist.save();
         }
 
-        if (favoriteList.movies.includes(movieId)) {
-            return res.status(400).json({ message: 'Movie already in Favorite Watchlist' });
+        // ตรวจสอบว่าหนังอยู่ใน Watchlist แล้วหรือไม่
+        if (watchlist.movies.includes(movieId)) {
+            return res.status(400).json({ message: 'หนังเรื่องนี้มีอยู่ใน Watchlist แล้ว!' });
         }
 
-        favoriteList.movies.push(movieId);
-        await favoriteList.save();
+        // เพิ่มหนังใน Watchlist
+        watchlist.movies.push(movieId);
+        await watchlist.save();
 
-        res.status(201).json({ message: 'Movie added to Favorite Watchlist' });
+        res.status(201).json({ message: `เพิ่มหนังใน Watchlist "${listName}" สำเร็จ!` });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Failed to add movie to Watchlist' });
+        console.error('เกิดข้อผิดพลาดในการเพิ่มหนังใน Watchlist:', error);
+        res.status(500).json({ message: 'ไม่สามารถเพิ่มหนังใน Watchlist ได้.' });
+    }
+});
+
+// API สำหรับเพิ่มหนังใน Watchlist "Favorite" จากหน้า movie-detail
+app.post('/movie-detail/add-to-favorite', async (req, res) => {
+    const { username, movieId } = req.body;
+
+    if (!username || !movieId) {
+        return res.status(400).json({ message: 'Username and movie ID are required!' });
+    }
+
+    try {
+        const watchlist = await Watchlist.findOne({ username, listName: 'Favorite' });
+        if (!watchlist) {
+            return res.status(404).json({ message: 'Favorite Watchlist not found.' });
+        }
+
+        if (watchlist.movies.includes(movieId)) {
+            return res.status(400).json({ message: 'Movie already exists in Favorite Watchlist.' });
+        }
+
+        watchlist.movies.push(movieId);
+        await watchlist.save();
+
+        res.status(201).json({ message: 'Movie successfully added to Favorite Watchlist.' });
+    } catch (error) {
+        console.error("Error adding movie to Favorite Watchlist:", error);
+        res.status(500).json({ message: 'Failed to add movie to Favorite Watchlist.' });
     }
 });
 
 app.post('/watchlist/delete-movie', async (req, res) => {
     const { username, listName, movieId } = req.body;
 
+    console.log("Received data:", { username, listName, movieId });
+
     try {
         const watchlist = await Watchlist.findOne({ username, listName });
         if (!watchlist) {
-            return res.status(404).json({ message: "Watchlist not found" });
+            return res.status(404).json({ message: "Watchlist ไม่พบ" });
         }
 
-        // ลบหนังที่มี movieId ตรงกันออกจาก watchlist.movies
+        // ลบหนังจาก Watchlist
         watchlist.movies = watchlist.movies.filter(
             (movie) => movie.toString() !== movieId
         );
 
-        await watchlist.save(); // บันทึกการเปลี่ยนแปลง
-        res.json({ message: "Movie deleted successfully" });
+        await watchlist.save();
+        res.json({ message: "ลบหนังสำเร็จ" });
     } catch (error) {
         console.error("Error deleting movie:", error);
-        res.status(500).json({ message: "An error occurred while deleting the movie" });
+        res.status(500).json({ message: "เกิดข้อผิดพลาดระหว่างการลบหนัง" });
     }
 });
-
-
 
 app.get('/watchlist/:username', async (req, res) => {
     const { username } = req.params;
@@ -400,18 +437,16 @@ app.post('/watchlist/create', async (req, res) => {
 });
 
 
-app.delete('/watchlist/delete/:listName', async (req, res) => {
-    const { username } = req.body; // รับ username
-    const { listName } = req.params;
-
+app.get('/movies_list/all', async (req, res) => {
     try {
-        await Watchlist.deleteOne({ username, listName });
-        res.status(200).send({ message: "Watchlist deleted successfully." });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send({ message: "Error deleting Watchlist." });
+        const movies = await Movie.find(); // ดึงหนังทั้งหมดจาก MongoDB
+        res.status(200).json(movies);
+    } catch (error) {
+        console.error("Error fetching all movies:", error);
+        res.status(500).json({ message: 'Failed to fetch movies.' });
     }
 });
+
 
 // สร้าง Schema สำหรับเก็บคะแนน
 const movieScoreSchema = new mongoose.Schema({
@@ -451,6 +486,28 @@ app.post('/movies_list/movies/:movieId/rate', async (req, res) => {
     }
 });
 
+app.delete('/watchlist/delete/:listName', async (req, res) => {
+    const username = req.body.username || "default_user";
+    const { listName } = req.params;
+
+    if (listName === 'Favorite') {
+        return res.status(403).json({ message: 'ไม่สามารถลบ Favorite ได้' });
+    }
+
+    try {
+        const result = await Watchlist.deleteOne({ username, listName }); // แก้ WatchlistModel เป็น Watchlist
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Watchlist ไม่พบ' });
+        }
+        res.status(200).json({ message: `ลบ Watchlist "${listName}" สำเร็จ` });
+    } catch (error) {
+        console.error("Error deleting Watchlist:", error);
+        res.status(500).json({ message: 'เกิดข้อผิดพลาดในการลบ Watchlist' });
+    }
+});
+
+
+// Start the server on port 5001
 app.get('/api/search', async (req, res) => {
     const { category, query } = req.query;
 
