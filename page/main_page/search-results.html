@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
 </head>
 <body>
     <header>
@@ -18,28 +17,24 @@
                     <option value="title">Movie Title</option>
                     <option value="director">Director</option>
                     <option value="actor">Actor</option>
+                    <option value="genre">Genre</option>
                 </select>
-                <input type="text" id="search-bar" class="search-bar" placeholder="Search for movies...">
+                
+                <input type="text" id="search-bar" class="search-bar" placeholder="Search Movie...">
+                <div id="suggestion-box"></div>
                 <button id="search-button">Search</button>
-            </div>
-            <div class="my-list">
-                <span id="username-display" class="username-display"></span>
-                <a href="/page/watchlist/index.html" class="my-list-icon">
-                    <i class="fas fa-bookmark"></i>
-                </a>
-                <button class="account-icon" onclick="goToProfile()">👤</button>
             </div>
         </div>
     </header>
     <main>
         <section id="search-results">
             <h2>Search Results</h2>
-            <div class="movie-list"></div> <!-- ผลลัพธ์จะแสดงในนี้ -->
+            <div class="movie-list">
+                <div class="movie-item"></div>
+                <!-- โปสเตอร์อื่นๆ -->
+            </div>
         </section>
     </main>
     <script src="script.js"></script>
-    <script>
-        
-    </script>
 </body>
 </html>

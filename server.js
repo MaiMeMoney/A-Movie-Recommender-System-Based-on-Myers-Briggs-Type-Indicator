@@ -454,33 +454,81 @@ app.post('/movies_list/movies/:movieId/rate', async (req, res) => {
 app.get('/api/search', async (req, res) => {
     const { category, query } = req.query;
 
-    if (!category || !query) {
-        return res.status(400).json({ message: 'Category and query are required' });
+    if (!query) {
+        return res.status(400).send({ message: 'Query is required' });
     }
 
     try {
-        let filter = {};
+        let searchCondition;
         if (category === 'title') {
-            filter.Series_Title = { $regex: query, $options: 'i' };
+            searchCondition = { Series_Title: { $regex: query, $options: 'i' } };
         } else if (category === 'director') {
-            filter.Director = { $regex: query, $options: 'i' };
+            searchCondition = { Director: { $regex: query, $options: 'i' } };
         } else if (category === 'actor') {
-            filter.$or = [
-                { Star1: { $regex: query, $options: 'i' } },
-                { Star2: { $regex: query, $options: 'i' } },
-                { Star3: { $regex: query, $options: 'i' } },
-                { Star4: { $regex: query, $options: 'i' } },
-            ];
+            searchCondition = { 
+                $or: [
+                    { Star1: { $regex: query, $options: 'i' } },
+                    { Star2: { $regex: query, $options: 'i' } },
+                    { Star3: { $regex: query, $options: 'i' } },
+                    { Star4: { $regex: query, $options: 'i' } }
+                ]
+            };
+        } else {
+            return res.status(400).send({ message: 'Invalid search category' });
         }
 
-        const movies = await Movie.find(filter);
-        res.json(movies);
+        console.log('Searching with condition:', searchCondition);
+
+        const movies = await Movie.find(searchCondition);
+        res.status(200).json(movies);
     } catch (error) {
-        console.error('Error fetching movies:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error('Error searching movies:', error);
+        res.status(500).json({ message: 'Failed to search movies' });
     }
 });
 
+
+
+app.get('/api/predict', async (req, res) => {
+    const { category, query } = req.query;
+
+    if (!query || query.length < 3) {
+        return res.status(400).json({ message: 'Query must be at least 3 characters long' });
+    }
+
+    try {
+        const regex = new RegExp(query, 'i');
+        const movies = await Movie.find({ [category]: regex }).limit(10).select(category);
+
+        const suggestions = movies.map((movie) => movie[category]);
+        res.json(suggestions);
+    } catch (error) {
+        console.error('Error fetching predictions:', error);
+        res.status(500).json({ message: 'Error fetching suggestions' });
+    }
+});
+
+app.get('/api/debug/movies', async (req, res) => {
+    try {
+        const movies = await Movie.find();
+        res.status(200).json(movies);
+    } catch (error) {
+        console.error('Error fetching movies:', error);
+        res.status(500).json({ message: 'Failed to fetch movies' });
+    }
+});
+
+
+// กรณีไม่มี API ที่ตรง ให้เสิร์ฟไฟล์ movie-detail.html
+app.get('/page/movie-details/movie-details.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'page', 'movie-details', 'movie-detail.html'));
+});
+app.use(express.static(path.join(__dirname, 'public')));
+
+// กรณีไม่มี API ที่ตรง ให้ส่งไฟล์ search-results.html
+app.get('/page/main_page/search-results.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'page', 'main_page', 'search-results.html'));
+});
 // เสิร์ฟไฟล์ static ทั้งหมดจากโฟลเดอร์ page
 app.use(express.static(path.join(__dirname, 'page')));
 

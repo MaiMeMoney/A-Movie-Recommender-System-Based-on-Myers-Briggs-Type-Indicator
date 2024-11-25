@@ -14,18 +14,22 @@
             <div class="logo">
                 <a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a>
             </div>
-            <!-- เพิ่มส่วน Search Container -->
+            
             <div class="search-container">
                 <select id="search-category">
                     <option value="title">Movie Title</option>
                     <option value="director">Director</option>
                     <option value="actor">Actor</option>
+                    <option value="genre">Genre</option>
                 </select>
-                <input type="text" id="search-bar" class="search-bar" placeholder="Search for movies...">
+                
+                <p class="search-caption">Search Movie</p>
+                <input type="text" id="search-bar" class="search-bar" placeholder="Search Movie...">
                 <button id="search-button">Search</button>
-            </div>            
+                
+            </div>
             <div class="my-list">
-                <span id="username-display" class="username-display"></span> <!-- แสดงชื่อผู้ใช้ -->
+                <span id="username-display" class="username-display"></span>
                 <a href="/page/watchlist/index.html" class="my-list-icon">
                     <i class="fas fa-bookmark"></i>
                 </a>
@@ -1011,8 +1015,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
-
     </script>
     <script src="script.js"></script>
 </body>
