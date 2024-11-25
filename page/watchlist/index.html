@@ -44,13 +44,6 @@
         <div class="main-content">
             <div id="movie-list" class="movie-grid">
                 <!-- Movies in the selected list will be displayed here -->
-                <!-- Example Movie Template -->
-                <!--
-                <div class="movie-item" onclick="selectMovie('movieId', this)">
-                    <img src="posterUrl" alt="Movie Poster">
-                    <p>Movie Title</p>
-                </div>
-                -->
             </div>
             <div class="actions">
                 <button class="update" onclick="updateMovies()">Update</button>
@@ -59,5 +52,46 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal for selecting movies -->
+    <div id="movie-selection-modal" class="modal">
+        <div class="modal-content">
+            <h3>เลือกหนังที่จะเพิ่มในลิสต์</h3>
+            
+            <!-- Filter and Search Section -->
+            <div class="filter-search">
+                <select id="category-filter" onchange="filterByCategory()">
+                    <option value="all">ทั้งหมด</option>
+                    <option value="action">Action</option>
+                    <option value="drama">Drama</option>
+                    <option value="comedy">Comedy</option>
+                    <option value="thriller">Thriller</option>
+                    <option value="sci-fi">Sci-Fi</option>
+                    <option value="horror">Horror</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="romance">Romance</option>
+                    <option value="mystery">Mystery</option>
+                    <option value="history">History</option>
+                    <option value="adventure">Adventure</option>
+                    <option value="animation">Animation</option>
+                    <option value="biography">Biography</option>
+                    <option value="family">Family</option>
+                    <option value="sport">Sport</option>
+                    <option value="musical">Musical</option>
+                    <option value="crime">Crime</option>
+                    <!-- Add more categories here -->
+                </select>
+                <input type="text" id="movie-search" placeholder="ค้นหาหนังหรือชื่อนักแสดง..." oninput="searchMovies()">
+            </div>
+
+            <!-- Movie Grid -->
+            <div id="movie-scroll-container" class="movie-grid">
+                <!-- Movies will be dynamically loaded here -->
+            </div>
+            
+            <button class="close-modal-btn" onclick="closeModal()">ปิด</button>
+        </div>
+    </div>
+    <div id="toast" class="toast"></div>
 </body>
 </html>

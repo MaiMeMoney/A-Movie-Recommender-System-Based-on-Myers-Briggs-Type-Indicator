@@ -47,39 +47,95 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 });
 
-document.getElementById('add-to-watchlist').addEventListener('click', async function () {
-    const username = localStorage.getItem('username'); // ใช้ username ที่ล็อกอิน
-    if (!username) {
-        alert("Please login first!");
-        return;
+function showToast(message, type) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+
+    // กำหนดสีพื้นหลังตามประเภท (success หรือ error)
+    if (type === "success") {
+        toast.style.backgroundColor = "green";
+    } else if (type === "error") {
+        toast.style.backgroundColor = "red";
+    } else {
+        toast.style.backgroundColor = "#333"; // Default สีเทา
     }
 
-    const movieId = new URLSearchParams(window.location.search).get('movieId');
-    if (!movieId) {
-        alert("Movie ID is missing.");
+    toast.className = "toast show";
+
+    // ซ่อน Toast หลังจาก 3 วินาที
+    setTimeout(() => {
+        toast.className = toast.className.replace("show", "");
+    }, 3000);
+}
+
+async function addToWatchlist() {
+    const username = localStorage.getItem("username"); // ดึง username จาก LocalStorage
+    const movieId = new URLSearchParams(window.location.search).get("movieId"); // ดึง movieId จาก URL
+    const listName = "Favorite"; // Watchlist เป้าหมาย
+
+    // ตรวจสอบว่าพารามิเตอร์ครบถ้วนหรือไม่
+    if (!username || !movieId) {
+        showToast("กรุณาระบุ Username และ Movie ID!", "error");
+        console.error("พารามิเตอร์หาย:", { username, movieId });
         return;
     }
 
     try {
-        const response = await fetch('http://localhost:5001/watchlist/add', {
+        const response = await fetch("http://127.0.0.1:5001/watchlist/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, listName, movieId }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            showToast(result.message, "success"); // แจ้งเตือนเมื่อสำเร็จ
+            console.log(`เพิ่มหนังใน Watchlist "${listName}" สำเร็จ:`, result);
+        } else {
+            showToast(result.message || "ไม่สามารถเพิ่มหนังได้!", "error");
+            console.error("ข้อผิดพลาดจาก API:", result);
+        }
+    } catch (error) {
+        console.error("เกิดข้อผิดพลาดระหว่างเรียก API:", error);
+        showToast("เกิดข้อผิดพลาดขณะเพิ่มหนัง!", "error");
+    }
+}
+
+
+function getMovieIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('movieid'); // คืนค่าค่า movieid จาก URL
+}
+
+document.getElementById('add-to-watchlist').addEventListener('click', async () => {
+    const username = localStorage.getItem('username') || "default_user";
+    const movieId = getMovieIdFromURL();
+
+    if (!username || !movieId) {
+        showToast("Missing username or movie ID!", "error");
+        return;
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:5001/watchlist/add', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, movieId }),
         });
 
         const result = await response.json();
         if (response.ok) {
-            alert("Added to Watchlist!");
-            location.reload(); // รีโหลดหน้าหลังเพิ่ม
+            showToast(result.message, "success");
         } else {
-            alert(result.message || "Failed to add to Watchlist.");
+            showToast(result.message || "Failed to add movie.", "error");
         }
     } catch (error) {
-        console.error("Error adding to Watchlist:", error);
+        console.error("Error adding movie to watchlist:", error);
+        showToast("An error occurred while adding movie.", "error");
     }
 });
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const openPopupBtn = document.getElementById('open-rating-popup');
@@ -271,3 +327,5 @@ async function submitRating(rating) {
         console.error('Error submitting rating:', error);
     }
 }
+
+

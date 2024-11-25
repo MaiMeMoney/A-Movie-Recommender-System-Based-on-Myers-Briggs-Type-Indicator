@@ -7,7 +7,7 @@ let watchlists = { Favorite: [] }; // เก็บข้อมูล Watchlist
 async function initializeWatchlist() {
     const username = localStorage.getItem("username");
     if (!username) {
-        alert("Username not found! Please log in.");
+        showToast("ไม่พบชื่อผู้ใช้ กรุณาเข้าสู่ระบบ", "error");
         return;
     }
 
@@ -19,14 +19,15 @@ async function initializeWatchlist() {
         });
 
         if (response.ok) {
-            console.log("Favorite Watchlist initialized.");
+            console.log("Favorite Watchlist ถูกสร้างแล้ว");
         } else {
-            console.error("Failed to initialize Favorite Watchlist.");
+            console.error("ไม่สามารถสร้าง Favorite Watchlist ได้");
         }
     } catch (error) {
         console.error("Error initializing Favorite Watchlist:", error);
     }
 }
+
 
 
 // สร้าง Watchlist ใหม่แบบ Dynamic
@@ -35,7 +36,7 @@ async function createList() {
     const username = localStorage.getItem("username") || "default_user";
 
     if (!listName) {
-        alert("Please enter a list name.");
+        showToast("กรุณากรอกชื่อรายการโปรดที่คุณต้องการก่อนสร้าง", "warning");
         return;
     }
 
@@ -50,12 +51,13 @@ async function createList() {
         if (response.ok) {
             // เพิ่มลิสต์ใหม่ใน Sidebar
             addWatchlistToSidebar(listName);
-            alert("Watchlist created successfully!");
+            showToast("สร้าง Watchlist สำเร็จ!", "success");
         } else {
-            alert(result.message || "Failed to create Watchlist.");
+            showToast(result.message || "ไม่สามารถสร้าง Watchlist ได้", "error");
         }
     } catch (error) {
         console.error("Error creating Watchlist:", error);
+        showToast("เกิดข้อผิดพลาดในการสร้าง Watchlist", "error");
     }
 }
 
@@ -72,26 +74,6 @@ function addWatchlistToSidebar(listName) {
     listContainer.insertBefore(newListItem, favoriteButton.nextSibling);
 }
 
-// ลบ Watchlist เมื่อคลิกขวา
-async function deleteWatchlist(listName) {
-    if (confirm(`Are you sure you want to delete the Watchlist "${listName}"?`)) {
-        try {
-            const response = await fetch(`/watchlist/delete/${listName}`, { method: 'DELETE' });
-            if (response.ok) {
-                document.querySelector(`.list-item[data-list="${listName}"]`).remove();
-                alert(`Watchlist "${listName}" deleted successfully.`);
-                if (currentList === listName) {
-                    currentList = 'Favorite'; // เปลี่ยนกลับไป Favorite
-                    loadMovies(currentList);
-                }
-            } else {
-                alert("Failed to delete the Watchlist.");
-            }
-        } catch (error) {
-            console.error("Error deleting Watchlist:", error);
-        }
-    }
-}
 
 // แสดง Modal เพื่อเลือก Watchlist เมื่อเพิ่มหนัง
 function showAddMovieModal(movie) {
@@ -139,10 +121,13 @@ function loadMovies(listName = 'Favorite') {
                     movieList.appendChild(movieDiv);
                 });
             } else {
-                alert(`No movies in "${listName}" list.`);
+                showToast(`ไม่มีหนังใน "${listName}"`, "info");
             }
         })
-        .catch(error => console.error("Error loading movies:", error));
+        .catch(error => {
+            console.error("Error loading movies:", error);
+            showToast("เกิดข้อผิดพลาดในการโหลดหนัง", "error");
+        });
 }
 
 
@@ -150,6 +135,7 @@ function loadMovies(listName = 'Favorite') {
 // โหลดหนังใน Watchlist "Favorite" โดยค่าเริ่มต้น
 document.addEventListener('DOMContentLoaded', () => {
     initializeWatchlist(); // สร้าง Favorite Watchlist ถ้ายังไม่มี
+    initializeRightClickDelete(); // เพิ่มคลิกขวาสำหรับลบลิสต์
     loadWatchlists(); // โหลด Watchlist ทั้งหมด
     loadMovies('Favorite'); // โหลดหนังใน Favorite
 });
@@ -198,7 +184,7 @@ async function loadWatchlist(listName) {
         movieList.innerHTML = ''; // เคลียร์รายการเก่า
 
         if (movies.length === 0) {
-            alert(`No movies in "${listName}" list.`);
+            showToast(`ไม่มีหนังในลิสต์ "${listName}"`, "error");
             return;
         }
 
@@ -249,7 +235,7 @@ function deleteList(listName) {
 function switchList(listName) {
     currentList = listName; // ตั้ง Watchlist ปัจจุบัน
     loadMovies(listName); // โหลดหนังใน Watchlist
-    alert(`Switched to list: ${listName}`);
+    showToast(`สลับไปยังลิสต์: ${listName}`, "success");
 }
 
 
@@ -286,7 +272,7 @@ function displayMovies(movies) {
 
 function addMovie() {
     if (!currentList) {
-        alert("Please create or select a list first!");
+        showToast("กรุณาสร้างหรือเลือก Watchlist ก่อน!", "error");
         return;
     }
 
@@ -355,73 +341,46 @@ function renderMovies(movies) {
 
 async function deleteSelectedMovie() {
     if (!selectedMovie) {
-        alert("Please select a movie to delete.");
+        showToast("กรุณาเลือกหนังที่ต้องการลบ", "error");
         return;
     }
 
     const currentList = getCurrentList(); // ดึงชื่อ Watchlist ปัจจุบัน
     if (!currentList) {
-        alert("Please select a list.");
+        showToast("กรุณาเลือก Watchlist ก่อน", "error");
         return;
     }
 
     try {
-        console.log("Deleting Movie:", selectedMovie); // Debugging: แสดงข้อมูลหนังที่เลือก
         const response = await fetch('http://127.0.0.1:5001/watchlist/delete-movie', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: localStorage.getItem('username') || 'default_user', // ดึง username
+                username: localStorage.getItem('username') || 'default_user', // ใช้ username จาก Local Storage
                 listName: currentList,
-                movieId: selectedMovie.Movie_ID, // ใช้ Movie_ID ของหนังที่เลือก
+                movieId: selectedMovie._id, // ใช้ `_id` แทน Movie_ID
             }),
         });
 
         const result = await response.json();
         if (response.ok) {
-            alert(result.message || "Movie deleted successfully.");
+            showToast(result.message || "ลบหนังสำเร็จ", "success");
             loadMovies(currentList); // โหลดหนังใหม่ในลิสต์
-            selectedMovie = null; // รีเซ็ตค่า selectedMovie
+            selectedMovie = null; // รีเซ็ตหนังที่เลือก
         } else {
-            alert(result.message || "Failed to delete movie.");
+            showToast(result.message || "ไม่สามารถลบหนังได้", "error");
         }
     } catch (error) {
         console.error("Error deleting movie:", error);
-        alert("An error occurred while deleting the movie.");
+        showToast("เกิดข้อผิดพลาดระหว่างการลบหนัง", "error");
     }
 }
 
-async function updateMovies() {
-    if (!selectedMovie) {
-        alert("กรุณาเลือกหนังก่อนทำการแก้ไข");
-        return;
-    }
-
-    const movieId = selectedMovie.Movie_ID; // ID ของหนังที่ถูกเลือก
-    const newTitle = prompt("กรุณาใส่ชื่อใหม่ของหนัง:", selectedMovie.Series_Title);
-
-    if (!newTitle) return;
-
-    try {
-        const response = await fetch(`http://127.0.0.1:5001/movie/update`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ movieId, newTitle }),
-        });
-
-        if (response.ok) {
-            alert("แก้ไขหนังสำเร็จ!");
-            loadMovies(currentList); // โหลดหนังใหม่ในลิสต์
-        } else {
-            alert("ไม่สามารถแก้ไขหนังได้");
-        }
-    } catch (error) {
-        console.error("Error updating movie:", error);
-    }
+function updateMovies() {
+    openMovieSelectionModal(); // เปิด Modal เมื่อกด Update
 }
-
 
 function goBack() {
     window.location.href = "../main_page/mainpage.html"; // กลับไปหน้าหลัก
@@ -439,7 +398,7 @@ function clearMovieList() {
 async function loadWatchlist() {
     const username = localStorage.getItem('username');
     if (!username) {
-        alert("Please login first!");
+        showToast("กรุณาเข้าสู่ระบบก่อน!", "error");
         return;
     }
 
@@ -459,6 +418,13 @@ async function loadWatchlist() {
 }
 
 
+// ฟังก์ชันดึง Movie ID จาก URL
+function getMovieIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('movieId');
+}
+
+
 document.addEventListener('DOMContentLoaded', loadWatchlist);
 
 function switchList(listName) {
@@ -471,7 +437,7 @@ function switchList(listName) {
             addMovieToGrid(movie);
         });
     } else {
-        alert(`No movies in "${listName}" list.`);
+        showToast(`ไม่มีหนังในลิสต์ "${listName}"`, "error");
     }
 }
 
@@ -497,7 +463,7 @@ function addMovieToGrid(movie) {
 async function addToWatchlist(movieId) {
     const username = localStorage.getItem('username');
     if (!username) {
-        alert("Please login first!");
+        showToast("กรุณาเข้าสู่ระบบก่อน!", "error");
         return;
     }
 
@@ -512,13 +478,14 @@ async function addToWatchlist(movieId) {
 
         const result = await response.json();
         if (response.ok) {
-            alert(result.message);
+            showToast(result.message || "เพิ่มหนังใน Watchlist สำเร็จ", "success");
             loadWatchlist(); // โหลด Watchlist ใหม่
         } else {
-            alert(result.message || "Failed to add movie to Watchlist.");
+            showToast(result.message || "ไม่สามารถเพิ่มหนังได้", "error");
         }
     } catch (error) {
         console.error("Error adding to Watchlist:", error);
+        showToast("เกิดข้อผิดพลาดระหว่างการเพิ่มหนัง", "error");
     }
 }
 
@@ -536,13 +503,14 @@ async function addToFavorite(movieId) {
 
         const result = await response.json();
         if (response.ok) {
-            alert(result.message);
+            showToast(result.message, "success");
             loadMovies('Favorite'); // โหลดหนังใหม่ใน Favorite
         } else {
-            alert(result.message || "Failed to add movie to Watchlist.");
+            showToast(result.message || "Failed to add movie to Watchlist.", "error");
         }
     } catch (error) {
         console.error("Error adding to Favorite Watchlist:", error);
+        showToast("Error occurred while adding to Favorite Watchlist.", "error");
     }
 }
 
@@ -561,15 +529,184 @@ function getCurrentList() {
     return currentList || null;
 }
 
-function updateMovies() {
-    const selectedList = getCurrentList();
-    if (!selectedList) return alert("Please select a list.");
-    alert(`Update movies in ${selectedList}`);
+// เปิด Modal และโหลดหนังทั้งหมด
+async function openMovieSelectionModal() {
+    const modal = document.getElementById('movie-selection-modal');
+    const container = document.getElementById('movie-scroll-container');
+    container.innerHTML = ''; // Clear previous movies
+
+    try {
+        const response = await fetch('http://127.0.0.1:5001/movies_list/all');
+        const movies = await response.json();
+
+        movies.forEach(movie => {
+            const movieDiv = document.createElement('div');
+            movieDiv.className = 'movie-item';
+            movieDiv.setAttribute('data-category', movie.Genre?.toLowerCase() || 'unknown');
+            movieDiv.setAttribute('data-actors', `${movie.Star1}, ${movie.Star2}, ${movie.Star3}, ${movie.Star4}`);
+
+            movieDiv.innerHTML = `
+                <img src="${movie.Poster_Link || 'placeholder.jpg'}" alt="${movie.Series_Title}" />
+                <p>${movie.Series_Title}</p>
+            `;
+            movieDiv.onclick = () => addMovieToCurrentList(movie._id, movie.Series_Title);
+            container.appendChild(movieDiv);
+        });
+
+        modal.style.display = 'flex'; // Show modal
+    } catch (error) {
+        console.error("Error fetching movies:", error);
+    }
 }
 
-function deleteSelectedMovie() {
-    const selectedList = getCurrentList();
-    if (!selectedList) return alert("Please select a list.");
-    alert(`Delete selected movie from ${selectedList}`);
+// ปิด Modal
+function closeModal() {
+    const modal = document.getElementById('movie-selection-modal');
+    modal.style.display = 'none';
+}
+
+// เพิ่มหนังในลิสต์ปัจจุบัน
+async function addMovieToCurrentList(movieId, movieName) {
+    if (!currentList) {
+        showToast("กรุณาเลือก Watchlist ก่อน!", "error");
+        return;
+    }
+
+    const username = localStorage.getItem("username") || "default_user";
+
+    try {
+        const response = await fetch('http://127.0.0.1:5001/watchlist/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, listName: currentList, movieId }),
+        });
+
+        if (response.ok) {
+            showToast(`เพิ่มหนัง "${movieName}" สำเร็จในลิสต์ "${currentList}"`, "success");
+            loadMovies(currentList); // โหลดหนังในลิสต์
+            closeModal(); // ปิด Modal
+        } else {
+            const result = await response.json();
+            showToast(result.message || "ไม่สามารถเพิ่มหนังได้", "error");
+        }
+    } catch (error) {
+        console.error("Error adding movie:", error);
+        showToast("เกิดข้อผิดพลาดระหว่างการเพิ่มหนัง", "error");
+    }
+}
+
+function filterByCategory() {
+    const selectedCategory = document.getElementById('category-filter').value.toLowerCase();
+    const movieItems = document.querySelectorAll('.movie-item');
+
+    movieItems.forEach(item => {
+        const category = item.getAttribute('data-category') || '';
+        if (selectedCategory === 'all' || category.includes(selectedCategory)) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+function searchMovies() {
+    const searchTerm = document.getElementById('movie-search').value.toLowerCase();
+    const movieItems = document.querySelectorAll('.movie-item');
+
+    movieItems.forEach(item => {
+        const title = item.querySelector('p').textContent.toLowerCase();
+        const actors = item.getAttribute('data-actors')?.toLowerCase() || '';
+
+        if (title.includes(searchTerm) || actors.includes(searchTerm)) {
+            item.style.display = 'flex';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+movies.forEach(movie => {
+    const movieDiv = document.createElement('div');
+    movieDiv.className = 'movie-item';
+    movieDiv.setAttribute('data-category', movie.Genre?.toLowerCase() || 'unknown');
+    movieDiv.setAttribute('data-actors', `${movie.Star1}, ${movie.Star2}, ${movie.Star3}, ${movie.Star4}`);
+
+    movieDiv.innerHTML = `
+        <img src="${movie.Poster_Link || 'placeholder.jpg'}" alt="${movie.Series_Title}" />
+        <p>${movie.Series_Title}</p>
+    `;
+    movieDiv.onclick = () => addMovieToCurrentList(movie._id, movie.Series_Title);
+    container.appendChild(movieDiv);
+});
+
+function initializeRightClickDelete() {
+    const listContainer = document.getElementById("list-container");
+
+    listContainer.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+
+        const target = event.target;
+        if (target.classList.contains("list-item")) {
+            const listName = target.textContent;
+
+            if (listName === "Favorite") {
+                showToast("ไม่สามารถลบ Favorite ได้", "error");
+                return;
+            }
+
+            if (confirm(`คุณต้องการลบ Watchlist "${listName}" หรือไม่?`)) {
+                deleteWatchlist(listName, target);
+            }
+        }
+    });
+}
+
+async function deleteWatchlist(listName, listElement) {
+    const username = localStorage.getItem("username") || "default_user";
+
+    try {
+        const response = await fetch(`http://127.0.0.1:5001/watchlist/delete/${listName}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username }), // ส่ง username ใน body
+        });
+
+        if (response.ok) {
+            listElement.remove();
+            showToast(`ลบ Watchlist "${listName}" สำเร็จ`, "success");
+        } else {
+            const result = await response.json();
+            showToast(result.message || "ไม่สามารถลบ Watchlist ได้", "error");
+        }
+    } catch (error) {
+        console.error("Error deleting Watchlist:", error);
+        showToast("เกิดข้อผิดพลาดระหว่างการลบ Watchlist", "error");
+    }
+}
+
+function showToast(message, type) {
+    // ลบ toast เดิมถ้ามีอยู่
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    // สร้าง toast ใหม่
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+
+    // เพิ่ม toast ใน body
+    document.body.appendChild(toast);
+
+    // ตั้ง timeout เพื่อซ่อน toast
+    setTimeout(() => {
+        toast.classList.add("hide");
+        toast.addEventListener("transitionend", () => {
+            if (toast.parentNode) {
+                toast.remove(); // ลบ toast ออกจาก DOM
+            }
+        });
+    }, 3000); // Toast จะแสดงผล 3 วินาที
 }
 
