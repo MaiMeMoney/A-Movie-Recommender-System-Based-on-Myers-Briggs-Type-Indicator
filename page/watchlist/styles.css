@@ -62,6 +62,11 @@ body {
     font-size: 15px;
 }
 
+.movie-item.selected {
+    border: 2px solid #00ff00;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
 /* การจัดสไตล์ Sidebar */
 .sidebar {
     background-color: #333;
@@ -76,8 +81,18 @@ body {
     overflow-y: auto;
 }
 
+#watchlist-header {
+    text-align: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+    font-size: 24px; /* ขนาดตัวอักษรใหญ่ขึ้น */
+    font-weight: bold;
+    color: #fff; /* สีขาวสำหรับข้อความ */
+    margin-bottom: 20px; /* เพิ่มระยะห่างจากลิสต์ด้านล่าง */
+}
+
+
 #list-container {
     display: flex;
+    margin-top: 5px; /* เพิ่มระยะห่างจากด้านบน */
     flex-direction: column;
     gap: 10px;
     max-height: 300px;
@@ -89,13 +104,25 @@ body {
     color: black;
     padding: 10px;
     margin-bottom: 5px;
+    font-weight: bold; /* ตัวอักษรหนา */
     border: 1px solid #ddd;
     cursor: pointer;
     border-radius: 4px;
+    border: none; /* ไม่มีขอบ */
+    border-radius: 8px; /* มุมโค้งมน */
+    cursor: pointer; /* เปลี่ยนเคอร์เซอร์เมื่อ hover */
+    
 }
 
 .list-item:hover {
-    background-color: #f0f0f0;
+    background: linear-gradient(45deg, #f06595, #ff6b6b); /* เปลี่ยนทิศทาง Gradient */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3); /* เงาลึกขึ้น */
+}
+
+.list-item:active {
+    transform: scale(0.95); /* ลดขนาดเล็กน้อย */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* เงาแบนลง */
+    background: linear-gradient(45deg, #e63950, #d6336c); /* สีเข้มขึ้น */
 }
 
 .favorite-list {
@@ -115,26 +142,46 @@ body {
 
 #create-list-container {
     margin-top: 20px;
-}
-
-#create-list-container input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: none;
-    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .create-list {
+    margin-top: 10px; /* ดันปุ่มลง */
+}
+
+#new-list-name {
+    width: 80%; /* ขยายความกว้างของช่องป้อนข้อมูล */
+    padding: 8px;
+}
+
+.create-list {
+    width: 80%; /* ขยายความกว้างของปุ่ม */
     padding: 10px;
-    width: 100%;
+}
+
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* กระจายช่องว่าง */
+    height: 100vh; /* ใช้ความสูงเต็มหน้าจอ */
+    padding: 20px; /* ระยะห่างภายใน */
+}
+
+.favorite-button,
+.create-list {
+    display: block;
+    width: 100%; /* ขยายปุ่มให้เต็มความกว้าง */
+    margin: 10px 0; /* เพิ่มระยะห่าง */
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.create-list {
     background-color: #4caf50;
-    border: none;
     color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
 .create-list:hover {

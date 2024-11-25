@@ -25,20 +25,32 @@
 
     <div class="watchlist">
         <div class="sidebar">
-            <h3>WATCHLIST</h3>
-            <div id="list-container">
-                <!-- ลิสต์ Favorite ที่สร้างโดยค่าเริ่มต้น -->
+            <div id="watchlist-header">
+                <h3>WATCHLIST</h3>
             </div>
+            
+            <div id="list-container">
+                <!-- Default Favorite List -->
+                <button class="list-item" onclick="setCurrentList('Favorite'); loadMovies('Favorite')">Favorite</button>
+                <!-- Additional lists will be dynamically added here -->
+            </div>
+
             <div id="create-list-container">
                 <input type="text" id="new-list-name" placeholder="New List Name">
-                <button class="favorite-button" onclick="loadWatchlist('Favorite')">Favorite</button>
                 <button class="create-list" onclick="createList()">Create List</button>
             </div>
         </div>
 
         <div class="main-content">
             <div id="movie-list" class="movie-grid">
-                <!-- หนังในลิสต์จะแสดงที่นี่ -->
+                <!-- Movies in the selected list will be displayed here -->
+                <!-- Example Movie Template -->
+                <!--
+                <div class="movie-item" onclick="selectMovie('movieId', this)">
+                    <img src="posterUrl" alt="Movie Poster">
+                    <p>Movie Title</p>
+                </div>
+                -->
             </div>
             <div class="actions">
                 <button class="update" onclick="updateMovies()">Update</button>

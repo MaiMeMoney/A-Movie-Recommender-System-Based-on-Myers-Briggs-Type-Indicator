@@ -250,6 +250,39 @@ const watchlistSchema = new mongoose.Schema({
     movies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'movies_list' }]
 });
 
+app.post('/watchlist/init', async (req, res) => {
+    const { username } = req.body;
+
+    if (!username) {
+        return res.status(400).json({ message: "Username is required!" });
+    }
+
+    try {
+        let favoriteList = await Watchlist.findOne({ username, listName: 'Favorite' });
+        if (!favoriteList) {
+            favoriteList = new Watchlist({ username, listName: 'Favorite', movies: [] });
+            await favoriteList.save();
+        }
+
+        res.status(201).json({ message: "Default Favorite Watchlist created or already exists!" });
+    } catch (error) {
+        console.error("Error initializing Favorite Watchlist:", error);
+        res.status(500).json({ message: "Failed to initialize Favorite Watchlist." });
+    }
+});
+
+app.get('/watchlist/all/:username', async (req, res) => {
+    const { username } = req.params;
+
+    try {
+        const watchlists = await Watchlist.find({ username }); // ดึงข้อมูลจากฐานข้อมูล
+        res.status(200).json(watchlists); // ส่งข้อมูล JSON กลับไป
+    } catch (error) {
+        console.error("Error fetching Watchlists:", error);
+        res.status(500).json({ message: "Failed to fetch Watchlists." });
+    }
+});
+
 
 const Watchlist = mongoose.model('Watchlist', watchlistSchema);
 
@@ -282,6 +315,29 @@ app.post('/watchlist/add', async (req, res) => {
     }
 });
 
+app.post('/watchlist/delete-movie', async (req, res) => {
+    const { username, listName, movieId } = req.body;
+
+    try {
+        const watchlist = await Watchlist.findOne({ username, listName });
+        if (!watchlist) {
+            return res.status(404).json({ message: "Watchlist not found" });
+        }
+
+        // ลบหนังที่มี movieId ตรงกันออกจาก watchlist.movies
+        watchlist.movies = watchlist.movies.filter(
+            (movie) => movie.toString() !== movieId
+        );
+
+        await watchlist.save(); // บันทึกการเปลี่ยนแปลง
+        res.json({ message: "Movie deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting movie:", error);
+        res.status(500).json({ message: "An error occurred while deleting the movie" });
+    }
+});
+
+
 
 app.get('/watchlist/:username', async (req, res) => {
     const { username } = req.params;
@@ -298,23 +354,23 @@ app.get('/watchlist/:username', async (req, res) => {
     }
 });
 
-// API สำหรับดึง Watchlist "Favorite"
 app.get('/watchlist/:username/:listName', async (req, res) => {
     const { username, listName } = req.params;
 
     try {
-        const watchlist = await Watchlist.findOne({ username, listName })
-            .populate({
-                path: 'movies',
-                model: 'movies_list', // ระบุโมเดลที่ต้องการ populate
-            });
+        const watchlist = await Watchlist.findOne({ username, listName }).populate({
+            path: 'movies',
+            model: 'movies_list',
+        });
+
         if (!watchlist) {
-            return res.status(404).json({ message: 'Watchlist not found' });
+            return res.status(404).json({ message: `Watchlist "${listName}" not found.` });
         }
+
         res.status(200).json(watchlist.movies);
     } catch (error) {
         console.error("Error fetching Watchlist:", error);
-        res.status(500).json({ message: 'Failed to fetch Watchlist' });
+        res.status(500).json({ message: 'Failed to fetch Watchlist.' });
     }
 });
 
@@ -326,22 +382,21 @@ app.post('/watchlist/create', async (req, res) => {
     }
 
     try {
-        // ตรวจสอบว่ามี Watchlist อยู่แล้วหรือไม่
         const existingList = await Watchlist.findOne({ username, listName });
         if (existingList) {
             return res.status(400).json({ message: "This Watchlist already exists." });
         }
 
-        // สร้าง Watchlist ใหม่
         const newList = new Watchlist({ username, listName, movies: [] });
         await newList.save();
 
-        res.status(201).json({ message: "Watchlist created successfully!" });
+        res.status(201).json({ message: "Watchlist created successfully!", list: newList });
     } catch (error) {
         console.error("Error creating Watchlist:", error);
         res.status(500).json({ message: "Failed to create Watchlist." });
     }
 });
+
 
 app.delete('/watchlist/delete/:listName', async (req, res) => {
     const { username } = req.body; // รับ username
