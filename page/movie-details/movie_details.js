@@ -68,6 +68,39 @@ function showToast(message, type) {
     }, 3000);
 }
 
+function getMovieIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('movieid');
+}
+
+// โหลดข้อมูลหนังจาก Backend
+function loadMovieDetails(movieId) {
+    fetch(`http://127.0.0.1:5001/movies_list/movies/${movieId}`)
+        .then(response => response.json())
+        .then(movie => {
+            if (!movie) {
+                showToast("ไม่พบข้อมูลหนัง!", "error");
+                return;
+            }
+
+            // อัปเดตข้อมูลหนังในหน้า
+            document.getElementById('movie-name').textContent = movie.Series_Title || "Unknown Title";
+            document.getElementById('movie-info').textContent = `${movie.Release_Year || "N/A"} · ${movie.Certificate || "N/A"} · ${movie.Runtime || "N/A"}`;
+            document.getElementById('movie-rating').textContent = `⭐ IMDB Rating ${movie.IMDB_Rating || "N/A"}/10`;
+            document.getElementById('movie-description').textContent = movie.Overview || "No description available.";
+            document.getElementById('movie-director').textContent = `Director: ${movie.Director || "N/A"}`;
+            document.getElementById('movie-actors').textContent = `Stars: ${movie.Star1 || ""}, ${movie.Star2 || ""}, ${movie.Star3 || ""}, ${movie.Star4 || ""}`;
+            document.getElementById('movie-genre').textContent = movie.Genre || "N/A";
+            document.getElementById('movie-gross').textContent = `$${movie.Gross || "N/A"}`;
+            document.getElementById('meta-score').textContent = `Metascore: ${movie.Meta_Score || "N/A"}`;
+            document.getElementById('movie-poster').src = movie.Poster_Link || "placeholder.jpg";
+        })
+        .catch(error => {
+            console.error("Error loading movie details:", error);
+            showToast("เกิดข้อผิดพลาดในการโหลดข้อมูลหนัง", "error");
+        });
+}
+
 async function addToWatchlist() {
     const username = localStorage.getItem("username"); // ดึง username จาก LocalStorage
     const movieId = new URLSearchParams(window.location.search).get("movieId"); // ดึง movieId จาก URL

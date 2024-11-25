@@ -104,20 +104,32 @@ function loadMovies(listName = 'Favorite') {
                 movies.forEach(movie => {
                     const movieDiv = document.createElement("div");
                     movieDiv.className = "movie-item";
+                    movieDiv.setAttribute('data-movie-id', movie._id); // เพิ่ม movieId ใน data attribute
                     movieDiv.innerHTML = `
                         <img src="${movie.Poster_Link || ''}" alt="${movie.Series_Title || 'No Title'}">
                         <p>${movie.Series_Title || 'No Title'}</p>
                     `;
-                    // เพิ่ม event listener เพื่อเลือกหนัง
+
+                    // เพิ่ม Event Listener สำหรับคลิก
                     movieDiv.addEventListener('click', () => {
-                        // ลบการเลือกทั้งหมดก่อนหน้า
                         document.querySelectorAll('.movie-item.selected').forEach(item => {
                             item.classList.remove('selected');
                         });
-                        // เพิ่ม class 'selected' ให้หนังที่ถูกเลือก
                         movieDiv.classList.add('selected');
-                        selectedMovie = movie; // เก็บข้อมูลหนังที่ถูกเลือก
+                        selectedMovie = movie; // อัปเดต selectedMovie
                     });
+
+                    // เพิ่ม Event Listener สำหรับดับเบิ้ลคลิก
+                    movieDiv.addEventListener('dblclick', () => {
+                        const movieId = movieDiv.getAttribute('data-movie-id');
+                        if (movieId) {
+                            window.location.href = `/page/movie-details/movie-details.html?movieId=${movieId}`;
+                        } else {
+                            console.error("Movie ID not found for this movie.");
+                            showToast("ไม่พบ Movie ID สำหรับหนังนี้", "error");
+                        }
+                    });
+
                     movieList.appendChild(movieDiv);
                 });
             } else {
@@ -129,7 +141,6 @@ function loadMovies(listName = 'Favorite') {
             showToast("เกิดข้อผิดพลาดในการโหลดหนัง", "error");
         });
 }
-
 
 
 // โหลดหนังใน Watchlist "Favorite" โดยค่าเริ่มต้น
@@ -165,8 +176,6 @@ async function loadWatchlists() {
         console.error("Error loading Watchlists:", error);
     }
 }
-
-
 
 document.addEventListener('DOMContentLoaded', () => {
     loadWatchlists(); // โหลด Watchlist ทั้งหมด
