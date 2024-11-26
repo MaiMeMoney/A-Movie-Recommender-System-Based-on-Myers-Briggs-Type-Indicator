@@ -17,35 +17,130 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 60px;
+    height: 60px; /* กำหนดความสูงที่ชัดเจน */
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #4caf50;
+    justify-content: space-between; /* จัดระยะห่างระหว่างโลโก้, ส่วนค้นหา และส่วนผู้ใช้ */
+    align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+    background-color: #32834F;
     padding: 10px 20px;
     z-index: 1000;
-}
-
-.search-bar {
-    flex-grow: 1;
-    margin: 0 20px;
-    padding: 8px;
-    border-radius: 5px;
-    border: none;
-    font-size: 16px;
-    min-width: 200px;
-    max-width: 600px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* เพิ่มเงาเล็กน้อย */
 }
 
 .logo {
     font-size: 24px;
     font-weight: bold;
     color: #f4a261;
+    text-decoration: none; /* ลบเส้นใต้ */
+}
+
+#search-bar {
+    flex-grow: 1; /* ขยายให้เต็มพื้นที่ที่เหลือ */
+    height: 100%; /* ความสูงเท่ากับ container */
+    padding: 0 10px; /* ลด padding เพื่อไม่ให้สูงเกินไป */
+    border-radius: 0 5px 5px 0; /* โค้งเฉพาะด้านขวา */
+    border: none; /* ลบเส้นขอบ */
+    font-size: 16px;
+    box-shadow: none; /* ลบเงาที่อาจจะทำให้เกิดเส้น */
+    outline: none; /* ลบเส้นที่เกิดจากการโฟกัส */
+}
+
+#search-category {
+    padding: 0 10px; /* ปรับ padding เพื่อให้ข้อความไม่ชิดขอบ */
+    border-radius: 5px 0 0 5px; /* โค้งเฉพาะด้านซ้าย */
+    border: none;
+    font-size: 16px;
+    background-color: #f4a261; /* ใช้สีเดียวกันกับ container */
+    color: #fff;
+    height: 100%; /* ใช้ความสูงเท่ากับ container */
+    box-sizing: border-box; /* รวม padding และ border ในความสูง */
+    appearance: none; /* ซ่อนลูกศรของ select */
+}
+
+/* การจัดสไตล์ปุ่ม search */
+/* การจัดสไตล์ปุ่ม search */
+#search-button {
+    height: 100%; /* ใช้ความสูงเต็ม container เพื่อให้เท่ากับ search-category และ search-bar */
+    padding: 0 15px; /* กำหนด padding แนวนอนเท่านั้น */
+    background-color: #e63946;
+    border: none; /* ลบเส้นขอบ */
+    border-radius: 5px; /* โค้งทั้งหมด */
+    color: #fff;
+    cursor: pointer;
+    outline: none; /* ลบเส้นที่เกิดจากการโฟกัส */
+    box-sizing: border-box; /* รวม padding และ border ในความสูง */
+    transition: background-color 0.3s ease; /* เพิ่มการเปลี่ยนสีเมื่อ hover อย่างนุ่มนวล */
+    margin-left: 10px; /* เพิ่มระยะห่างจาก search bar */
+}
+
+/* เอฟเฟกต์ hover สำหรับปุ่ม search */
+#search-button:hover {
+    background-color: #d62828; /* เปลี่ยนสีเมื่อ hover เพื่อเพิ่มลูกเล่น */
+}
+
+
+
+#search-bar {
+    flex-grow: 1; /* ขยายเพื่อให้เต็มพื้นที่ที่เหลือ */
+    padding: 0 10px; /* ลด padding ให้พอดี */
+    border: none; /* ลบเส้นขอบ */
+    border-radius: 0; /* โค้งด้านขวาต้องเข้ากับ search button */
+    border-top-right-radius: 5px; /* เพิ่มความโค้งด้านขวาบน */
+    border-bottom-right-radius: 5px; /* เพิ่มความโค้งด้านขวาล่าง */
+    font-size: 16px;
+    outline: none; /* ลบเส้นที่เกิดจากการโฟกัส */
+    height: 100%; /* ใช้ความสูงเต็ม container */
+    box-sizing: border-box; /* รวม padding และ border ในความสูง */
+}
+
+/* การจัดสไตล์ Search Bar */
+.search-container {
+    display: flex; /* จัดให้อยู่ในแถวเดียวกัน */
+    align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+    gap: 0; /* ไม่มีช่องว่างระหว่างองค์ประกอบ */
+    max-width: 600px; /* จำกัดความกว้างสูงสุด */
+    width: 100%;
+    height: 30px; /* กำหนดความสูงที่ชัดเจนให้ตรงกัน */
+    overflow: hidden; /* ป้องกันองค์ประกอบที่หลุดออก */
 }
 
 .my-list {
     display: flex;
     align-items: center;
+}
+
+.username-display {
+    font-size: 16px;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.my-list-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 18px;
+    margin-left: 15px;
+}
+
+.account-icon {
+    font-size: 18px;
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.2s;
+}
+
+.account-icon:hover {
+    transform: scale(1.1);
 }
 
 .my-list button {
@@ -56,10 +151,13 @@ body {
     border-radius: 5px;
     color: white;
     cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.account-icon {
-    font-size: 15px;
+.my-list button:hover {
+    background-color: #d62828;
+    transform: scale(1.05);
 }
 
 .movie-item.selected {

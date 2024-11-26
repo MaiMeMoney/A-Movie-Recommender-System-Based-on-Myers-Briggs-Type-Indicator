@@ -28,11 +28,12 @@ body.popup-open {
     left: 0;
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #4caf50;
+    justify-content: space-between; /* จัดวางให้ logo, search และ my-list อยู่คนละด้าน */
+    align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+    background-color: #32834F;
     padding: 10px 20px;
     z-index: 1000;
+    box-shadow: none;
 }
 
 .movie-details-layout {
@@ -50,6 +51,7 @@ body.popup-open {
     font-size: 24px;
     font-weight: bold;
     color: #f4a261;
+    margin-right: auto; /* ดันโลโก้ไปด้านซ้าย */
 }
 
 .search-bar {
@@ -64,6 +66,7 @@ body.popup-open {
 .my-list {
     display: flex;
     align-items: center;
+    margin-left: auto; /* ดัน my-list ไปทางด้านขวา */
 }
 
 .my-list button {
@@ -87,18 +90,18 @@ body.popup-open {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px; /* กำหนดขนาดปุ่ม */
+    width: 40px;
     height: 40px;
-    
-    border-radius: 10px; /* ทำให้เป็นวงกลม */
-    text-decoration: none; /* ลบเส้นใต้ */
-    color: white; /* สีของไอคอน */
-    
+    background-color: transparent;
+    color: white;
     cursor: pointer;
+    text-decoration: none;
+    font-size: 18px;
+    margin-left: 15px; /* เพิ่มระยะห่างระหว่าง my-list-icon และองค์ประกอบก่อนหน้า */
 }
-
 .my-list-icon i {
     font-size: 22px; /* ขนาดของไอคอน */
+    color: white;
 }
 
 .my-list-icon:hover {
@@ -107,7 +110,12 @@ body.popup-open {
 }
 
 .account-icon {
-    font-size: 15px;
+    font-size: 18px;
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: white;
 }
 /* Layout container */
 .movie-details-layout {
@@ -163,22 +171,26 @@ body.popup-open {
 
 .toast {
     position: fixed;
-    top: 80px;
-    right: 20px;
+    top: 70px; /* ระยะห่างใต้ navbar */
+    right: 20px; /* ติดกับขอบขวา */
     background-color: #333;
-    color: white;
-    padding: 15px 20px;
+    color: #fff;
+    padding: 10px 20px;
     border-radius: 5px;
-    font-size: 14px;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
     z-index: 1000;
-    display: none;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
 .toast.show {
-    display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
+
+.toast.fade-out {
+    opacity: 0;
+}
+
 
 @keyframes fadein {
     from { opacity: 0; }
@@ -304,25 +316,8 @@ body.popup-open {
     display: none;
 }
 
-.navbar {
-    z-index: 1000;
-}
-
 /* ป๊อปอัป */
-#rating-popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #1a1a1a;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    z-index: 1050;
-    color: #fff;
-    width: 300px;
-    text-align: center;
-}
+
 
 .rating-stars {
     display: flex; /* Arrange stars in a row */
@@ -425,3 +420,122 @@ body.popup-open {
     }
 }
 
+.search-container {
+    display: flex; /* ใช้ flexbox เพื่อให้องค์ประกอบอยู่ในแถวเดียวกัน */
+    align-items: center; /* จัดแนวให้อยู่ตรงกลางในแนวตั้ง */
+    gap: 0; /* ไม่มีช่องว่างระหว่างองค์ประกอบ */
+    max-width: 600px; /* จำกัดขนาด container */
+    width: 100%;
+    height: 30px; /* ความสูงของ container */
+}
+
+#search-category {
+    height: 100%; /* ความสูงเท่ากับ container */
+    padding: 0 10px;
+    border-radius: 5px 0 0 5px; /* โค้งเฉพาะด้านซ้ายเพื่อรวมกับ search-bar */
+    border: none;
+    font-size: 16px;
+    background-color: #f4a261;
+    color: #fff;
+    box-shadow: none; /* ลบเงาเพื่อให้ดูเรียบ */
+    appearance: none; /* ซ่อนลูกศรของ select */
+    margin: 0; /* ลบระยะห่างที่อาจทำให้เกิดช่องว่าง */
+}
+
+#search-bar {
+    flex-grow: 1; /* ขยายเพื่อให้เต็มพื้นที่ที่เหลือ */
+    height: 100%; /* ความสูงเท่ากับ container */
+    padding: 0 10px; /* ลด padding ให้ไม่เพิ่มความสูงขององค์ประกอบ */
+    border-radius: 0 5px 5px 0; /* โค้งเฉพาะด้านขวาเพื่อรวมกับ search-category */
+    border: none;
+    font-size: 16px;
+    box-shadow: none; /* ลบเงาเพื่อให้ดูเรียบ */
+    outline: none;
+    margin: 0; /* ลบระยะห่างที่อาจทำให้เกิดช่องว่าง */
+}
+
+
+
+#search-button {
+    padding: 8px 12px;
+    background-color: #e63946;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    outline: none;
+}
+
+#search-button {
+    padding: 8px 12px;
+    background-color: #e63946;
+    border: none; /* ลบเส้นขอบ */
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 10px;
+    outline: none; /* ลบเส้นที่เกิดจากการโฟกัส */
+}
+
+#search-button:hover {
+    background-color: #d62828;
+}
+
+/* ป๊อปอัป */
+#rating-popup {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#rating-popup.fade-in {
+    opacity: 1;
+}
+
+#rating-popup.fade-out {
+    opacity: 0;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    top: 70px; /* ระยะห่างใต้ navbar */
+    right: 20px; /* ติดกับขอบขวา */
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
+    z-index: 1000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.fade-out {
+    opacity: 0;
+}
+
+
+/* Ripple Effect */
+button {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}

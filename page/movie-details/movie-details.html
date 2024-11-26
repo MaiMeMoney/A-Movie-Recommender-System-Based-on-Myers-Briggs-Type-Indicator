@@ -12,17 +12,30 @@
 <body>
     <header>
         <div class="navbar">
-            <div class="logo"><a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a></div>
-            <input type="text" class="search-bar" placeholder="Search for movies...">
+            <div class="logo">
+                <a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a>
+            </div>
+            <div class="search-container">
+                <select id="search-category">
+                    <option value="title">Movie Title</option>
+                    <option value="director">Director</option>
+                    <option value="actor">Actor</option>
+                    <option value="genre">Genre</option>
+                </select>
+                <input type="text" id="search-bar" class="search-bar" placeholder="Search Movie...">
+                <button id="search-button">Search</button>
+            </div>
             <div class="my-list">
-                <span id="username-display" class="username-display"></span> <!-- แสดงชื่อผู้ใช้ -->
+                <span id="username-display" class="username-display">Username</span>
                 <a href="/page/watchlist/index.html" class="my-list-icon">
                     <i class="fas fa-bookmark"></i>
-                </a>     
+                </a>
                 <button class="account-icon" onclick="goToProfile()">👤</button>
             </div>
         </div>
     </header>
+    <div id="toast" class="toast">You have rated 4 stars!</div> 
+    
 
 
     <!-- Movie Details Layout -->
@@ -32,6 +45,7 @@
                 <img id="movie-poster" src="#" alt="Movie Poster" class="movie-poster">
                 <button id="add-to-watchlist" class="add-watchlist" onclick="addToWatchlist()">+ Add to Watchlist</button>
             </div>
+            
             <div class="right-section">
                 <h1 id="movie-name">Forrest Gump</h1>
                 <p id="movie-info">1994 · UA · 142 min</p>
@@ -65,6 +79,24 @@
         </div>
     </div>
     <div id="toast" class="toast"></div>
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const username = localStorage.getItem('username');
+
+    if (!username) {
+        alert('You are not logged in!');
+        window.location.href = '/page/login_page/index.html';
+        return;
+    }
+
+    document.getElementById('username-display').textContent = `Welcome, ${username}`;
+
+    // ฟังก์ชันสำหรับไปยังหน้าแก้ไขข้อมูลส่วนตัว
+    window.goToProfile = function () {
+        window.location.href = `/page/Personal information editing page/index.html?username=${username}`;
+    };
+});        
+    </script>
     <script src="movie_details.js"></script>
 </body>
 </html>
