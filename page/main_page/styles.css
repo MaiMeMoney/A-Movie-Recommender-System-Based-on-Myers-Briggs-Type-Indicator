@@ -16,13 +16,13 @@ body {
     left: 0;
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #4caf50;
+    justify-content: space-between; /* จัดวางองค์ประกอบด้านซ้ายและด้านขวา */
+    align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+    background-color: #32834F;
     padding: 10px 20px;
     z-index: 1000;
-    border: none; /* ลบเส้นขอบของ navbar */
-    box-shadow: none; /* ลบเงา */
+    border: none;
+    box-shadow: none;
 }
 
 .logo {
@@ -31,20 +31,32 @@ body {
     color: #f4a261;
 }
 
-.search-bar {
-    flex-grow: 1;
-    margin: 0 20px;
-    padding: 8px;
-    border-radius: 5px;
-    border: none;
+#search-bar {
+    flex-grow: 1; /* ขยายให้เต็มพื้นที่ที่เหลือ */
+    height: 100%; /* ความสูงเท่ากับ container */
+    padding: 0 10px; /* ลด padding เพื่อไม่ให้สูงเกินไป */
+    border-radius: 0 5px 5px 0; /* โค้งเฉพาะด้านขวา */
+    border: none; /* ลบเส้นขอบ */
     font-size: 16px;
-    box-shadow: none; /* ลบเงาของ input */
+    box-shadow: none; /* ลบเงาที่อาจจะทำให้เกิดเส้น */
+    outline: none; /* ลบเส้นที่เกิดจากการโฟกัส */
+}
+
+#search-button {
+    padding: 8px 12px;
+    background-color: #e63946;
+    border: none; /* ลบเส้นขอบ */
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 10px;
+    outline: none; /* ลบเส้นที่เกิดจากการโฟกัส */
 }
 
 .search-bar, #search-category, #search-button {
-    border: none; /* ลบเส้นขอบทั้งหมด */
-    outline: none; /* ลบเส้นไฮไลต์ที่เกิดจากการโฟกัส */
-    box-shadow: none; /* ลบเงา */
+    border: none; 
+    outline: none; 
+    box-shadow: none; 
 }
 
 .my-list {
@@ -64,14 +76,20 @@ body {
 
 .my-list i {
     margin-right: 5px;
-    color: white; /* สีไอคอน */
+    color: white; /* สีของไอคอน */
     font-size: 16px; /* ขนาดของไอคอน */
 }
 
 
 .account-icon {
     font-size: 18px;
+    margin-left: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: white;
 }
+
 
 main {
     padding: 80px 20px 20px;
@@ -262,14 +280,13 @@ h2 a {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40px; /* กำหนดขนาดปุ่ม */
+    width: 40px;
     height: 40px;
-    
-    border-radius: 10px; /* ทำให้เป็นวงกลม */
-    text-decoration: none; /* ลบเส้นใต้ */
+    background-color: transparent; /* พื้นหลังโปร่งใส */
     color: white; /* สีของไอคอน */
-    
     cursor: pointer;
+    text-decoration: none;
+    font-size: 18px; /* ขนาดของไอคอน */
 }
 
 .my-list-icon i {
@@ -282,31 +299,37 @@ h2 a {
 }
 
 .search-container {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    background-color: transparent; /* ลบสีพื้นหลัง */
-    gap: 10px; /* เพิ่มระยะห่างระหว่างองค์ประกอบ */
+    display: flex; /* ใช้ flexbox เพื่อให้อยู่ในแถวเดียวกัน */
+    align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+    gap: 0; /* ลบช่องว่างระหว่างองค์ประกอบ */
+    width: 600px; /* ขนาด container */
+    max-width: 100%; /* รองรับหน้าจอเล็ก */
+    height: 30px; /* ปรับความสูงให้น้อยลง */
+    border: none; /* ลบเส้นขอบที่อาจจะทำให้เกิดเส้น */
 }
 
+
 #search-category {
-    padding: 8px;
-    border-radius: 5px;
-    border: none;
+    height: 100%; /* ความสูงเท่ากับ container */
+    padding: 0 10px;
+    border-radius: 5px 0 0 5px; /* โค้งเฉพาะด้านซ้าย */
+    border: none; /* ลบเส้นขอบ */
     font-size: 16px;
     background-color: #f4a261;
     color: #fff;
-    box-shadow: none; /* ลบเงาของ select */
+    box-shadow: none; /* ลบเงาที่อาจจะทำให้เกิดเส้น */
     appearance: none; /* ซ่อนลูกศรของ select */
 }
 
 #search-button {
     padding: 8px 12px;
     background-color: #e63946;
-    border: none;
+    border: none; /* ลบเส้นขอบ */
     border-radius: 5px;
     color: #fff;
     cursor: pointer;
+    margin-left: 10px;
+    outline: none; /* ลบเส้นที่เกิดจากการโฟกัส */
 }
 
 #search-button:hover {
@@ -390,6 +413,7 @@ h2 a {
     width: calc(100% - 30px);
     z-index: 1000;
     color: black;
+    display: none;
 }
 
 .suggestion-item {
