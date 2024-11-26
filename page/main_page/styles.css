@@ -190,17 +190,23 @@ main {
 }
 
 
-/* ปรับความไวต่อการตอบสนอง */
 @media (max-width: 768px) {
-    .movie-item {
-        width: 100%; /* เต็มความกว้างบนหน้าจอเล็ก */
-        height: auto; /* ความสูงอัตโนมัติเพื่อรักษาสัดส่วน */
+    .search-container {
+        width: 100%; /* ใช้ความกว้างเต็มบนหน้าจอเล็ก */
+        height: auto; /* ปรับความสูงให้เหมาะสม */
     }
 
-    .movie-list {
-        flex-direction: column; /* จัดเรียงรายการในแนวตั้งบนหน้าจอเล็ก */
+    #search-bar {
+        font-size: 14px; /* ลดขนาดตัวอักษรลง */
+        padding: 0 10px;
+    }
+
+    #search-button {
+        padding: 6px 10px; /* ลดขนาดปุ่มให้เล็กลง */
+        font-size: 14px; /* ลดขนาดตัวอักษรในปุ่ม */
     }
 }
+
 
 .recommend-header {
     display: flex;
@@ -348,14 +354,30 @@ h2 a {
 
 #search-results .movie-list {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* เพื่อให้รายการถูกจัดในหลายบรรทัดเมื่อหน้าจอเล็ก */
     gap: 20px;
+    justify-content: center; /* จัดให้อยู่กลาง */
 }
 
 #search-results .movie-item {
-    width: 300px;
+    width: 100%;
+    max-width: 282px; /* กำหนดขนาดสูงสุด */
     text-align: center;
     margin: 20px;
+    flex-grow: 1;
+}
+
+/* สำหรับอุปกรณ์ที่มีขนาดหน้าจอเล็ก */
+@media (max-width: 768px) {
+    #search-results .movie-item {
+        width: 45%; /* ใช้ 45% ของความกว้างหน้าจอสำหรับ 2 คอลัมน์ */
+    }
+}
+
+@media (max-width: 480px) {
+    #search-results .movie-item {
+        width: 100%; /* ให้ภาพยนตร์แต่ละตัวเต็มความกว้างหน้าจอ */
+    }
 }
 
 #search-results .movie-item img {
@@ -363,9 +385,18 @@ h2 a {
     transition: transform 0.2s;
 }
 
-#search-results .movie-item img:hover {
-    transform: scale(1.05);
+#search-results .movie-item:hover {
+    transform: scale(1.05); /* ขยายภาพเล็กน้อยเมื่อ hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
+
+/* สำหรับหน้าจอขนาดเล็ก เช่นมือถือ */
+@media (max-width: 768px) {
+    #search-results .movie-item:hover {
+        transform: scale(1); /* ลดการขยายลงสำหรับอุปกรณ์ขนาดเล็ก */
+    }
+}
+
 #search-results .movie-item p {
     color: #333;
     font-size: 14px;
@@ -431,4 +462,29 @@ h2 a {
     margin-top: 3px;
 }
 
+@media (max-width: 768px) {
+    .navbar {
+        padding: 10px 15px; /* ลดขนาด padding */
+    }
 
+    .logo {
+        font-size: 18px; /* ลดขนาด logo */
+    }
+
+    #search-bar {
+        font-size: 14px; /* ลดขนาดฟอนต์ให้เล็กลง */
+    }
+
+    #search-button {
+        padding: 6px 10px; /* ปรับขนาดของปุ่ม */
+    }
+}
+
+@media (max-width: 768px) {
+    .movie-list {
+        flex-direction: column; /* เปลี่ยนให้เป็นแนวตั้งบนหน้าจอเล็ก */
+        gap: 15px; /* เพิ่มระยะห่างระหว่างภาพยนตร์ */
+        width: 100%; /* ความกว้างเต็มจอ */
+        overflow-x: visible; /* ปิด scroll bar */
+    }
+}
