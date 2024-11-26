@@ -96,6 +96,9 @@ app.post('/register',
 );
 
 // ฟังก์ชันสำหรับการล็อกอิน
+const jwt = require('jsonwebtoken');
+const secretKey = "your_secret_key"; // ใช้คีย์ลับที่ปลอดภัย
+
 app.post('/login', [
     body('username').trim().escape(),
     body('password').trim().escape()
@@ -118,9 +121,10 @@ app.post('/login', [
             return res.status(401).json({ message: '❌ Invalid username or password' });
         }
 
-        
+        // สร้าง JWT และส่งไปยัง Client
+        const token = jwt.sign({ id: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
 
-        res.status(200).json({ message: '✅ Login successful!', username: user.username });
+        res.status(200).json({ message: '✅ Login successful!', token });
     } catch (error) {
         console.error('❌ Error during login:', error);
         res.status(500).json({ message: '❌ Internal server error' });
@@ -128,6 +132,7 @@ app.post('/login', [
         await client.close();
     }
 });
+
 
 // ฟังก์ชันสำหรับการดึงข้อมูลผู้ใช้
 app.get('/user/:username', async (req, res) => {

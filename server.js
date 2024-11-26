@@ -597,3 +597,45 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+app.post('/recommend', async (req, res) => {
+    const { username } = req.body;
+
+    if (!username) {
+        return res.status(400).json({ message: 'Username is required!' });
+    }
+
+    try {
+        // ค้นหา MBTI ของผู้ใช้
+        const userMbti = await MBTI.findOne({ username });
+
+        if (!userMbti || !userMbti.mbti_type) {
+            return res.status(404).json({ message: 'User MBTI not found!' });
+        }
+
+        // ค้นหาผู้ใช้ที่มี MBTI เดียวกัน
+        const sameMbtiUsers = await MBTI.find({ mbti_type: userMbti.mbti_type });
+        const sameMbtiUsernames = sameMbtiUsers.map(user => user.username);
+
+        // ดึงคะแนนหนังจาก movies_scores
+        const recommendedMovies = await MovieScore.find({
+            username: { $in: sameMbtiUsernames }
+        }).sort({ score: -1 }).limit(10);
+
+        if (recommendedMovies.length === 0) {
+            return res.status(404).json({ message: 'No recommendations found!' });
+        }
+
+        // ส่งรายชื่อหนังกลับ
+        res.status(200).json({
+            mbti: userMbti.mbti_type,
+            recommendations: recommendedMovies.map(movie => ({
+                movieName: movie.movieName,
+                score: movie.score
+            }))
+        });
+    } catch (error) {
+        console.error('Error fetching recommendations:', error);
+        res.status(500).json({ message: 'Failed to fetch recommendations.' });
+    }
+});

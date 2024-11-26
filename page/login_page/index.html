@@ -32,12 +32,13 @@
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+            e.preventDefault(); // ป้องกันการส่งฟอร์มแบบดั้งเดิม
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             try {
+                // ส่งคำขอ Login ไปยัง Backend
                 const response = await fetch('http://127.0.0.1:3000/login', {
                     method: 'POST',
                     headers: {
@@ -49,10 +50,15 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    localStorage.setItem('username', result.username);
+                    // เก็บ JWT ใน Local Storage
+                    localStorage.setItem('token', result.token);
+
+                    // เก็บ Username ไว้ใน Local Storage (ถ้าจำเป็น)
+                    localStorage.setItem('username', username);
+
                     showToast(result.message, 'success'); // Toast สำหรับกรณีสำเร็จ
                     setTimeout(() => {
-                        window.location.href = '../main_page/mainpage.html';
+                        window.location.href = '../main_page/mainpage.html'; // ย้ายไปหน้าหลัก
                     }, 3000);
                 } else {
                     const errorMessage = result.message || '❌ Invalid username or password';
@@ -64,6 +70,7 @@
             }
         });
 
+        // ฟังก์ชันแสดง Toast Notification
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             toast.className = 'toast ' + type;
