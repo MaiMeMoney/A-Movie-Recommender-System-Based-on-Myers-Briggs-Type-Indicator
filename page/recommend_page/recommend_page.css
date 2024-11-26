@@ -1,0 +1,147 @@
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: 'Bebas Neue', sans-serif;
+    background-color: #000000;
+    color: #E09B50;
+    overflow-y: scroll;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Top Navigation Bar */
+.top-nav {
+    background-color: #32834F;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-bar input {
+    width: 300px;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+    padding: 10px;
+}
+
+.search-bar .search-icon {
+    background: #E09B50;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.top-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.my-list {
+    background-color: #B32121;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+}
+
+.user-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Recommendation Section */
+.recommended-section {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.recommendation-title {
+    font-size: 2.5rem;
+}
+
+.mbti-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.mbti-type {
+    font-size: 3rem;
+    color: #E09B50;
+}
+
+.change-mbti, .recommend-me {
+    background-color: #B32121;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* Movie Grid Section */
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
+    gap: 20px;
+    padding: 40px;
+}
+
+.movie-card {
+    width: 100%;
+    height: 435px;
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000000;
+    font-size: 1rem;
+}
+
+/* Filter/Search Options */
+.filter-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+}
+
+.filter-options input {
+    width: 300px;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+    padding: 10px;
+}
+
+.filter-options .filter-icon {
+    background: #E09B50;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+}
