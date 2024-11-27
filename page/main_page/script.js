@@ -84,3 +84,57 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+
+document.addEventListener('DOMContentLoaded', async function () {
+    const username = localStorage.getItem('username');
+    const adminIcon = document.querySelector('.admin-icon');
+
+    if (!username) {
+        alert('You are not logged in!');
+        window.location.href = '/page/login_page/index.html';
+        return;
+    }
+
+    document.getElementById('username-display').textContent = `Welcome, ${username}`;
+
+    try {
+        const response = await fetch(`http://localhost:6001/api/check-role?username=${username}`);
+        const data = await response.json();
+
+        console.log('API /api/check-role Response:', data); // Log ข้อมูลที่ API ส่งกลับมา
+
+        if (data.role === 1) {
+            console.log(`User ${username} is an admin. Showing admin icon.`);
+            adminIcon.style.display = 'block'; // แสดงมงกุฏ
+            adminIcon.addEventListener('click', function () {
+                window.location.href = `http://localhost:6001/admin/dashboard?username=${username}`;
+            });
+        } else {
+            console.log(`User ${username} is not an admin.`);
+        }
+    } catch (error) {
+        console.error('Error fetching role data:', error);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', async function () {
+    const username = localStorage.getItem('username');
+    
+    if (!username) {
+        alert('Session expired. Please log in again.');
+        window.location.href = '/page/login_page/index.html';
+        return;
+    }
+
+    document.getElementById('username-display').textContent = `Welcome, ${username}`;
+});
+
+
+
+// Route สำหรับ mainpage.html พร้อม session validation
+app.get('/mainpage.html', validateSession, (req, res) => {
+    res.sendFile(path.join(__dirname, 'page/main_page/mainpage.html'));
+});
+
+
+
