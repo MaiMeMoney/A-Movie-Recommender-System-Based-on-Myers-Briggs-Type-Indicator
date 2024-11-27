@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/page/admin_dashboard/dashboard_statistics/admin-dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>MOVIEMINGLE</h1>
+        <div class="title">ADMIN DASHBOARD</div>
+    </header>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="admin-profile">
+                <div class="admin-image">
+                    <p>Admin Image</p>
+                </div>
+                <h2 id="admin-name">ADMIN</h2>
+                <button class="logout-btn" id="logout-btn">Logout</button>
+                <button id="backToMainPage" class="back-btn">Back to Main Page</button>
+            </div>
+            <nav>
+                <ul>
+                    <li><button class="menu-btn">User account management</button></li>
+                    <li><button class="menu-btn">Movie management</button></li>
+                </ul>
+            </nav>
+        </aside>
+        <main>
+            <div class="main-header">
+                <h2>ADMIN MENU</h2>
+                <select id="data-selector">
+                    <option value="dashboard">Select Data You Want to View</option>
+                    <option value="user-management">User account management</option>
+                    <option value="movie-management">Movie management</option>
+                </select>
+            </div>
+            <section id="dashboard-content">
+                <h3>MBTI Distribution Statistics</h3>
+                <div id="mbti-stats">
+                    <canvas id="mbti-chart"></canvas>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/page/admin_dashboard/dashboard_statistics/admin-dashboard.js"></script>
+</body>
+</html>

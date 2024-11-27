@@ -1,0 +1,215 @@
+/* General Reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: #fff;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between; /* จัดตำแหน่งซ้ายและกลาง */
+    align-items: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+    background-color: #333;
+    padding: 0.5rem 1rem; /* ลด padding เพื่อให้ขนาดเล็กลง */
+    color: #ff9e00;
+    font-weight: bold;
+    font-size: 1.2rem; /* ลดขนาด font */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* โลโก้ MOVIEMINGLE */
+header .logo {
+    flex: 1; /* ให้พื้นที่ด้านซ้าย */
+    text-align: left;
+    color: #ff9e00; /* สีเดิมของ MOVIEMINGLE */
+}
+
+/* คำว่า Admin Dashboard */
+header .title {
+    flex: 2; /* ให้พื้นที่ตรงกลาง */
+    text-align: center;
+    color: #fff; /* สีขาว */
+    font-size: 1.2rem;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    flex-direction: row;
+    height: calc(100vh - 3.5rem); /* Adjust for header height */
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: #2d8a4c;
+    width: 250px;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+    overflow-y: auto;
+}
+
+.admin-profile {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.admin-image {
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #000;
+    font-weight: bold;
+}
+
+.logout-btn {
+    background-color: #ff5c5c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+nav ul li {
+    margin-bottom: 1rem;
+}
+
+.menu-btn {
+    width: 100%;
+    padding: 0.7rem;
+    background-color: #000;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.95rem;
+    border-radius: 5px;
+}
+
+.menu-btn:hover {
+    background-color: #444;
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+#data-selector {
+    padding: 0.5rem;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+#dashboard-content {
+    background-color: #333;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#mbti-stats {
+    margin: 20px auto;
+    max-width: 90%;
+    background-color: #202020;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#mbti-chart {
+    max-width: 100%;
+    height: 400px;
+}
+
+.back-btn {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background-color: #45a049;
+}
+
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+        box-shadow: none;
+    }
+
+    main {
+        padding: 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .menu-btn {
+        font-size: 0.8rem;
+    }
+
+    .logout-btn {
+        font-size: 0.8rem;
+    }
+
+    #data-selector {
+        font-size: 0.8rem;
+    }
+
+    #dashboard-content {
+        font-size: 1rem;
+    }
+}

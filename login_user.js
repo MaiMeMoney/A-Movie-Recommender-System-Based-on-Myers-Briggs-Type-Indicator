@@ -8,6 +8,7 @@ const { body, validationResult } = require('express-validator');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const session = require('express-session');
 
 // ข้อมูลการเชื่อมต่อ MongoDB
 const uri = 'mongodb+srv://bankweerpt:ohMpYPUHkNoz0Ba3@movie-mbti.k3yt3.mongodb.net/?retryWrites=true&w=majority';
@@ -94,6 +95,13 @@ app.post('/register',
         }
     }
 );
+
+app.use(session({
+    secret: 'yourSecretKey', // ใส่ค่า secret ที่เหมาะสม
+    resave: false, // ลดการบันทึก session ซ้ำ
+    saveUninitialized: true, // บันทึก session ใหม่ที่ยังไม่ได้ถูกแก้ไข
+    cookie: { secure: false } // เปลี่ยนเป็น true หากใช้ HTTPS
+}));
 
 // ฟังก์ชันสำหรับการล็อกอิน
 app.post('/login', [

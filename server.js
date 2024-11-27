@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path'); // ประกาศที่นี่เพียงครั้งเดียว
 require('dotenv').config();
+const session = require('express-session');
 
 
 const app = express();
@@ -105,6 +106,13 @@ app.post('/api/saveMBTI', async (req, res) => {
         res.status(500).json({ message: 'Failed to update MBTI' });
     }
 });
+
+app.use(session({
+    secret: 'yourSecretKey', // เปลี่ยนเป็นค่าเฉพาะของคุณ
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // เปลี่ยนเป็น true หากใช้ HTTPS
+}));
 
 // API เพื่อเช็ค MBTI ของผู้ใช้
 app.post('/api/check-mbti', async (req, res) => {
@@ -578,6 +586,7 @@ app.get('/api/debug/movies', async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch movies' });
     }
 });
+
 
 
 // กรณีไม่มี API ที่ตรง ให้เสิร์ฟไฟล์ movie-detail.html
