@@ -10,6 +10,18 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     try {
+        await fetch(`http://localhost:5001/movies_list/movies/${movieId}/view`, { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log('View recorded successfully for movie:', movieId);
+    } catch (error) {
+        console.error('Error recording view:', error);
+    }
+
+    try {
         const response = await fetch(`http://localhost:5001/movies_list/movies/${movieId}`);
         if (!response.ok) throw new Error('Movie not found');
         const movie = await response.json();
@@ -46,6 +58,24 @@ document.addEventListener('DOMContentLoaded', async function () {
         alert("Failed to load movie details.");
     }
 });
+
+async function logMovieView(movieId) {
+    try {
+        const response = await fetch('http://localhost:6001/api/movie-view', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ movieId })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to log movie view');
+        }
+    } catch (error) {
+        console.error('Error logging movie view:', error);
+    }
+}
 
 function showToast(message, type) {
     const toast = document.getElementById('toast');
@@ -262,6 +292,7 @@ document.addEventListener('DOMContentLoaded', function () {
             showToast('An error occurred while submitting the rating.', 'error');
         }
     }
+
 
     // ฟังก์ชันสำหรับแสดง Toast แจ้งเตือนที่มุมขวาบนใต้ navbar
     function showToast(message, type) {

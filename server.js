@@ -23,6 +23,7 @@ mongoose.connect('mongodb+srv://bankweerpt:ohMpYPUHkNoz0Ba3@movie-mbti.k3yt3.mon
 
 const { ObjectId } = mongoose.Types;
 
+
 // Define Movie Schema and Model
 const movieSchema = new mongoose.Schema({
     Poster_Link: String,
@@ -41,8 +42,17 @@ const movieSchema = new mongoose.Schema({
     Star4: String,
     No_of_Votes: Number,
     Gross: String,
-    link_movies: String
+    link_movies: String,
+    viewCount: { type: Number, default: 0 },
+    searchCount: { type: Number, default: 0 }  // เพิ่ม field นี้
 });
+
+const searchLogSchema = new mongoose.Schema({
+    query: { type: String, required: true },
+    timestamp: { type: Date, default: Date.now }
+});
+const SearchLog = mongoose.model('SearchLog', searchLogSchema, 'searchlogs');
+
 
 const Movie = mongoose.model('movies_list', movieSchema, 'movies');
 
@@ -584,6 +594,94 @@ app.get('/api/debug/movies', async (req, res) => {
     } catch (error) {
         console.error('Error fetching movies:', error);
         res.status(500).json({ message: 'Failed to fetch movies' });
+    }
+});
+
+
+// เพิ่ม API endpoint สำหรับบันทึก view
+app.post('/movies_list/movies/:movieId/view', async (req, res) => {
+    try {
+        const { movieId } = req.params;
+        console.log('Recording view for movie:', movieId);
+
+        const result = await Movie.findByIdAndUpdate(
+            movieId,
+            { $inc: { viewCount: 1 } },
+            { new: true }
+        );
+
+        console.log('Updated view count:', result.viewCount);
+        res.status(200).json({ message: 'View recorded', viewCount: result.viewCount });
+    } catch (error) {
+        console.error('Error recording view:', error);
+        res.status(500).json({ message: 'Failed to record view' });
+    }
+});
+
+
+// API สำหรับบันทึกการค้นหา
+app.post('/api/log-search', async (req, res) => {
+    try {
+        const { query, movieId } = req.body;
+        console.log('Logging search:', { query, movieId });
+
+        // บันทึกการค้นหาลงใน SearchLog
+        const searchLog = new SearchLog({ query });
+        await searchLog.save();
+
+        // ถ้ามี movieId ให้เพิ่ม searchCount
+        if (movieId) {
+            await Movie.findByIdAndUpdate(movieId, {
+                $inc: { searchCount: 1 }
+            });
+        }
+
+        res.status(201).json({ message: 'Search logged successfully' });
+    } catch (error) {
+        console.error('Error logging search:', error);
+        res.status(500).json({ message: 'Failed to log search' });
+    }
+});
+
+// API สำหรับดึงสถิติการค้นหา
+app.get('/api/search-stats', async (req, res) => {
+    try {
+        const stats = await SearchLog.aggregate([
+            { $group: { _id: "$query", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 10 }
+        ]);
+        res.json(stats);
+    } catch (error) {
+        console.error('Error fetching search stats:', error);
+        res.status(500).json({ message: 'Failed to fetch search stats' });
+    }
+});
+
+// API สำหรับดึงหนังยอดนิยม (รวมทั้ง viewCount และ searchCount)
+app.get('/api/popular-movies', async (req, res) => {
+    try {
+        const popularMovies = await Movie.aggregate([
+            {
+                $project: {
+                    Series_Title: 1,
+                    viewCount: 1,
+                    searchCount: 1,
+                    totalPopularity: {
+                        $add: [
+                            '$viewCount',
+                            { $multiply: ['$searchCount', 0.5] }  // searchCount มีน้ำหนัก 0.5 เท่าของ viewCount
+                        ]
+                    }
+                }
+            },
+            { $sort: { totalPopularity: -1 } },
+            { $limit: 10 }
+        ]);
+        res.json(popularMovies);
+    } catch (error) {
+        console.error('Error fetching popular movies:', error);
+        res.status(500).json({ message: 'Failed to fetch popular movies' });
     }
 });
 
