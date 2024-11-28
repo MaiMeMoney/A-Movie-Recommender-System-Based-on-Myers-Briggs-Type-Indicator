@@ -1,5 +1,5 @@
 // ฟังก์ชันสำหรับดึง MBTI ของผู้ใช้
-async function fetchUserMBTI() {
+async function loadUserMBTI() {
     const username = localStorage.getItem('username'); // ดึง username จาก Local Storage
     const mbtiTypeElement = document.querySelector(".mbti-type");
 
@@ -9,16 +9,14 @@ async function fetchUserMBTI() {
     }
 
     try {
-        const response = await fetch(`http://localhost:5001/api/mbti/${username}`, {
-            method: "GET",
-        });
-
-        if (!response.ok) {
-            throw new Error("Failed to fetch MBTI");
+        const response = await fetch(`http://127.0.0.1:5001/api/user-mbti/${username}`);
+        if (response.ok) {
+            const { mbti } = await response.json();
+            mbtiTypeElement.textContent = mbti || "Not Set";
+        } else {
+            console.error("Failed to fetch MBTI");
+            mbtiTypeElement.textContent = "Error fetching MBTI";
         }
-
-        const data = await response.json();
-        mbtiTypeElement.textContent = data.mbti; // อัปเดต MBTI ใน HTML
     } catch (error) {
         console.error("Error fetching MBTI:", error);
         mbtiTypeElement.textContent = "Error fetching MBTI";
@@ -36,7 +34,7 @@ async function fetchRecommendations() {
     }
 
     try {
-        const response = await fetch("http://localhost:5001/recommend", {
+        const response = await fetch("http://127.0.0.1:5001/recommend", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -68,5 +66,5 @@ async function fetchRecommendations() {
 // ผูกฟังก์ชันกับปุ่ม Recommend
 document.querySelector(".recommend-me").addEventListener("click", fetchRecommendations);
 
-// เรียกฟังก์ชัน fetchUserMBTI เมื่อโหลดหน้าเสร็จ
-window.onload = fetchUserMBTI;
+// เรียกฟังก์ชัน loadUserMBTI เมื่อโหลดหน้า
+document.addEventListener("DOMContentLoaded", loadUserMBTI);

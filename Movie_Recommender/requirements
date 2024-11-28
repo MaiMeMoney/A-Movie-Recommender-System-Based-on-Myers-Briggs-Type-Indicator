@@ -1,8 +1,6 @@
-pandas
-numpy
-scikit-learn
-scipy
-flask
 pymongo
-python-dotenv
-waitress
+flask
+pyjwt
+numpy
+
+#รันคำสั่ง pip install ตามด้วยชื่อ library ด้านบน
