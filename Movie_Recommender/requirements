@@ -1,0 +1,6 @@
+pymongo
+flask
+pyjwt
+numpy
+
+#รันคำสั่ง pip install ตามด้วยชื่อ library ด้านบน
