@@ -12,6 +12,7 @@
         <h1>MOVIEMINGLE</h1>
         <div class="title">ADMIN DASHBOARD</div>
     </header>
+
     <div class="dashboard-container">
         <aside class="sidebar">
             <div class="admin-profile">
@@ -29,23 +30,68 @@
                 </ul>
             </nav>
         </aside>
+
         <main>
             <div class="main-header">
                 <h2>ADMIN MENU</h2>
                 <select id="data-selector">
-                    <option value="dashboard">Select Data You Want to View</option>
-                    <option value="user-management">User account management</option>
-                    <option value="movie-management">Movie management</option>
+                    <option value="mbti">MBTI Distribution</option>
+                    <option value="movies">Movie Analytics</option>
+                    <option value="search">Search Analytics</option>
+                    <option value="popular-movies">Popular Movies</option>
+                    <option value="user-management">User Management</option>
                 </select>
             </div>
-            <section id="dashboard-content">
-                <h3>MBTI Distribution Statistics</h3>
-                <div id="mbti-stats">
+
+            <!-- MBTI Stats Container -->
+
+                <!-- Movie Analytics Container -->
+                <div id="movie-analytics" class="analytics-container" style="display: none;">
+                    <div class="analytics-grid">
+                        <div class="chart-container">
+                            <h3>Top Rated Movies</h3>
+                            <!-- เพิ่ม canvas สำหรับ Top Rated Movies -->
+                            <canvas id="topRatedChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h3>Most Added to Watchlists</h3>
+                            <!-- เพิ่ม canvas สำหรับ Watchlist -->
+                            <canvas id="watchlistChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="mbti-stats" class="analytics-container">
+                    <h3>MBTI Distribution Statistics</h3>
                     <canvas id="mbti-chart"></canvas>
+                </div>
+
+                <div id="search-analytics" class="analytics-container" style="display: none;">
+                    <div class="chart-container">
+                        <h3>Top Search Queries</h3>
+                        <canvas id="searchQueryChart"></canvas>
+                    </div>
+                </div>
+                
+                <div id="popular-movies" class="analytics-container" style="display: none;">
+                    <div class="chart-container">
+                        <h3>Most Viewed Movies</h3>
+                        <canvas id="popularMoviesChart"></canvas>
+                    </div>
+                </div>
+
+
+                <!-- User Management Container -->
+                <div id="user-management" class="analytics-container" style="display: none;">
+                    <h3>User Management</h3>
+                    <div class="user-management-content">
+                        <!-- User management content will be loaded here -->
+                    </div>
                 </div>
             </section>
         </main>
     </div>
+
     <script src="/page/admin_dashboard/dashboard_statistics/admin-dashboard.js"></script>
 </body>
 </html>

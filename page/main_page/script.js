@@ -20,7 +20,7 @@ function scrollRight(sectionClass) {
     }
 }
 
-document.getElementById('search-button').addEventListener('click', () => {
+document.getElementById('search-button').addEventListener('click', async () => {
     const query = document.getElementById('search-bar').value.trim();
     const category = document.getElementById('search-category').value;
 
@@ -28,14 +28,45 @@ document.getElementById('search-button').addEventListener('click', () => {
         alert('Please enter a search term');
         return;
     }
+    
+    // บันทึกการค้นหาพร้อม movieId (ถ้ามี)
+    try {
+        const searchData = { 
+            query,
+            // เพิ่ม movieId ถ้าเป็นการค้นหาจากหน้าหนัง
+            movieId: new URLSearchParams(window.location.search).get('movieId')
+        };
 
+        await fetch('http://localhost:5001/api/log-search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(searchData)
+        });
+        console.log('Search logged:', searchData);
+    } catch (error) {
+        console.error('Error logging search:', error);
+    }
+
+    // ไปยังหน้าผลการค้นหา
     const searchUrl = `/page/main_page/search-results.html?category=${category}&query=${encodeURIComponent(query)}`;
     window.location.href = searchUrl;
-
 });
 
-
-
+async function logMovieView(movieId) {
+    try {
+        await fetch('http://localhost:6001/api/movie-view', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ movieId })
+        });
+    } catch (error) {
+        console.error('Error logging movie view:', error);
+    }
+}
 
 window.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
