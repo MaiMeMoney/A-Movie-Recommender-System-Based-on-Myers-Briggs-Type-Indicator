@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Header -->
+<header>
+    <div class="left-header">MOVIEMINGLE</div>
+    <div class="center-header">MOVIE MANAGEMENT</div>
+</header>
+
+<div class="container">
+    <!-- Left Sidebar -->
+    <aside class="left-sidebar">
+        <div class="genre-header">MOVIE LIST</div>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Search Movie">
+            <button id="search-button">Search</button>
+        </div>
+        <div class="genre-list">
+            <ul>
+                <li>Action</li>
+                <li>Comedy</li>
+                <li>Horror</li>
+                <!-- Add more genres as needed -->
+            </ul>
+        </div>
+        <div class="create-genre">
+            <!-- <button id="add-movie-button">Add Movie</button> ปุ่ม Add Movie -->
+        </div>
+    </aside>
+
+    <!-- Right Content -->
+    <main class="right-content" id="right-content">
+        <!-- โปสเตอร์หนังจะถูกเพิ่มที่นี่จากฐานข้อมูล -->
+    </main>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <button id="add-movie-button">Add Movie</button> <!-- ปุ่ม Add Movie -->
+        <!-- ปุ่ม Update -->
+        <button id="update-movie-button" class="btn update">Update</button>
+
+        <button class="btn delete" id="delete-button">Delete</button>
+        <button class="btn exit" id="exit-button">Exit</button>
+        
+    </div>
+</div>
+
+<!-- Modal Popup สำหรับ Add Movie -->
+<div id="addMovieModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="close-modal">&times;</span>
+        <h2>Add Movie</h2>
+        <form id="add-movie-form">
+            <label for="poster-link">Poster Link:</label>
+            <input type="text" id="poster-link" name="poster-link" required>
+
+            <label for="series-title">Series Title:</label>
+            <input type="text" id="series-title" name="series-title" required>
+
+            <label for="released-year">Released Year:</label>
+            <input type="text" id="released-year" name="released-year" required>
+
+            <label for="imdb-rating">IMDB Rating (decimal):</label>
+            <input type="number" id="imdb-rating" name="imdb-rating" step="0.1" required>
+
+            <label for="genre">Genre:</label>
+            <input type="text" id="genre" name="genre" required>
+
+            <label for="overview">Overview:</label>
+            <textarea id="overview" name="overview" required></textarea>
+
+            <label for="meta-score">Meta Score:</label>
+            <input type="number" id="meta-score" name="meta-score">
+
+            <label for="director">Director:</label>
+            <input type="text" id="director" name="director">
+
+            <label for="star1">Star 1:</label>
+            <input type="text" id="star1" name="star1">
+
+            <label for="star2">Star 2:</label>
+            <input type="text" id="star2" name="star2">
+
+            <label for="star3">Star 3:</label>
+            <input type="text" id="star3" name="star3">
+
+            <label for="star4">Star 4:</label>
+            <input type="text" id="star4" name="star4">
+
+            <label for="gross">Gross:</label>
+            <input type="text" id="gross" name="gross">
+
+            <label for="link-movies">Link to Movie:</label>
+            <input type="text" id="link-movies" name="link-movies">
+
+            <button type="submit" id="submit-movie-button">Add Movie</button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Popup สำหรับการอัปเดตหนัง -->
+<div id="updateMovieModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="close-update-modal">&times;</span>
+        <h2>Update Movie</h2>
+        <form id="update-movie-form">
+            <label for="update-poster-link">Poster Link:</label>
+            <input type="text" id="update-poster-link" name="update-poster-link" required>
+
+            <label for="update-series-title">Series Title:</label>
+            <input type="text" id="update-series-title" name="update-series-title" required>
+
+            <label for="update-released-year">Released Year:</label>
+            <input type="text" id="update-released-year" name="update-released-year" required>
+
+            <label for="update-imdb-rating">IMDB Rating:</label>
+            <input type="number" id="update-imdb-rating" name="update-imdb-rating" step="0.1" required>
+
+            <label for="update-genre">Genre:</label>
+            <input type="text" id="update-genre" name="update-genre" required>
+
+            <label for="update-overview">Overview:</label>
+            <textarea id="update-overview" name="update-overview" required></textarea>
+
+            <label for="update-meta-score">Meta Score:</label>
+            <input type="number" id="update-meta-score" name="update-meta-score">
+
+            <label for="update-director">Director:</label>
+            <input type="text" id="update-director" name="update-director">
+
+            <label for="update-star1">Star 1:</label>
+            <input type="text" id="update-star1" name="update-star1">
+
+            <label for="update-star2">Star 2:</label>
+            <input type="text" id="update-star2" name="update-star2">
+
+            <label for="update-star3">Star 3:</label>
+            <input type="text" id="update-star3" name="update-star3">
+
+            <label for="update-star4">Star 4:</label>
+            <input type="text" id="update-star4" name="update-star4">
+
+            <label for="update-gross">Gross:</label>
+            <input type="text" id="update-gross" name="update-gross">
+
+            <label for="update-link-movies">Link to Movie:</label>
+            <input type="text" id="update-link-movies" name="update-link-movies">
+
+            <button type="submit">Update Movie</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Action Buttons -->
+<div class="action-buttons">
+    <button id="delete-movie-button">Delete Movie</button> <!-- ปุ่ม Delete Movie -->
+    <button class="btn exit" id="exit-button">Exit</button>
+</div>
+</div>
+
+<!-- Modal Popup สำหรับการยืนยันลบหนัง -->
+<div id="deleteMovieModal" class="modal">
+<div class="modal-content">
+    <span class="close" id="close-delete-modal">&times;</span>
+    <h2>Confirm Delete</h2>
+    <p>Are you sure you want to delete this movie?</p>
+    <button id="confirm-delete-button">Yes, Delete</button>
+    <button id="cancel-delete-button">Cancel</button>
+</div>
+</div>
+
+<script src="script.js"></script> <!-- ลิงค์ไปยังไฟล์ script.js -->
+</body>
+</html>

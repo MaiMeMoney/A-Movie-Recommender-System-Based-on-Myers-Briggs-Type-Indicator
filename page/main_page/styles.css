@@ -462,23 +462,10 @@ h2 a {
     margin-top: 3px;
 }
 
-<<<<<<< Updated upstream
 @media (max-width: 768px) {
     .navbar {
         padding: 10px 15px; /* ลดขนาด padding */
     }
-=======
-/* ปรับแต่งไอคอนมงกุฏ */
-.admin-icon {
-    font-size: 18px;
-    margin-left: 10px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: gold; /* สีทองสำหรับ role 1 */
-    display: none; /* ซ่อนเริ่มต้น */
-}
->>>>>>> Stashed changes
 
     .logo {
         font-size: 18px; /* ลดขนาด logo */

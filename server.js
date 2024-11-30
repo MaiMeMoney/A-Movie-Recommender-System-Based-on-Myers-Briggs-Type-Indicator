@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path'); // ประกาศที่นี่เพียงครั้งเดียว
 require('dotenv').config();
-const session = require('express-session');
 
 
 const app = express();
@@ -74,6 +73,75 @@ app.get('/movies_list/movies/:movieId', async (req, res) => {
     }
 });
 
+app.get('/movies', async (req, res) => {
+    try {
+        const searchQuery = req.query.search || ''; // รับค่าคำค้นหาจาก query string
+        const category = req.query.category || 'title'; // รับ category จาก query string
+
+        // สร้างเงื่อนไขการค้นหาจากหลายฟิลด์
+        let searchQueryCondition = {};
+        if (searchQuery) {
+            if (category === 'title') {
+                searchQueryCondition = { Series_Title: { $regex: searchQuery, $options: 'i' } };
+            } else if (category === 'genre') {
+                searchQueryCondition = { Genre: { $regex: searchQuery, $options: 'i' } };
+            } else if (category === 'actor') {
+                searchQueryCondition = {
+                    $or: [
+                        { Star1: { $regex: searchQuery, $options: 'i' } },
+                        { Star2: { $regex: searchQuery, $options: 'i' } },
+                        { Star3: { $regex: searchQuery, $options: 'i' } },
+                        { Star4: { $regex: searchQuery, $options: 'i' } }
+                    ]
+                };
+            }
+        }
+
+        // ค้นหาจาก MongoDB ด้วยเงื่อนไขที่กำหนด
+        const movies = await Movie.find(searchQueryCondition);
+
+        // ส่งผลลัพธ์กลับ
+        res.json(movies);
+    } catch (error) {
+        console.error('Error searching movies:', error);
+        res.status(500).json({ message: 'Failed to search movies' });
+    }
+});
+
+// Serve static files if needed
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'client/build')));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
+
+// API to fetch movies with pagination
+app.get('/movies_list/movies', async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1; // Default to page 1
+        const limit = parseInt(req.query.limit) || 10; // Default to 10 movies per page
+        const skip = (page - 1) * limit;
+
+        const movies = await Movie.find()
+            .skip(skip)
+            .limit(limit)
+            .exec();
+
+        if (movies.length === 0) {
+            return res.status(404).json({ message: 'No movies found' });
+        }
+
+        res.json(movies);
+    } catch (error) {
+        console.error('Error fetching movies:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
+
+
 // Define MBTI Schema and Model
 const mbtiSchema = new mongoose.Schema({
     username: { type: String, required: true },
@@ -106,13 +174,6 @@ app.post('/api/saveMBTI', async (req, res) => {
         res.status(500).json({ message: 'Failed to update MBTI' });
     }
 });
-
-app.use(session({
-    secret: 'yourSecretKey', // เปลี่ยนเป็นค่าเฉพาะของคุณ
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } // เปลี่ยนเป็น true หากใช้ HTTPS
-}));
 
 // API เพื่อเช็ค MBTI ของผู้ใช้
 app.post('/api/check-mbti', async (req, res) => {
@@ -447,13 +508,72 @@ app.post('/watchlist/create', async (req, res) => {
 
 app.get('/movies_list/all', async (req, res) => {
     try {
-        const movies = await Movie.find(); // ดึงหนังทั้งหมดจาก MongoDB
-        res.status(200).json(movies);
+        const movies = await Movie.find();  // ดึงข้อมูลทั้งหมดจากฐานข้อมูล
+        res.status(200).json(movies);  // ส่งข้อมูลหนังทั้งหมด
     } catch (error) {
         console.error("Error fetching all movies:", error);
         res.status(500).json({ message: 'Failed to fetch movies.' });
     }
 });
+
+// API สำหรับเพิ่มหนัง
+app.post('/api/add-movie', async (req, res) => {
+    try {
+        const movieData = req.body;
+
+        if (!movieData || !movieData.seriesTitle || !movieData.posterLink) {
+            return res.status(400).json({ message: "Incomplete movie data!" });
+        }
+
+        const newMovie = new Movie({
+            Poster_Link: movieData.posterLink,
+            Series_Title: movieData.seriesTitle,
+            Released_Year: movieData.releasedYear,
+            Certificate: movieData.certificate,
+            Runtime: movieData.runtime,
+            Genre: movieData.genre,
+            IMDB_Rating: movieData.imdbRating,
+            Overview: movieData.overview,
+            Meta_score: movieData.metaScore,
+            Director: movieData.director,
+            Star1: movieData.star1,
+            Star2: movieData.star2,
+            Star3: movieData.star3,
+            Star4: movieData.star4,
+            Gross: movieData.gross,
+            link_movies: movieData.linkMovies
+        });
+
+        await newMovie.save();  // บันทึกหนังใหม่ลงในฐานข้อมูล
+
+        res.status(201).json({ message: "Movie added successfully!" });
+    } catch (error) {
+        console.error("Error adding movie:", error);
+        res.status(500).json({ message: "Failed to add movie" });
+    }
+});
+
+
+
+
+// API สำหรับลบหนัง
+app.delete('/api/delete-movie/:movieId', async (req, res) => {
+    try {
+        const { movieId } = req.params;
+
+        const movie = await Movie.findByIdAndDelete(movieId);
+        if (!movie) {
+            return res.status(404).json({ message: "Movie not found!" });
+        }
+
+        res.status(200).json({ message: "Movie deleted successfully!" });
+    } catch (error) {
+        console.error("Error deleting movie:", error);
+        res.status(500).json({ message: "Failed to delete movie" });
+    }
+});
+
+
 
 
 // สร้าง Schema สำหรับเก็บคะแนน
@@ -515,7 +635,7 @@ app.delete('/watchlist/delete/:listName', async (req, res) => {
 });
 
 
-// Start the server on port 5001
+// API สำหรับค้นหาหนังจาก title หรืออื่น ๆ
 app.get('/api/search', async (req, res) => {
     const { category, query } = req.query;
 
@@ -558,6 +678,7 @@ app.get('/api/search', async (req, res) => {
 
 
 
+
 app.get('/api/predict', async (req, res) => {
     const { category, query } = req.query;
 
@@ -587,7 +708,56 @@ app.get('/api/debug/movies', async (req, res) => {
     }
 });
 
+app.put('/api/update-movie/:movieId', async (req, res) => {
+    const { movieId } = req.params;
+    const movieData = req.body;
 
+    try {
+        const movie = await Movie.findById(movieId);
+        if (!movie) {
+            return res.status(404).json({ message: "Movie not found!" });
+        }
+
+        movie.Poster_Link = movieData.posterLink;
+        movie.Series_Title = movieData.seriesTitle;
+        movie.Released_Year = movieData.releasedYear;
+        movie.IMDB_Rating = movieData.imdbRating;
+        movie.Genre = movieData.genre;
+        movie.Overview = movieData.overview;
+        movie.Meta_score = movieData.metaScore;
+        movie.Director = movieData.director;
+        movie.Star1 = movieData.star1;
+        movie.Star2 = movieData.star2;
+        movie.Star3 = movieData.star3;
+        movie.Star4 = movieData.star4;
+        movie.Gross = movieData.gross;
+        movie.link_movies = movieData.linkMovies;
+
+        await movie.save();
+
+        res.status(200).json({ message: "Movie updated successfully!" });
+    } catch (error) {
+        console.error('Error updating movie:', error);
+        res.status(500).json({ message: 'Failed to update movie' });
+    }
+});
+
+// API สำหรับลบหนัง
+app.delete('/api/delete-movie/:movieId', async (req, res) => {
+    try {
+        const { movieId } = req.params;
+
+        const movie = await Movie.findByIdAndDelete(movieId);
+        if (!movie) {
+            return res.status(404).json({ message: "Movie not found!" });
+        }
+
+        res.status(200).json({ message: "Movie deleted successfully!" });
+    } catch (error) {
+        console.error("Error deleting movie:", error);
+        res.status(500).json({ message: "Failed to delete movie" });
+    }
+});
 
 // กรณีไม่มี API ที่ตรง ให้เสิร์ฟไฟล์ movie-detail.html
 app.get('/page/movie-details/movie-details.html', (req, res) => {
@@ -606,48 +776,3 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
-<<<<<<< HEAD
-=======
-
-app.post('/recommend', async (req, res) => {
-    const { username } = req.body;
-
-    if (!username) {
-        return res.status(400).json({ message: 'Username is required!' });
-    }
-
-    try {
-        // ค้นหา MBTI ของผู้ใช้
-        const userMbti = await MBTI.findOne({ username });
-
-        if (!userMbti || !userMbti.mbti_type) {
-            return res.status(404).json({ message: 'User MBTI not found!' });
-        }
-
-        // ค้นหาผู้ใช้ที่มี MBTI เดียวกัน
-        const sameMbtiUsers = await MBTI.find({ mbti_type: userMbti.mbti_type });
-        const sameMbtiUsernames = sameMbtiUsers.map(user => user.username);
-
-        // ดึงคะแนนหนังจาก movies_scores
-        const recommendedMovies = await MovieScore.find({
-            username: { $in: sameMbtiUsernames }
-        }).sort({ score: -1 }).limit(10);
-
-        if (recommendedMovies.length === 0) {
-            return res.status(404).json({ message: 'No recommendations found!' });
-        }
-
-        // ส่งรายชื่อหนังกลับ
-        res.status(200).json({
-            mbti: userMbti.mbti_type,
-            recommendations: recommendedMovies.map(movie => ({
-                movieName: movie.movieName,
-                score: movie.score
-            }))
-        });
-    } catch (error) {
-        console.error('Error fetching recommendations:', error);
-        res.status(500).json({ message: 'Failed to fetch recommendations.' });
-    }
-});
->>>>>>> Python-Recommender-Test
