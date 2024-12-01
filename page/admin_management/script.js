@@ -325,3 +325,112 @@ document.getElementById('search-button').addEventListener('click', () => {
     }
 });
 
+document.getElementById('search-button').addEventListener('click', function() {
+    const searchTerm = document.getElementById('search-input').value.trim();
+    
+    if (searchTerm) {
+        // ส่งคำค้นหาไปที่ backend โดยใช้ fetch API
+        fetch(`/api/search-movies?query=${encodeURIComponent(searchTerm)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // แสดงผลลัพธ์ที่ได้รับ
+                    displayMovies(data.movies);
+                } else {
+                    alert('ไม่พบหนังตามคำค้นหา');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    } else {
+        alert('กรุณากรอกคำค้นหา');
+    }
+});
+
+// ฟังก์ชันในการแสดงผลลัพธ์หนัง
+function displayMovies(movies) {
+    const rightContent = document.querySelector('.right-content');
+    rightContent.innerHTML = ''; // ล้างผลลัพธ์เดิม
+
+    movies.forEach(movie => {
+        const movieElement = document.createElement('div');
+        movieElement.classList.add('movie-poster');
+        movieElement.innerHTML = `
+            <img src="${movie.poster}" alt="${movie.title}" />
+            <h3>${movie.title}</h3>
+        `;
+        rightContent.appendChild(movieElement);
+    });
+}
+
+// เปิด Modal เมื่อคลิกที่ปุ่ม Create Movie List
+const createGenreButton = document.getElementById('create-genre-button');
+const createGenreModal = document.getElementById('createGenreModal');
+const closeCreateGenreModal = document.getElementById('close-create-genre');
+const createGenreForm = document.getElementById('create-genre-form');
+const genreListContainer = document.querySelector('.genre-list ul');
+
+// เปิด Modal เมื่อคลิกที่ปุ่ม Create Movie List
+createGenreButton.addEventListener('click', () => {
+    createGenreModal.style.display = 'block';
+});
+
+// ปิด Modal เมื่อคลิกที่ปุ่ม Close
+closeCreateGenreModal.addEventListener('click', () => {
+    createGenreModal.style.display = 'none';
+});
+
+// ปิด Modal เมื่อคลิกนอก Modal
+window.addEventListener('click', (event) => {
+    if (event.target === createGenreModal) {
+        createGenreModal.style.display = 'none';
+    }
+});
+
+// ฟังก์ชันสร้าง Movie List ใหม่
+createGenreForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const genreName = document.getElementById('genre-name').value.trim();
+
+    if (genreName) {
+        // เพิ่ม genre ที่สร้างขึ้นใหม่ใน sidebar
+        const genreItem = document.createElement('li');
+        genreItem.textContent = genreName;
+        genreItem.classList.add('genre-item');
+        genreItem.addEventListener('click', () => showMoviesByGenre(genreName)); // เมื่อคลิกจะเรียกฟังก์ชันแสดงหนังตาม genre
+        genreListContainer.appendChild(genreItem);
+        
+        // ซ่อน Modal
+        createGenreModal.style.display = 'none';
+
+        // ล้างฟอร์ม
+        document.getElementById('genre-name').value = '';
+    }
+});
+
+// ฟังก์ชันแสดงหนังตาม genre ที่เลือก
+async function showMoviesByGenre(genre) {
+    try {
+        const response = await fetch(`http://localhost:5001/api/search?category=genre&query=${genre}`);
+        const movies = await response.json();
+        const rightContent = document.querySelector('.right-content');
+        rightContent.innerHTML = '';  // ล้างเนื้อหาหนังก่อน
+
+        if (movies.length > 0) {
+            movies.forEach(movie => {
+                const moviePoster = document.createElement('div');
+                moviePoster.classList.add('movie-poster');
+                moviePoster.setAttribute('data-movie-id', movie._id);  // เก็บ movieId ใน attribute
+                moviePoster.innerHTML = `
+                    <img src="${movie.Poster_Link}" alt="${movie.Series_Title}">
+                    <div class="movie-title">${movie.Series_Title}</div>
+                `;
+                rightContent.appendChild(moviePoster);
+            });
+        } else {
+            rightContent.innerHTML = '<p>No movies found in this genre.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching movies by genre:', error);
+    }
+}

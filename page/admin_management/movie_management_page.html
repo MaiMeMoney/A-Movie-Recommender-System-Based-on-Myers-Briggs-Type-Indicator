@@ -30,9 +30,24 @@
                 <!-- Add more genres as needed -->
             </ul>
         </div>
-        <div class="create-genre">
-            <!-- <button id="add-movie-button">Add Movie</button> ปุ่ม Add Movie -->
-        </div>
+        <!-- ปุ่ม Create Movie List ใน Sidebar -->
+<div class="create-genre">
+    <button id="create-genre-button">Create Movie List</button>
+</div>
+
+<!-- Modal สำหรับสร้าง Movie List -->
+<div id="createGenreModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="close-create-genre">&times;</span>
+        <h2>Create New Movie List</h2>
+        <form id="create-genre-form">
+            <label for="genre-name">Enter Genre Name:</label>
+            <input type="text" id="genre-name" name="genre-name" required>
+            <button type="submit">Create</button>
+        </form>
+    </div>
+</div>
+
     </aside>
 
     <!-- Right Content -->

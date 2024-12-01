@@ -160,6 +160,129 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('username-display').textContent = `Welcome, ${username}`;
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    // กำหนด event listener ให้กับปุ่ม SEE MORE ของ section ต่างๆ
+
+    // กำหนดปุ่ม "See More" ของแต่ละ genre
+    const seeMoreButtons = [
+        { id: 'see-more-action', category: 'genre', query: 'action' },
+        { id: 'see-more-fantasy', category: 'genre', query: 'fantasy' },
+        { id: 'see-more-sci-fi', category: 'genre', query: 'sci-fi' },
+        { id: 'see-more-romance', category: 'genre', query: 'romance' },
+        { id: 'see-more-thriller', category: 'genre', query: 'thriller' },
+        { id: 'see-more-drama', category: 'genre', query: 'drama' },
+        { id: 'see-more-comedy', category: 'genre', query: 'comedy' },
+        { id: 'see-more-mystery', category: 'genre', query: 'mystery' },
+        { id: 'see-more-crime', category: 'genre', query: 'crime' },
+        { id: 'see-more-adventure', category: 'genre', query: 'adventure' },
+        { id: 'see-more-animation', category: 'genre', query: 'animation' },
+        { id: 'see-more-biography', category: 'genre', query: 'biography' },
+        { id: 'see-more-family', category: 'genre', query: 'family' },
+        { id: 'see-more-musical', category: 'genre', query: 'musical' },
+        { id: 'see-more-history', category: 'genre', query: 'history' },
+        { id: 'see-more-sport', category: 'genre', query: 'sport' },
+        { id: 'see-more-horror', category: 'genre', query: 'horror' }
+    ];
+
+    // เพิ่ม event listener สำหรับแต่ละปุ่ม
+    seeMoreButtons.forEach(button => {
+        const seeMoreButton = document.getElementById(button.id);
+        
+        if (seeMoreButton) {
+            seeMoreButton.addEventListener('click', function() {
+                // เมื่อคลิกที่ปุ่ม, ไปยังหน้าค้นหาพร้อมกับ category และ query ที่กำหนด
+                window.location.href = `search-results.html?category=${button.category}&query=${button.query}`;
+            });
+        }
+    });
+});
+
+
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Sci-Fi
+//     document.getElementById('see-more-sci-fi').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=sci-fi';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Action
+//     document.getElementById('see-more-action').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=action';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Romance
+//     document.getElementById('see-more-romance').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=romance';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Thriller
+//     document.getElementById('see-more-thriller').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=thriller';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Fantasy
+//     document.getElementById('see-more-fantasy').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=fantasy';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Mystery
+//     document.getElementById('see-more-mystery').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=mystery';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ History
+//     document.getElementById('see-more-history').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=history';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Adventure
+//     document.getElementById('see-more-adventure').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=adventure';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Animation
+//     document.getElementById('see-more-animation').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=animation';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Biography
+//     document.getElementById('see-more-biography').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=biography';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Family
+//     document.getElementById('see-more-family').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=family';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Crime
+//     document.getElementById('see-more-crime').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=crime';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Sport
+//     document.getElementById('see-more-sport').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=sport';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Musical
+//     document.getElementById('see-more-musical').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=musical';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Horror
+//     document.getElementById('see-more-horror').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=horror';
+//     });
+
+//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Drama
+//     document.getElementById('see-more-drama').addEventListener('click', function () {
+//         window.location.href = '/page/main_page/search-results.html?category=genre&query=drama';
+//     });
+// });
+
+
+
 
 
 // Route สำหรับ mainpage.html พร้อม session validation

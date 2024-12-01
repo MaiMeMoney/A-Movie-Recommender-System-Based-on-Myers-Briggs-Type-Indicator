@@ -635,7 +635,6 @@ app.delete('/watchlist/delete/:listName', async (req, res) => {
 });
 
 
-// API สำหรับค้นหาหนังจาก title หรืออื่น ๆ
 app.get('/api/search', async (req, res) => {
     const { category, query } = req.query;
 
@@ -659,13 +658,17 @@ app.get('/api/search', async (req, res) => {
                 ]
             };
         } else if (category === 'genre') {
-            searchField = 'Genre'; // ตรวจสอบให้รองรับ genre
+            searchField = 'Genre'; // ค้นหาภาพยนตร์ตาม genre
         } else {
             return res.status(400).send({ message: 'Invalid search category' });
         }
 
         // ค้นหาข้อมูลในฐานข้อมูล
-        const searchQuery = category === 'actor' ? searchField : { [searchField]: { $regex: query, $options: 'i' } };
+        const searchQuery = category === 'actor' 
+            ? searchField 
+            : { [searchField]: { $regex: query, $options: 'i' } };
+
+        // ค้นหาในฐานข้อมูล
         const movies = await Movie.find(searchQuery);
 
         res.status(200).json(movies);
@@ -674,6 +677,7 @@ app.get('/api/search', async (req, res) => {
         res.status(500).json({ message: 'Failed to search movies' });
     }
 });
+
 
 
 

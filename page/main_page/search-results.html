@@ -60,6 +60,57 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = `/page/Personal information editing page/index.html?username=${username}`;
     };
 });
+
+document.addEventListener('DOMContentLoaded', async function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category');  // ค่าคือ 'genre'
+    const query = urlParams.get('query');  // ค่าคือ 'fantasy'
+
+    console.log("Category: ", category);  // ดูค่าที่ส่งมา
+    console.log("Query: ", query);  // ดูค่าที่ส่งมา
+
+    if (!query) {
+        document.querySelector('.movie-list').innerHTML = '<p>No search term provided</p>';
+        return;
+    }
+
+    try {
+        // ดึงข้อมูลภาพยนตร์จาก API ตาม category และ query
+        const response = await fetch(`http://localhost:5001/api/search?category=${category}&query=${query}`);
+        const movies = await response.json();
+        console.log("Movies: ", movies);  // ดูข้อมูลภาพยนตร์ที่ได้จาก API
+
+        const resultsContainer = document.querySelector('.movie-list');
+        resultsContainer.innerHTML = '';  // เคลียร์ผลการค้นหาก่อน
+
+        if (!movies.length) {
+            resultsContainer.innerHTML = `
+                <div style="text-align: center; color: #f4a261;">
+                    <h3>No results found for ${query}</h3>
+                    <p>Try searching for something else.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // แสดงผลภาพยนตร์
+        movies.forEach(movie => {
+            const movieItem = document.createElement('div');
+            movieItem.className = 'movie-item';
+            movieItem.innerHTML = `
+                <a href="/page/movie-details/movie-details.html?movieId=${movie._id}">
+                    <img src="${movie.Poster_Link}" alt="${movie.Series_Title}">
+                </a>
+                <p>${movie.Series_Title} (${movie.Released_Year})</p>
+            `;
+            resultsContainer.appendChild(movieItem);
+        });
+    } catch (error) {
+        console.error('Error fetching search results:', error);
+        alert('An error occurred while fetching search results.');
+    }
+});
+
     </script>
     <script src="script.js"></script>
 </body>
