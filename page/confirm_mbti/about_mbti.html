@@ -4,10 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MBTI Personality Detail</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <script>
         function goBack() {
             window.history.back();
+        }
+        
+        function showNotification(mbtiType) {
+            const notification = document.createElement('div');
+            notification.classList.add('notification');
+            notification.innerText = `You selected MBTI type: ${mbtiType}`;
+            
+            // Append the notification to the body
+            document.body.appendChild(notification);
+            
+            // Set a timeout to remove the notification after 5 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        function confirmMBTI() {
+            const mbtiType = localStorage.getItem('selectedMBTI');
+            const username = localStorage.getItem('username'); // Get username from localStorage
+
+            if (mbtiType && username) {
+                fetch('http://localhost:5001/api/saveMBTI', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ mbtiType, username })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    window.location.href = '/page/main_page/mainpage.html';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+                // Show the notification when user confirms
+                showNotification(mbtiType); 
+            } else {
+                alert("กรุณาเลือก MBTI และเข้าสู่ระบบก่อนทำการยืนยัน");
+            }
         }
     </script>
 </head>
@@ -21,7 +63,7 @@
             <div class="character-image">
                 <img id="character-img" src="pic.png" alt="Architect" class="character-img">
                 <h2 id="character-name">ARCHITECT</h2>
-                <p id="subtext" class="subtext">INTJ-A / INTJ-T</p> <!-- เพิ่ม subtext ใต้ชื่อ -->
+                <p id="subtext" class="subtext">INTJ-A / INTJ-T</p>
             </div>
             <div class="description">
                 <p id="mbti-description" class="personality-text">
@@ -30,7 +72,6 @@
                 </p>
             </div>
         </div>
-        
 
         <div class="buttons">
             <button class="confirm-btn" onclick="confirmMBTI()">CONFIRM YOUR MBTI</button>
@@ -48,6 +89,40 @@
             }
         });
 
+        // ฟังก์ชันแสดงการแจ้งเตือนที่มุมขวาบน
+function showNotification(message, isSuccess) {
+    const notification = document.createElement('div');
+    notification.classList.add('notification');
+    
+    // กำหนดข้อความการแจ้งเตือน
+    notification.innerText = message;
+    
+    // กำหนดคลาสให้เป็นการแจ้งเตือนที่สำเร็จ (สีเขียว) หรือข้อผิดพลาด (สีแดง)
+    if (isSuccess) {
+        notification.classList.add('success');
+    } else {
+        notification.classList.add('error');
+    }
+
+    // เพิ่มการแจ้งเตือนใน DOM
+    document.body.appendChild(notification);
+
+    // ตั้งเวลาให้แจ้งเตือนหายไปหลังจาก 3 วินาที
+    setTimeout(() => {
+        notification.remove();
+        // หลังจาก 3 วินาทีให้เปลี่ยนหน้าไปยังหน้าถัดไป
+        window.location.href = '/page/main_page/mainpage.html';
+    }, 3000);  // ลดเวลาหลังจาก 3 วินาที
+}
+
+// ทดสอบการแสดงผล
+document.addEventListener('DOMContentLoaded', () => {
+    const mbtiType = localStorage.getItem('selectedMBTI');
+    if (mbtiType) {
+        updateMBTIInfo(mbtiType);
+    }
+});
+        // ฟังก์ชันสำหรับอัปเดตข้อมูล MBTI ที่แสดงในหน้า
         function updateMBTIInfo(type) {
             const descriptions = {
                 "INTJ": {
@@ -159,30 +234,33 @@
             }
         }
 
+        // ฟังก์ชันยืนยันการเลือก MBTI
         function confirmMBTI() {
-            const mbtiType = localStorage.getItem('selectedMBTI');
-            const username = localStorage.getItem('username'); // Get username from localStorage
+    const mbtiType = localStorage.getItem('selectedMBTI');
+    const username = localStorage.getItem('username');
 
-            if (mbtiType && username) {
-                fetch('http://localhost:5001/api/saveMBTI', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ mbtiType, username })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                    window.location.href = '/page/main_page/mainpage.html';
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            } else {
-                alert("กรุณาเลือก MBTI และเข้าสู่ระบบก่อนทำการยืนยัน");
-            }
-        }
+    if (mbtiType && username) {
+        fetch('http://localhost:5001/api/saveMBTI', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ mbtiType, username })
+        })
+        .then(response => response.json())
+        .then(data => {
+            showNotification(data.message); // แสดงการแจ้งเตือนเมื่อข้อมูลถูกบันทึก
+            setTimeout(() => {
+                window.location.href = '/page/main_page/mainpage.html';
+            }, 3000); // ช้ากว่าเวลาแจ้งเตือนเล็กน้อย
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    } else {
+        alert("กรุณาเลือก MBTI และเข้าสู่ระบบก่อนทำการยืนยัน");
+    }
+}
     </script>
 
 </body>

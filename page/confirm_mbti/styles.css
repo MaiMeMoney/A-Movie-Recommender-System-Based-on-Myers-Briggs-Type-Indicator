@@ -1,3 +1,4 @@
+/* General Reset */
 * {
     margin: 0;
     padding: 0;
@@ -14,6 +15,7 @@ body {
     height: 100vh;
     text-align: center;
     overflow: hidden;
+    position: relative; /* ต้องเพิ่มเพื่อให้ notification สามารถแสดงทับบนเนื้อหา */
 }
 
 .container {
@@ -59,7 +61,7 @@ header .quote {
     width: auto;
     height: 100%;
     max-height: 150px;
-    object-fit: contain; /* ปรับให้ภาพพอดีในกรอบโดยไม่ล้นออกมา */
+    object-fit: contain;
     border-radius: 15px;
 }
 
@@ -69,27 +71,23 @@ header .quote {
     color: white;
 }
 
-.subtext {
+#character-subtext {
     font-size: 16px;
     color: #AAAAAA;
     margin-top: 3px;
 }
-
-
-
 
 .description {
     flex: 1;
     text-align: left;
 }
 
-
 .description h2 {
-    font-size: 18;
+    font-size: 18px;
     margin-bottom: 10px;
 }
 
-.subtext {
+.description-subtext {
     font-size: 18px;
     color: #AAAAAA;
     margin-bottom: 20px;
@@ -141,3 +139,40 @@ header .quote {
 .back-btn:hover {
     background-color: #444444;
 }
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #4CAF50; /* สีเขียวสำหรับการอัปเดตที่สำเร็จ */
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.notification.error {
+    background-color: #f44336; /* สีแดงสำหรับข้อผิดพลาด */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.notification.success {
+    background-color: #f44336; /* สีเขียวสำหรับข้อความสำเร็จ */
+}
+
+.notification.error {
+    background-color: #4CAF50; /* สีแดงสำหรับข้อผิดพลาด */
+}
+
