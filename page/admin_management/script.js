@@ -61,6 +61,11 @@ addMovieForm.addEventListener('submit', async (event) => {
     const posterLink = document.getElementById('poster-link').value;
     const seriesTitle = document.getElementById('series-title').value;
     const releasedYear = document.getElementById('released-year').value;
+
+    const certificate = document.getElementById('certificate').value;
+    const runtime = document.getElementById('runtime').value;
+
+
     const imdbRating = parseFloat(document.getElementById('imdb-rating').value); // รับค่าทศนิยม
     const genre = document.getElementById('genre').value;
     const overview = document.getElementById('overview').value;
@@ -84,6 +89,8 @@ addMovieForm.addEventListener('submit', async (event) => {
         posterLink,
         seriesTitle,
         releasedYear,
+        certificate,
+        runtime,
         imdbRating,
         genre,
         overview,
@@ -168,6 +175,11 @@ function openUpdateModal(movieId) {
             document.getElementById('update-poster-link').value = movie.Poster_Link;
             document.getElementById('update-series-title').value = movie.Series_Title;
             document.getElementById('update-released-year').value = movie.Released_Year;
+
+            document.getElementById('update-certificate').value = movie.Certificate;
+            document.getElementById('update-runtime').value = movie.Runtime;
+
+
             document.getElementById('update-imdb-rating').value = movie.IMDB_Rating;
             document.getElementById('update-genre').value = movie.Genre;
             document.getElementById('update-overview').value = movie.Overview;
@@ -205,6 +217,8 @@ updateMovieForm.addEventListener('submit', (event) => {
         posterLink: document.getElementById('update-poster-link').value,
         seriesTitle: document.getElementById('update-series-title').value,
         releasedYear: document.getElementById('update-released-year').value,
+        certificate: document.getElementById('update-certificate').value,
+        runtime: document.getElementById('update-runtime').value,
         imdbRating: parseFloat(document.getElementById('update-imdb-rating').value),
         genre: document.getElementById('update-genre').value,
         overview: document.getElementById('update-overview').value,
