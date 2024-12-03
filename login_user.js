@@ -82,7 +82,7 @@ app.post('/register',
                 lastname, 
                 email, 
                 password: hashedPassword,
-                role : 'user',
+                role : 0,
                 profileImage: ''
             });
 
