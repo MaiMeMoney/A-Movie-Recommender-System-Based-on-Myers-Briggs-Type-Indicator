@@ -14,9 +14,6 @@ mbti_collection = db["mbti_list"]
 movies_scores_collection = db["movies_scores"]
 
 def calculate_pearson_correlation(user_ratings, neighbor_ratings):
-    """
-    Calculate Pearson Correlation Coefficient between two users' ratings.
-    """
     common_movies = set(user_ratings.keys()).intersection(set(neighbor_ratings.keys()))
     if not common_movies:
         return 0
@@ -27,22 +24,13 @@ def calculate_pearson_correlation(user_ratings, neighbor_ratings):
     numerator = np.sum((user_scores - np.mean(user_scores)) * (neighbor_scores - np.mean(neighbor_scores)))
     denominator = np.sqrt(np.sum((user_scores - np.mean(user_scores))**2)) * np.sqrt(np.sum((neighbor_scores - np.mean(neighbor_scores))**2))
 
-    if denominator == 0:
-        return 0
-
-    return numerator / denominator
+    return numerator / denominator if denominator != 0 else 0
 
 def get_user_ratings(username):
-    """
-    Fetch all ratings given by a user.
-    """
     ratings = movies_scores_collection.find({"username": username})
     return {rating["movieName"]: rating["score"] for rating in ratings}
 
 def predict_rating(target_user_ratings, target_movie, neighbors):
-    """
-    Predict the rating for a movie using neighbors' ratings.
-    """
     numerator = 0
     denominator = 0
 
@@ -54,68 +42,56 @@ def predict_rating(target_user_ratings, target_movie, neighbors):
             numerator += similarity * neighbor_ratings[target_movie]
             denominator += abs(similarity)
 
-    if denominator == 0:
-        return 0
-
-    return numerator / denominator
+    return numerator / denominator if denominator != 0 else 0
 
 def get_recommendations(token):
-    """
-    Fetch movie recommendations for a user based on their MBTI type.
-    """
     try:
-        # Decode JWT
         decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         user_id = decoded_token.get("id")
 
-        # Fetch the user's MBTI
+        # ตรวจสอบว่าผู้ใช้มีข้อมูล MBTI หรือไม่
         user_mbti = mbti_collection.find_one({"_id": ObjectId(user_id)})
         if not user_mbti or "mbti_type" not in user_mbti:
-            return {"error": f"MBTI type not found for user with ID: {user_id}"}
+            return {"error": f"MBTI type not found for user with ID: {user_id}"}, 404
 
         mbti_type = user_mbti["mbti_type"]
-
-        # Fetch users with the same MBTI type
-        same_mbti_users = mbti_collection.find({"mbti_type": mbti_type})
-        same_mbti_usernames = [user["username"] for user in same_mbti_users]
-
-        # Fetch the target user's ratings
         target_user = user_mbti["username"]
+
         target_user_ratings = get_user_ratings(target_user)
 
-        # Calculate similarity with neighbors
+        # ค้นหาผู้ใช้ที่มี MBTI เดียวกัน
+        same_mbti_users = mbti_collection.find({"mbti_type": mbti_type})
         neighbors = []
-        for neighbor_username in same_mbti_usernames:
-            if neighbor_username == target_user:
-                continue  # Skip self
-            neighbor_ratings = get_user_ratings(neighbor_username)
+        for user in same_mbti_users:
+            if user["username"] == target_user:
+                continue
+            neighbor_ratings = get_user_ratings(user["username"])
             similarity = calculate_pearson_correlation(target_user_ratings, neighbor_ratings)
             if similarity > 0:
-                neighbors.append({"username": neighbor_username, "similarity": similarity})
+                neighbors.append({"username": user["username"], "similarity": similarity})
 
-        # Fetch all movies and predict ratings
+        # ดึงหนังทั้งหมดและคำนวณคะแนน
         all_movies = movies_scores_collection.distinct("movieName")
         recommendations = []
 
-        # ใช้ Set เพื่อเก็บหนังที่เพิ่มเข้ามาแล้ว
-        added_movies = set()
-
         for movie in all_movies:
-            if movie not in target_user_ratings and movie not in added_movies:
+            if movie not in target_user_ratings:
                 predicted_rating = predict_rating(target_user_ratings, movie, neighbors)
-                recommendations.append({"movieName": movie, "predictedRating": predicted_rating})
-                added_movies.add(movie)  # เพิ่มหนังลงใน Set เพื่อป้องกันซ้ำ
+                if predicted_rating > 0:
+                    recommendations.append({"movieName": movie, "predictedRating": predicted_rating})
 
-        # Sort and limit the recommendations
-        recommendations = sorted(recommendations, key=lambda x: x["predictedRating"], reverse=True)[:10]
-        return {"mbti_type": mbti_type, "recommendations": recommendations}
+        # จัดลำดับผลลัพธ์
+        sorted_recommendations = sorted(recommendations, key=lambda x: x["predictedRating"], reverse=True)[:10]
+        return {"mbti_type": mbti_type, "recommendations": sorted_recommendations}, 200
 
     except jwt.ExpiredSignatureError:
-        return {"error": "Token has expired"}
+        return {"error": "Token has expired"}, 401
     except jwt.InvalidTokenError:
-        return {"error": "Invalid token"}
+        return {"error": "Invalid token"}, 401
     except Exception as e:
-        return {"error": str(e)}
+        # เพิ่มการ Debug ให้เห็นข้อผิดพลาดชัดเจน
+        print(f"Unexpected error in get_recommendations: {str(e)}")
+        return {"error": f"Unexpected error: {str(e)}"}, 500
 
 
 # Flask API
@@ -123,8 +99,37 @@ app = Flask(__name__)
 
 @app.route("/recommend", methods=["POST"])
 def recommend():
-    token = request.headers.get("Authorization").split("Bearer ")[-1]
-    return jsonify(get_recommendations(token))
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        print("Authorization Header not provided or invalid format")
+        return jsonify({"error": "Token not provided or invalid format"}), 401
+
+    token = auth_header.split("Bearer ")[-1]
+
+    try:
+        # Decode token เพื่อตรวจสอบ
+        decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        print("Decoded Token:", decoded_token)
+
+        # เพิ่ม Debug: ตรวจสอบ Body ของคำขอ
+        if not request.json or "username" not in request.json:
+            print("Request Body is invalid or missing 'username'")
+            return jsonify({"error": "Invalid request body"}), 400
+
+        username = request.json.get("username")
+        print("Username from request body:", username)
+
+        recommendations, status = get_recommendations(token)
+        return jsonify(recommendations), status
+    except jwt.ExpiredSignatureError:
+        return jsonify({"error": "Token has expired"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"error": "Invalid token"}), 401
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
+
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

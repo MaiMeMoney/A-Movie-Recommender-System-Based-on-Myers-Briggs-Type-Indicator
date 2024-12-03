@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path'); // ประกาศที่นี่เพียงครั้งเดียว
 require('dotenv').config();
+const session = require('express-session');
 
 
 const app = express();
@@ -174,6 +175,13 @@ app.post('/api/saveMBTI', async (req, res) => {
         res.status(500).json({ message: 'Failed to update MBTI' });
     }
 });
+
+app.use(session({
+    secret: 'yourSecretKey', // เปลี่ยนเป็นค่าเฉพาะของคุณ
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // เปลี่ยนเป็น true หากใช้ HTTPS
+}));
 
 // API เพื่อเช็ค MBTI ของผู้ใช้
 app.post('/api/check-mbti', async (req, res) => {
@@ -635,6 +643,7 @@ app.delete('/watchlist/delete/:listName', async (req, res) => {
 });
 
 
+// Start the server on port 5001
 app.get('/api/search', async (req, res) => {
     const { category, query } = req.query;
 
@@ -802,3 +811,56 @@ const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
+
+app.post('/recommend', async (req, res) => {
+    const { username } = req.body;
+
+    // ตรวจสอบว่าได้รับ username หรือไม่
+    console.log('Received username for recommend:', username);
+
+    if (!username) {
+        return res.status(400).json({ message: 'Username is required!' });
+    }
+
+    try {
+        // ค้นหา MBTI ของผู้ใช้
+        const userMbti = await MBTI.findOne({ username });
+        if (!userMbti || !userMbti.mbti_type) {
+            console.error('User MBTI not found for username:', username);
+            return res.status(404).json({ message: 'User MBTI not found!' });
+        }
+
+        // ค้นหาผู้ใช้ที่มี MBTI เดียวกัน
+        const sameMbtiUsers = await MBTI.find({ mbti_type: userMbti.mbti_type });
+        const sameMbtiUsernames = sameMbtiUsers.map(user => user.username);
+
+        console.log('Users with same MBTI:', sameMbtiUsernames);
+
+        // ดึงคะแนนหนังจาก movies_scores
+        const recommendedMovies = await MovieScore.find({
+            username: { $in: sameMbtiUsernames }
+        }).sort({ score: -1 }).limit(10);
+
+        if (recommendedMovies.length === 0) {
+            console.error('No recommendations found for MBTI:', userMbti.mbti_type);
+            return res.status(404).json({ message: 'No recommendations found!' });
+        }
+
+        // ส่งรายชื่อหนังกลับ
+        console.log('Recommended movies:', recommendedMovies);
+        res.status(200).json({
+            mbti: userMbti.mbti_type,
+            recommendations: recommendedMovies.map(movie => ({
+                movieName: movie.movieName,
+                score: movie.score
+            }))
+        });
+    } catch (error) {
+        console.error('Error in recommend API:', {
+            message: error.message,
+            stack: error.stack
+        });
+        res.status(500).json({ message: 'Failed to fetch recommendations.' });
+    }
+});
+

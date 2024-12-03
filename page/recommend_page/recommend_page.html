@@ -9,15 +9,31 @@
 <body>
     <!-- Top Navigation Bar -->
     <header>
-        <div class="top-nav">
-            <div class="logo"><a href="../main_page/mainpage.html">MOVIEMINGLE</a></div>
-            <div class="search-bar">
-                <input type="text" placeholder="Search movies...">
-                <button class="search-icon">&#128269;</button>
+        <div class="navbar">
+            <div class="logo">
+                <a href="/page/main_page/mainpage.html" style="text-decoration: none; color: inherit;">MOVIEMINGLE</a>
             </div>
-            <div class="top-nav-actions">
-                <button class="my-list">MY LIST</button>
-                <div class="user-icon">&#128100;</div>
+            <div class="search-container">
+                <select id="search-category">
+                    <option value="title">Movie Title</option>
+                    <option value="director">Director</option>
+                    <option value="actor">Actor</option>
+                    <option value="genre">Genre</option>
+                </select>
+                <input type="text" id="search-bar" class="search-bar" placeholder="Search Movie...">
+                <div id="suggestion-box"></div>
+                <button id="search-button">Search</button>
+            </div>
+            <div class="my-list">
+                <span id="username-display" class="username-display"></span>
+                <a href="/page/watchlist/index.html" class="my-list-icon">
+                    <i class="fas fa-bookmark"></i>
+                </a>
+                <button class="account-icon" onclick="goToProfile()">👤</button>
+                 <!-- เพิ่มปุ่มมงกุฏ -->
+                 <button id="admin-icon" class="admin-icon" onclick="goToAdminDashboard()" style="display: none;">
+                    👑
+                </button>
             </div>
         </div>
     </header>
