@@ -231,6 +231,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// ฟังก์ชันเพื่อดึงข้อมูลหนังจาก genre ที่กำหนด
+// ฟังก์ชันเพื่อดึงข้อมูลหนังจาก genre ที่กำหนด
+async function loadMoviesByGenre(genre) {
+    try {
+        const response = await fetch(`/api/movies-by-genre?genre=${genre}`);
+        const movies = await response.json();
+
+        const movieListContainer = document.getElementById(`${genre}-movie-list`);
+        movieListContainer.innerHTML = ''; // เคลียร์ข้อมูลเก่า
+
+        if (movies.length === 0) {
+            movieListContainer.innerHTML = `<p>No movies found for ${genre}</p>`;
+            return;
+        }
+
+        // เพิ่มหนังที่ดึงมาจาก backend ลงใน container
+        movies.forEach(movie => {
+            const movieItem = document.createElement('div');
+            movieItem.className = 'movie-item';
+            movieItem.innerHTML = `
+                <a href="/page/movie-details/movie-details.html?movieId=${movie._id}">
+                    <img src="${movie.Poster_Link}" alt="${movie.Series_Title}">
+                </a>
+                <p>${movie.Series_Title} (${movie.Released_Year})</p>
+            `;
+            movieListContainer.appendChild(movieItem);
+        });
+    } catch (error) {
+        console.error('Error fetching movies by genre:', error);
+    }
+}
+
+
+
+// ฟังก์ชันสำหรับปุ่ม SEE MORE
+document.getElementById('see-more-sci-fi').addEventListener('click', function() {
+    window.location.href = "/page/movie-details/movie-details.html?genre=sci-fi"; // หรือหน้าอื่นที่จะแสดงรายละเอียดทั้งหมด
+});
+
+// เมื่อโหลดหน้า ให้โหลดข้อมูลหนังจาก genre 'sci-fi'
+window.addEventListener('DOMContentLoaded', function() {
+    loadMoviesByGenre('sci-fi');
+});
+
+
+
+  
 
 // Route สำหรับ mainpage.html พร้อม session validation
 app.get('/mainpage.html', validateSession, (req, res) => {

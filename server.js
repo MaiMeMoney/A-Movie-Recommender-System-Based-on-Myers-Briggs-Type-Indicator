@@ -781,6 +781,29 @@ app.get('/api/get-movies-high-rating', async (req, res) => {
 });
 
 
+const validGenres = ['action', 'sci-fi', 'comedy', 'drama', 'thriller', 'romance', 'mystery', 'adventure', 'animation', 'biography', 'horror', 'sport', 'family', 'musical', 'crime', 'fantasy', 'history'];
+
+app.get('/api/movies-by-genre', async (req, res) => {
+    const genre = req.query.genre;
+
+    // ตรวจสอบว่า genre ที่รับมาถูกต้องหรือไม่
+    if (!validGenres.includes(genre)) {
+        return res.status(400).json({ message: 'Invalid genre provided' });
+    }
+
+    try {
+        const movies = await db.collection('movies_list').find({ Genre: { $in: [genre] } }).limit(8).toArray();
+        res.json(movies);
+    } catch (error) {
+        console.error('Error fetching movies by genre:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+
+
+
+
 // กรณีไม่มี API ที่ตรง ให้เสิร์ฟไฟล์ movie-detail.html
 app.get('/page/movie-details/movie-details.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'page', 'movie-details', 'movie-detail.html'));

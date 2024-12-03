@@ -177,7 +177,18 @@ main {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* เพิ่มเงา */
 }
 
-.movie-suggestions {
+.movie-sci-fi {
+    margin-bottom: 30px;
+    overflow: hidden;  /* ป้องกันการแสดง scroll แนวตั้ง */
+  }
+  
+  .movie-sci-fi h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #f4a261;
+  }
+
+  .movie-suggestions {
     margin-bottom: 30px;
     overflow: hidden;  /* ป้องกันการแสดง scroll แนวตั้ง */
   }
