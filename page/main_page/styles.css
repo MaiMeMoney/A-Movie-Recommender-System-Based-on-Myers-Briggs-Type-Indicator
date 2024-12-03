@@ -505,3 +505,45 @@ h2 a {
 }
 
 
+.movie-suggestions .slider-container {
+    display: flex;            /* ใช้ flexbox เพื่อจัดเรียงรายการในแนวนอน */
+    overflow-x: scroll;       /* ให้สามารถเลื่อนรายการในแนวนอน */
+    padding: 10px 0;          /* กำหนด padding ด้านบนและล่าง */
+    gap: 20px;                /* ระยะห่างระหว่างไอเท็ม */
+    scrollbar-width: none; /* ซ่อน scrollbar ใน Firefox */
+    scroll-behavior: smooth; /* เพิ่มความนุ่มในการเลื่อน */
+    -ms-overflow-style: none;  /* ซ่อน scrollbar ใน IE */
+}
+
+.movie-suggestions .slide-btn {
+    position: absolute;        /* วางปุ่มเลื่อนให้ซ้อนอยู่ในตำแหน่งที่ต้องการ */
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5); /* ปรับสีปุ่มให้มองเห็นได้ */
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+
+
+.movie-suggestions .slider-container::-webkit-scrollbar {
+    display: none; /* ซ่อน scrollbar ใน Chrome, Safari */
+}
+
+.movie-suggestions .movie-list {
+    display: flex;            /* จัดเรียงรายการภายในเป็นแนวนอน */
+    gap: 20px;                /* ระยะห่างระหว่างรายการ */
+    transition: transform 0.3s ease-in-out;
+}
+
+.movie-suggestions .movie-item {
+    flex: 0 0 auto;           /* ไม่ให้ไอเท็มขยายหรือหดตัว */
+    width: 282px;             /* กำหนดขนาดให้โพสเตอร์ไม่เปลี่ยนแปลง */
+}
+
+.movie-suggestions img {
+    width: 100%;              /* ให้ภาพมีขนาดเต็มที่ตาม container */
+    border-radius: 8px;       /* มุมโค้งให้กับภาพ */
+}

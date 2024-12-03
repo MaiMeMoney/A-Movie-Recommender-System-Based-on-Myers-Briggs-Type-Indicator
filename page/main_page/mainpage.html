@@ -78,13 +78,13 @@
             <h2>MOVIE YOU MIGHT LIKE <a href="#">SEE MORE</a></h2>
             <div class="slider-container">
                 <button class="slide-btn left" onclick="scrollLeft('movie-suggestions')">❮</button>
-                <div id="movie-list" class="movie-list">
-                    <!-- โปสเตอร์ภาพยนตร์จะถูกแทรกที่นี่ -->
-                </div>
+                <!-- Movies will be injected here -->
                 <button class="slide-btn right" onclick="scrollRight('movie-suggestions')">❯</button>
             </div>
         </section>
-              
+        
+        
+
         <section class="sci-fi">
             <h2>SCI-FI <a href="#" id="see-more-sci-fi">SEE MORE</a></h2>
             <div class="slider-container">
@@ -130,10 +130,12 @@
                             <img src="https://image.tmdb.org/t/p/original/a9RjXOIIB56k2rGoL3Fk3nRHHHQ.jpg" alt="Movie">
                         </a>
                     </div>
+                </div>
                 <button class="slide-btn right" onclick="scrollRight('sci-fi')">❯</button>
             </div>
-        </section>        
+        </section>
         
+
         <section class="action">
             <h2>ACTION <a href="#" id="see-more-action">SEE MORE</a></h2>
             <div class="slider-container">
@@ -975,7 +977,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
     </script>
     <script src="script.js"></script>
 </body>

@@ -765,40 +765,21 @@ app.delete('/api/delete-movie/:movieId', async (req, res) => {
     }
 });
 
-// สร้าง route เพื่อดึงข้อมูลหนังที่มี IMDB_Rating >= 8.0
-app.get('/api/get-movies-high-rating', async (req, res) => {
+const Movies = mongoose.model('Movies', movieSchema);
+
+// ใน server.js หรือไฟล์ที่คุณตั้งค่า server
+app.get('/movies/suggestions', async (req, res) => {
     try {
-        // ค้นหาหนังที่มีคะแนน IMDB_Rating >= 8.0
-        const movies = await db.collection('movies_list').find({ IMDB_Rating: { $gte: 8.0 } })
-            .limit(8)  // จำกัดแค่ 8 รายการ
-            .toArray(); // เปลี่ยนผลลัพธ์ให้เป็น array
-        
-        res.json(movies);  // ส่งผลลัพธ์กลับไปยัง client
-    } catch (error) {
-        console.error('Error fetching high-rated movies:', error);
-        res.status(500).send('Error fetching movies');
-    }
-});
-
-
-const validGenres = ['action', 'sci-fi', 'comedy', 'drama', 'thriller', 'romance', 'mystery', 'adventure', 'animation', 'biography', 'horror', 'sport', 'family', 'musical', 'crime', 'fantasy', 'history'];
-
-app.get('/api/movies-by-genre', async (req, res) => {
-    const genre = req.query.genre;
-
-    // ตรวจสอบว่า genre ที่รับมาถูกต้องหรือไม่
-    if (!validGenres.includes(genre)) {
-        return res.status(400).json({ message: 'Invalid genre provided' });
-    }
-
-    try {
-        const movies = await db.collection('movies_list').find({ Genre: { $in: [genre] } }).limit(8).toArray();
+        // ค้นหาหนังที่มี IMDB_Rating >= 8
+        const movies = await Movies.find({ IMDB_Rating: { $gte: 8 } });
         res.json(movies);
     } catch (error) {
-        console.error('Error fetching movies by genre:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        console.error('Error fetching movies:', error);
+        res.status(500).send('Internal Server Error');
     }
 });
+
+
 
 
 

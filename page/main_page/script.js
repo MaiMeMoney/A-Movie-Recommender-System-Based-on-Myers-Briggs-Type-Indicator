@@ -20,6 +20,23 @@ function scrollRight(sectionClass) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const leftBtn = document.querySelector('.movie-suggestions .slide-btn.left');
+    const rightBtn = document.querySelector('.movie-suggestions .slide-btn.right');
+    const movieList = document.querySelector('.movie-suggestions .movie-list');
+
+    // เลื่อนซ้าย
+    leftBtn.addEventListener('click', () => {
+        movieList.scrollBy({ left: -200, behavior: 'smooth' });
+    });
+
+    // เลื่อนขวา
+    rightBtn.addEventListener('click', () => {
+        movieList.scrollBy({ left: 200, behavior: 'smooth' });
+    });
+});
+
+
 document.getElementById('search-button').addEventListener('click', async () => {
     const query = document.getElementById('search-bar').value.trim();
     const category = document.getElementById('search-category').value;
@@ -197,87 +214,71 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// document.addEventListener('DOMContentLoaded', () => {
+//     fetch('http://127.0.0.1:5001/movies/suggestions')
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log(data);
 
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        // Fetch movies with IMDB Rating >= 8.0
-        const response = await fetch('http://localhost:5001/api/get-movies-high-rating');
-        const movies = await response.json();
+//         // แสดงแค่ 8 รายการ
+//         const movieSuggestionsContainer = document.querySelector('.movie-suggestions .slider-container');
+//         const moviesToDisplay = data.slice(0, 8); // จำกัดแค่ 8 รายการ
 
-        // Select the container where the movies will be displayed
-        const movieList = document.getElementById('movie-list');
-        movieList.innerHTML = ''; // Clear any existing content
+//         moviesToDisplay.forEach(movie => {
+//             const movieElement = document.createElement('div');
+//             movieElement.classList.add('movie-item');
+//             movieElement.innerHTML = `
+//                 <img src="${movie.Poster_Link}" alt="${movie.Series_Title}">
+//                 <h3>${movie.Series_Title}</h3>
+//                 <p>IMDB Rating: ${movie.IMDB_Rating}</p>
+//             `;
+//             movieSuggestionsContainer.appendChild(movieElement);
+//         });
+//     })
+//     .catch(error => {
+//         console.error("Error loading movie suggestions:", error);
+//     });
+// });
 
-        if (movies.length === 0) {
-            movieList.innerHTML = `<p style="color: #f4a261; text-align: center;">No high-rated movies found.</p>`;
-            return;
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('http://127.0.0.1:5001/movies/suggestions')
+        .then(response => response.json())
+        .then(data => {
+            const movieListContainer = document.querySelector('.movie-suggestions .slider-container');
+            
+            data.forEach(movie => {
+                const movieElement = document.createElement('div');
+                movieElement.classList.add('movie-item');
+                
+                // สร้างลิงก์ที่เชื่อมไปยังหน้า movie-details
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;  // ใช้ _id ของ MongoDB เป็น movieId
+                movieLink.target = '_blank';  // เปิดในแท็บใหม่
 
-        // Loop through the movies and add them to the DOM
-        movies.forEach((movie) => {
-            const movieItem = document.createElement('div');
-            movieItem.className = 'movie-item';
-            movieItem.innerHTML = `
-                <a href="/page/movie-details/movie-details.html?movieId=${movie._id}">
-                    <img src="${movie.Poster_Link}" alt="${movie.Series_Title}" title="${movie.Series_Title} (${movie.Released_Year})">
-                </a>
-            `;
-            movieList.appendChild(movieItem);
+                // สร้างโพสเตอร์
+                const posterImg = document.createElement('img');
+                posterImg.src = movie.Poster_Link;
+                posterImg.alt = movie.Series_Title;
+
+                // เพิ่มภาพโพสเตอร์ไปยังลิงก์
+                movieLink.appendChild(posterImg);
+                
+                // เพิ่มลิงก์ของหนังไปยัง container
+                movieElement.appendChild(movieLink);
+                movieListContainer.appendChild(movieElement);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching movies:', error);
         });
-    } catch (error) {
-        console.error('Error fetching high-rated movies:', error);
-        const movieList = document.getElementById('movie-list');
-        movieList.innerHTML = `<p style="color: #f4a261; text-align: center;">Failed to load movies. Please try again later.</p>`;
-    }
-});
-
-// ฟังก์ชันเพื่อดึงข้อมูลหนังจาก genre ที่กำหนด
-// ฟังก์ชันเพื่อดึงข้อมูลหนังจาก genre ที่กำหนด
-async function loadMoviesByGenre(genre) {
-    try {
-        const response = await fetch(`/api/movies-by-genre?genre=${genre}`);
-        const movies = await response.json();
-
-        const movieListContainer = document.getElementById(`${genre}-movie-list`);
-        movieListContainer.innerHTML = ''; // เคลียร์ข้อมูลเก่า
-
-        if (movies.length === 0) {
-            movieListContainer.innerHTML = `<p>No movies found for ${genre}</p>`;
-            return;
-        }
-
-        // เพิ่มหนังที่ดึงมาจาก backend ลงใน container
-        movies.forEach(movie => {
-            const movieItem = document.createElement('div');
-            movieItem.className = 'movie-item';
-            movieItem.innerHTML = `
-                <a href="/page/movie-details/movie-details.html?movieId=${movie._id}">
-                    <img src="${movie.Poster_Link}" alt="${movie.Series_Title}">
-                </a>
-                <p>${movie.Series_Title} (${movie.Released_Year})</p>
-            `;
-            movieListContainer.appendChild(movieItem);
-        });
-    } catch (error) {
-        console.error('Error fetching movies by genre:', error);
-    }
-}
-
-
-
-// ฟังก์ชันสำหรับปุ่ม SEE MORE
-document.getElementById('see-more-sci-fi').addEventListener('click', function() {
-    window.location.href = "/page/movie-details/movie-details.html?genre=sci-fi"; // หรือหน้าอื่นที่จะแสดงรายละเอียดทั้งหมด
-});
-
-// เมื่อโหลดหน้า ให้โหลดข้อมูลหนังจาก genre 'sci-fi'
-window.addEventListener('DOMContentLoaded', function() {
-    loadMoviesByGenre('sci-fi');
 });
 
 
 
-  
+
+
+
+
 
 // Route สำหรับ mainpage.html พร้อม session validation
 app.get('/mainpage.html', validateSession, (req, res) => {
