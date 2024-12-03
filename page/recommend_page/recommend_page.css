@@ -7,11 +7,6 @@ body {
     overflow-y: scroll;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
 /* Top Navigation Bar */
 .top-nav {
     background-color: #32834F;
@@ -20,6 +15,8 @@ a {
     justify-content: space-between;
     padding: 20px 40px;
 }
+
+/* เพิ่มส่วนที่เหลือของ CSS ที่คุณให้ไว้ */
 
 .logo {
     font-size: 2rem;

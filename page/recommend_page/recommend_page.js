@@ -63,6 +63,16 @@ async function fetchRecommendations() {
     }
 }
 
+
+// ฟังก์ชันสำหรับปุ่ม CHANGE MBTI
+function handleChangeMBTI() {
+    window.location.href = "/page/mbti_selection/mbti_selection.html"; // พาผู้ใช้ไปหน้าเลือก MBTI
+}
+
+// ผูกฟังก์ชันกับปุ่ม CHANGE MBTI
+document.querySelector(".change-mbti").addEventListener("click", handleChangeMBTI);
+
+
 // ผูกฟังก์ชันกับปุ่ม Recommend
 document.querySelector(".recommend-me").addEventListener("click", fetchRecommendations);
 
