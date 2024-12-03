@@ -554,7 +554,7 @@ app.post('/api/add-movie', async (req, res) => {
 
         await newMovie.save();  // บันทึกหนังใหม่ลงในฐานข้อมูล
 
-        res.status(201).json({ message: "Movie added successfully!" });
+        // res.status(201).json({ message: "Movie added successfully!" });
     } catch (error) {
         console.error("Error adding movie:", error);
         res.status(500).json({ message: "Failed to add movie" });
@@ -574,7 +574,7 @@ app.delete('/api/delete-movie/:movieId', async (req, res) => {
             return res.status(404).json({ message: "Movie not found!" });
         }
 
-        res.status(200).json({ message: "Movie deleted successfully!" });
+        // res.status(200).json({ message: "Movie deleted successfully!" });
     } catch (error) {
         console.error("Error deleting movie:", error);
         res.status(500).json({ message: "Failed to delete movie" });
@@ -750,7 +750,7 @@ app.put('/api/update-movie/:movieId', async (req, res) => {
 
         await movie.save();
 
-        res.status(200).json({ message: "Movie updated successfully!" });
+        // res.status(200).json({ message: "Movie updated successfully!" });
     } catch (error) {
         console.error('Error updating movie:', error);
         res.status(500).json({ message: 'Failed to update movie' });
@@ -767,7 +767,7 @@ app.delete('/api/delete-movie/:movieId', async (req, res) => {
             return res.status(404).json({ message: "Movie not found!" });
         }
 
-        res.status(200).json({ message: "Movie deleted successfully!" });
+        // res.status(200).json({ message: "Movie deleted successfully!" });
     } catch (error) {
         console.error("Error deleting movie:", error);
         res.status(500).json({ message: "Failed to delete movie" });

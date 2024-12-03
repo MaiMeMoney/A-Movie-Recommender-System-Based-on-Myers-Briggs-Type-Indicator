@@ -17,7 +17,7 @@ header {
 }
 
 .left-header {
-    color: #ff8c00;
+    color: #f4a261;
     font-size: 24px;
 }
 
@@ -73,14 +73,14 @@ input[type="text"] {
     border-radius: 5px;
 }
 
-button {
+/* button {
     padding: 8px 16px;
     background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-}
+} */
 
 button:hover {
     background-color: #45a049;
@@ -123,14 +123,7 @@ button:hover {
     text-align: center;
 }
 
-.create-genre button {
-    background-color: black;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-}
+
 
 /* Right Content */
 .right-content {
@@ -252,7 +245,7 @@ button:hover {
 
 .action-buttons .btn {
     padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: #4CAF50; /* สีน้ำเงิน */
     color: white;
     border: none;
     border-radius: 5px;
@@ -262,8 +255,9 @@ button:hover {
 }
 
 .action-buttons .btn:hover {
-    background-color: #0056b3;
+    background-color: #4CAF50; /* สีน้ำเงินเข้มเมื่อ hover */
 }
+
 
 .btn {
     padding: 10px 20px;
@@ -273,20 +267,30 @@ button:hover {
     cursor: pointer;
 }
 
+.create-genre button {
+    background-color: #4CAF50 !important; /* สีน้ำเงิน */
+}
+
+.create-genre button:hover {
+    background-color: #1976D2 !important; /* น้ำเงินเข้มเมื่อ hover */
+}
+
 .update {
-    background-color: #4CAF50; /* สีเขียว */
-    color: white;
+    background-color: #2196F3 !important; /* สีเขียว */
+    color: white !important; /* สีขาว */
 }
 
 .delete {
-    background-color: #f44336; /* สีแดง */
-    color: white;
+    background-color: #f44336 !important; /* สีแดง */
+    color: white !important; /* สีขาว */
 }
 
 .exit {
-    background-color: #2196F3; /* สีน้ำเงิน */
-    color: white;
+    background-color: #000000 !important; /* สีน้ำเงิน */
+    color: white !important; /* สีขาว */
 }
+
+
 
 /* Pagination styles */
 .pagination {
@@ -296,7 +300,7 @@ button:hover {
 
 .pagination button {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #4CAF50; /* สีเขียว */
     color: white;
     border: none;
     border-radius: 5px;
@@ -305,13 +309,22 @@ button:hover {
 }
 
 .pagination button:hover {
-    background-color: #45a049;
+    background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
 }
 
+
 .pagination button:disabled {
-    background-color: #ccc;
+    background-color: #ccc; /* สีเทาสำหรับปุ่มที่ถูกปิดการใช้งาน */
     cursor: not-allowed;
 }
+.pagination button {
+    background-color: #00ff80; /* สีน้ำเงิน */
+}
+
+.pagination button:hover {
+    background-color: #0056b3; /* น้ำเงินเข้มเมื่อ hover */
+}
+
 
 /* Modal Styles */
 .modal {
@@ -399,7 +412,7 @@ button:hover {
 
 /* กำหนดสไตล์ของโปสเตอร์เมื่อเลือก */
 .movie-poster.selected {
-    border: 2px solid #007BFF;  /* เพิ่มขอบสีน้ำเงินเพื่อแสดงการเลือก */
+    border: 2px solid #1665db;  /* เพิ่มขอบสีน้ำเงินเพื่อแสดงการเลือก */
     transform: scale(1.05);  /* ขยายโปสเตอร์เล็กน้อยเมื่อเลือก */
     transition: transform 0.3s ease, border 0.3s ease;  /* เพิ่มการเคลื่อนไหว */
 }
@@ -444,12 +457,12 @@ button:hover {
 
 /* ปุ่ม Create Movie List */
 .create-genre button {
-    background-color: #2c7a45;
+    background-color: #2c7a45 !important;
     text-align: center;
     font-size: 16px;
     padding: 10px 20px;
     border-radius: 5px;
-    color: white;
+    color: white !important; 
     border: none;
     cursor: pointer;
 }
@@ -494,4 +507,137 @@ button:hover {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* Toast Notification */
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s, visibility 0.5s;
+}
+
+.toast-notification.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* เพิ่มสีต่างๆ สำหรับประเภทการแจ้งเตือน */
+.toast-notification.success {
+    background-color: #2ecc71; /* สีเขียวสำหรับการสำเร็จ */
+}
+
+.toast-notification.error {
+    background-color: #e74c3c; /* สีแดงสำหรับข้อผิดพลาด */
+}
+
+
+/* ปรับสีปุ่ม Add Movie */
+#add-movie-button {
+    background-color: #4CAF50; /* สีเขียว */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+#add-movie-button:hover {
+    background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
+}
+
+/* ปรับสีปุ่ม Update */
+#update-movie-button {
+    background-color: #2196F3; /* สีน้ำเงิน */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+#update-movie-button:hover {
+    background-color: #1976D2; /* สีน้ำเงินเข้มเมื่อ hover */
+}
+
+/* ปรับสีปุ่ม Delete Movie */
+#delete-movie-button {
+    background-color: #f44336; /* สีแดง */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+#delete-movie-button:hover {
+    background-color: #d32f2f; /* สีแดงเข้มเมื่อ hover */
+}
+
+/* ปุ่ม Exit */
+#exit-button {
+    background-color: #000000; /* สีดำ */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+#exit-button:hover {
+    background-color: #333333; /* สีดำเข้มเมื่อ hover */
+}
+
+/* ปุ่ม Create Movie List */
+#create-genre-button {
+    background-color: #4CAF50; /* สีเขียว */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+#create-genre-button:hover {
+    background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
+}
+
+/* ปุ่มสำหรับยืนยันการลบใน Delete Modal */
+#confirm-delete-button {
+    background-color: #e74c3c; /* สีแดง */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#confirm-delete-button:hover {
+    background-color: #c0392b; /* สีแดงเข้มเมื่อ hover */
+}
+
+/* ปุ่มสำหรับยกเลิกการลบใน Delete Modal */
+#cancel-delete-button {
+    background-color: #95a5a6; /* สีเทา */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#cancel-delete-button:hover {
+    background-color: #7f8c8d; /* สีเทาเข้มเมื่อ hover */
 }

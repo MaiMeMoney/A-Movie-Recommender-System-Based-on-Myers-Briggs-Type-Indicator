@@ -159,12 +159,12 @@ const updateMovieForm = document.getElementById('update-movie-form');
 // เมื่อคลิกที่ปุ่ม Update
 const updateMovieButton = document.getElementById('update-movie-button');
 updateMovieButton.addEventListener('click', () => {
-    // เปิด Modal เพื่ออัปเดต
     if (!selectedMovieId) {
-        alert('Please select a movie to update');
+        // ใช้ showToastNotification แทน showNotification
+        showToastNotification('Please select a movie to update', 'error'); // แจ้งเตือนเป็น error
         return;
     }
-    openUpdateModal(selectedMovieId);
+    openUpdateModal(selectedMovieId); // เปิด Modal สำหรับการอัปเดต
 });
 
 // ฟังก์ชันเปิด Modal สำหรับการอัปเดต
@@ -297,6 +297,25 @@ confirmDeleteButton.addEventListener('click', async () => {
         alert('Error deleting movie');
     }
 });
+
+// ฟังก์ชันสำหรับการปิด Modal
+function hideModal() {
+    deleteMovieModal.style.display = 'none';
+}
+
+// เมื่อคลิกที่ปุ่ม Cancel
+cancelDeleteButton.addEventListener('click', hideModal);
+
+// เมื่อคลิกที่ปุ่มปิด (X)
+closeDeleteModal.addEventListener('click', hideModal);
+
+// ปิด Modal เมื่อคลิกภายนอก Modal
+window.addEventListener('click', function(event) {
+    if (event.target === deleteMovieModal) {
+        hideModal();
+    }
+});
+
 
 // ฟังก์ชันค้นหาหนังจากคำค้นหาของผู้ใช้
 async function searchMovies(query) {
@@ -448,3 +467,147 @@ async function showMoviesByGenre(genre) {
         console.error('Error fetching movies by genre:', error);
     }
 }
+
+// ฟังก์ชันสำหรับการแสดง Notification
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    
+    // กำหนดข้อความใน Notification
+    notification.textContent = message;
+    
+    // กำหนดประเภทของ Notification (สีเขียวสำหรับสำเร็จ, สีแดงสำหรับข้อผิดพลาด)
+    notification.className = `notification show ${type}`;
+    
+    // ซ่อน Notification หลังจาก 3 วินาที
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+// ตัวอย่างการใช้
+// เรียกใช้งานเมื่อการเพิ่มหนังสำเร็จ
+function addMovieSuccess() {
+    showNotification('Add movie!', 'success');
+}
+
+// เรียกใช้งานเมื่อการอัปเดตหนังสำเร็จ
+function updateMovieSuccess() {
+    showNotification('Movie update!', 'success');
+}
+
+// เรียกใช้งานเมื่อการลบหนังสำเร็จ
+function deleteMovieSuccess() {
+    showNotification('Deleted the movie!', 'success');
+}
+
+// ตัวอย่างการใช้ในกรณีที่เกิดข้อผิดพลาด
+function addMovieError() {
+    showNotification('An error occurred while adding the movie.!', 'error');
+}
+
+// ตัวอย่างการเพิ่มหนังใหม่
+function addMovie(movieData) {
+    fetch('/api/add-movie', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(movieData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            addMovieSuccess();  // แสดง notification เมื่อเพิ่มหนังสำเร็จ
+        } else {
+            addMovieError();  // แสดง notification เมื่อเกิดข้อผิดพลาด
+        }
+    })
+    .catch(error => {
+        console.error('Error adding movie:', error);
+        addMovieError();  // แสดง notification เมื่อเกิดข้อผิดพลาด
+    });
+}
+
+// ตัวอย่างการอัปเดตหนัง
+function updateMovie(movieId, updatedData) {
+    fetch(`/api/update-movie/${movieId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateMovieSuccess();  // แสดง notification เมื่ออัปเดตหนังสำเร็จ
+        } else {
+            showNotification('เกิดข้อผิดพลาดในการอัปเดตหนัง!', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating movie:', error);
+        showNotification('เกิดข้อผิดพลาดในการอัปเดตหนัง!', 'error');
+    });
+}
+
+// ตัวอย่างการลบหนัง
+function deleteMovie(movieId) {
+    fetch(`/api/delete-movie/${movieId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            deleteMovieSuccess();  // แสดง notification เมื่อลบหนังสำเร็จ
+        } else {
+            showNotification('เกิดข้อผิดพลาดในการลบหนัง!', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting movie:', error);
+        showNotification('เกิดข้อผิดพลาดในการลบหนัง!', 'error');
+    });
+}
+
+// ฟังก์ชันการแสดง Toast Notification
+function showToastNotification(message, type = 'success') {
+    const toast = document.getElementById('toast-notification');
+    const toastMessage = document.getElementById('toast-message');
+
+    // กำหนดข้อความการแจ้งเตือน
+    toastMessage.textContent = message;
+
+    // กำหนดประเภทของการแจ้งเตือน (error, success)
+    if (type === 'error') {
+        toast.classList.add('error');
+    } else {
+        toast.classList.remove('error');
+        toast.classList.add('success');
+    }
+
+    // แสดงการแจ้งเตือน
+    toast.classList.add('show');
+
+    // ซ่อนการแจ้งเตือนหลังจาก 3 วินาที
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+document.getElementById('add-movie-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // ตัวอย่างการเพิ่มหนังสำเร็จ
+    showToastNotification('Add movie!', 'success');
+    document.getElementById('addMovieModal').style.display = 'none';
+});
+
+document.getElementById('update-movie-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // ตัวอย่างการอัปเดตหนังสำเร็จ
+    showToastNotification('Movie update!', 'success');
+    document.getElementById('updateMovieModal').style.display = 'none';
+});
+
