@@ -788,10 +788,311 @@ app.get('/movies/suggestions', async (req, res) => {
     }
 });
 
+// สร้าง API เพื่อดึงข้อมูลหนังที่มี genre "Crime"
+app.get('/api/crime-movies', async (req, res) => {
+    try {
+        const crimeMovies = await Movies.find({
+            Genre: { $regex: 'Crime', $options: 'i' }
+        }).limit(10);
 
+        if (crimeMovies.length === 0) {
+            return res.status(404).json({ message: "No crime movies found." });
+        }
 
+        res.status(200).json(crimeMovies); // ส่งข้อมูลเป็น JSON
+    } catch (error) {
+        console.error("Error fetching crime movies:", error);
+        res.status(500).json({ message: 'Error fetching crime movies.' });
+    }
+});
 
+app.get('/api/sport-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Sport" ใน Genre
+        const sportMovies = await Movies.find({
+            Genre: { $regex: 'Sport', $options: 'i' }
+        }).limit(10); // เพิ่ม .limit(10) ถ้าต้องการจำกัดจำนวนหนัง
 
+        if (sportMovies.length === 0) {
+            return res.status(404).json({ message: "No sport movies found." });
+        }
+
+        res.status(200).json(sportMovies);
+    } catch (error) {
+        console.error("Error fetching sport movies:", error);
+        res.status(500).json({ message: 'Error fetching sport movies.' });
+    }
+});
+
+app.get('/api/musical-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Musical" ใน Genre
+        const musicalMovies = await Movies.find({
+            Genre: { $regex: 'Musical', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (musicalMovies.length === 0) {
+            return res.status(404).json({ message: "No musical movies found." });
+        }
+
+        res.status(200).json(musicalMovies);
+    } catch (error) {
+        console.error("Error fetching musical movies:", error);
+        res.status(500).json({ message: 'Error fetching musical movies.' });
+    }
+});
+
+app.get('/api/family-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Family" ใน Genre
+        const familyMovies = await Movies.find({
+            Genre: { $regex: 'Family', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (familyMovies.length === 0) {
+            return res.status(404).json({ message: "No family movies found." });
+        }
+
+        res.status(200).json(familyMovies);
+    } catch (error) {
+        console.error("Error fetching family movies:", error);
+        res.status(500).json({ message: 'Error fetching family movies.' });
+    }
+});
+
+app.get('/api/biography-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Biography" ใน Genre
+        const biographyMovies = await Movies.find({
+            Genre: { $regex: 'Biography', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (biographyMovies.length === 0) {
+            return res.status(404).json({ message: "No biography movies found." });
+        }
+
+        res.status(200).json(biographyMovies);
+    } catch (error) {
+        console.error("Error fetching biography movies:", error);
+        res.status(500).json({ message: 'Error fetching biography movies.' });
+    }
+});
+
+app.get('/api/animation-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Animation" ใน Genre
+        const animationMovies = await Movies.find({
+            Genre: { $regex: 'Animation', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (animationMovies.length === 0) {
+            return res.status(404).json({ message: "No animation movies found." });
+        }
+
+        res.status(200).json(animationMovies);
+    } catch (error) {
+        console.error("Error fetching animation movies:", error);
+        res.status(500).json({ message: 'Error fetching animation movies.' });
+    }
+});
+
+app.get('/api/adventure-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Adventure" ใน Genre
+        const adventureMovies = await Movies.find({
+            Genre: { $regex: 'Adventure', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (adventureMovies.length === 0) {
+            return res.status(404).json({ message: "No adventure movies found." });
+        }
+
+        res.status(200).json(adventureMovies);
+    } catch (error) {
+        console.error("Error fetching adventure movies:", error);
+        res.status(500).json({ message: 'Error fetching adventure movies.' });
+    }
+});
+
+app.get('/api/history-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "History" ใน Genre
+        const historyMovies = await Movies.find({
+            Genre: { $regex: 'History', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (historyMovies.length === 0) {
+            return res.status(404).json({ message: "No history movies found." });
+        }
+
+        res.status(200).json(historyMovies);
+    } catch (error) {
+        console.error("Error fetching history movies:", error);
+        res.status(500).json({ message: 'Error fetching history movies.' });
+    }
+});
+
+app.get('/api/mystery-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Mystery" ใน Genre
+        const mysteryMovies = await Movies.find({
+            Genre: { $regex: 'Mystery', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (mysteryMovies.length === 0) {
+            return res.status(404).json({ message: "No mystery movies found." });
+        }
+
+        res.status(200).json(mysteryMovies);
+    } catch (error) {
+        console.error("Error fetching mystery movies:", error);
+        res.status(500).json({ message: 'Error fetching mystery movies.' });
+    }
+});
+
+app.get('/api/romance-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Romance" ใน Genre
+        const romanceMovies = await Movies.find({
+            Genre: { $regex: 'Romance', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (romanceMovies.length === 0) {
+            return res.status(404).json({ message: "No romance movies found." });
+        }
+
+        res.status(200).json(romanceMovies);
+    } catch (error) {
+        console.error("Error fetching romance movies:", error);
+        res.status(500).json({ message: 'Error fetching romance movies.' });
+    }
+});
+
+app.get('/api/comedy-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Comedy" ใน Genre
+        const comedyMovies = await Movies.find({
+            Genre: { $regex: 'Comedy', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (comedyMovies.length === 0) {
+            return res.status(404).json({ message: "No comedy movies found." });
+        }
+
+        res.status(200).json(comedyMovies);
+    } catch (error) {
+        console.error("Error fetching comedy movies:", error);
+        res.status(500).json({ message: 'Error fetching comedy movies.' });
+    }
+});
+
+app.get('/api/thriller-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Thriller" ใน Genre
+        const thrillerMovies = await Movies.find({
+            Genre: { $regex: 'Thriller', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (thrillerMovies.length === 0) {
+            return res.status(404).json({ message: "No thriller movies found." });
+        }
+
+        res.status(200).json(thrillerMovies);
+    } catch (error) {
+        console.error("Error fetching thriller movies:", error);
+        res.status(500).json({ message: 'Error fetching thriller movies.' });
+    }
+});
+
+app.get('/api/horror-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Horror" ใน Genre
+        const horrorMovies = await Movies.find({
+            Genre: { $regex: 'Horror', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (horrorMovies.length === 0) {
+            return res.status(404).json({ message: "No horror movies found." });
+        }
+
+        res.status(200).json(horrorMovies);
+    } catch (error) {
+        console.error("Error fetching horror movies:", error);
+        res.status(500).json({ message: 'Error fetching horror movies.' });
+    }
+});
+
+app.get('/api/drama-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Drama" ใน Genre
+        const dramaMovies = await Movies.find({
+            Genre: { $regex: 'Drama', $options: 'i' }
+        }).limit(10); // จำกัดแค่ 10 รายการ
+
+        if (dramaMovies.length === 0) {
+            return res.status(404).json({ message: "No drama movies found." });
+        }
+
+        res.status(200).json(dramaMovies);
+    } catch (error) {
+        console.error("Error fetching drama movies:", error);
+        res.status(500).json({ message: 'Error fetching drama movies.' });
+    }
+});
+
+app.get('/api/fantasy-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Fantasy" ใน Genre
+        const fantasyMovies = await Movies.find({
+            Genre: { $regex: 'Fantasy', $options: 'i' }
+        }).limit(10); // จำกัดให้แสดง 10 รายการ
+
+        if (fantasyMovies.length === 0) {
+            return res.status(404).json({ message: "No fantasy movies found." });
+        }
+
+        res.status(200).json(fantasyMovies);
+    } catch (error) {
+        console.error("Error fetching fantasy movies:", error);
+        res.status(500).json({ message: 'Error fetching fantasy movies.' });
+    }
+});
+
+app.get('/api/action-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Action" ใน Genre
+        const actionMovies = await Movies.find({
+            Genre: { $regex: 'Action', $options: 'i' }
+        }).limit(10); // จำกัดให้แสดง 10 รายการ
+
+        if (actionMovies.length === 0) {
+            return res.status(404).json({ message: "No action movies found." });
+        }
+
+        res.status(200).json(actionMovies);
+    } catch (error) {
+        console.error("Error fetching action movies:", error);
+        res.status(500).json({ message: 'Error fetching action movies.' });
+    }
+});
+
+app.get('/api/sci-fi-movies', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มี "Sci-Fi" ใน Genre
+        const sciFiMovies = await Movies.find({
+            Genre: { $regex: 'Sci-Fi', $options: 'i' }
+        }).limit(10); // จำกัดให้แสดง 10 รายการ
+
+        if (sciFiMovies.length === 0) {
+            return res.status(404).json({ message: "No sci-fi movies found." });
+        }
+
+        res.status(200).json(sciFiMovies);
+    } catch (error) {
+        console.error("Error fetching sci-fi movies:", error);
+        res.status(500).json({ message: 'Error fetching sci-fi movies.' });
+    }
+});
 
 
 // กรณีไม่มี API ที่ตรง ให้เสิร์ฟไฟล์ movie-detail.html

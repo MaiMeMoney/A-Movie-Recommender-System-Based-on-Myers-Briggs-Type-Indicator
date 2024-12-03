@@ -240,6 +240,691 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชันเพื่อดึงข้อมูลหนังจาก API
+fetch('http://localhost:5001/api/crime-movies')
+.then(response => {
+    if (!response.ok) {
+        throw new Error('Failed to fetch crime movies');
+    }
+    return response.json();
+})
+.then(movies => {
+    // แสดงหนังที่ได้ใน section crime
+    const crimeSection = document.querySelector('.crime .movie-list');
+    crimeSection.innerHTML = '';  // ลบเนื้อหาที่มีอยู่ก่อน
+
+    movies.forEach(movie => {
+        const movieItem = document.createElement('div');
+        movieItem.classList.add('movie-item');
+
+        const movieLink = document.createElement('a');
+        movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+
+        const movieImage = document.createElement('img');
+        movieImage.src = movie.Poster_Link || 'placeholder.png';
+        movieImage.alt = movie.Series_Title;
+
+        movieLink.appendChild(movieImage);
+        movieItem.appendChild(movieLink);
+        crimeSection.appendChild(movieItem);
+    });
+})
+.catch(error => {
+    console.error('Error fetching crime movies:', error);
+});
+
+});
+// ฟังก์ชั่นในการเลื่อนเลื่อน (สำหรับ slider)
+function scrollLeft(section) {
+    const container = document.querySelector(`#${section} .crime .movie-list`);
+    container.scrollBy({ left: -200, behavior: 'smooth' });
+}
+
+function scrollRight(section) {
+    const container = document.querySelector(`#${section} .crime .movie-list`);
+    container.scrollBy({ left: 200, behavior: 'smooth' });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    // ฟังก์ชันเพื่อดึงข้อมูลหนังจาก API (sport)
+    fetch('http://localhost:5001/api/sport-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch sport movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const sportMovieList = document.querySelector('.sport .movie-list'); // ใช้ querySelector แทน getElementById
+            sportMovieList.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                sportMovieList.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching sport movies:', error);
+            const sportMovieList = document.querySelector('.sport .movie-list'); // ใช้ querySelector แทน getElementById
+            sportMovieList.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/musical-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch musical movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const musicalSection = document.querySelector('.musical .movie-list');
+            musicalSection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                musicalSection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching musical movies:', error);
+            const musicalSection = document.querySelector('.musical .movie-list');
+            musicalSection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/family-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch family movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const familySection = document.querySelector('.family .movie-list');
+            familySection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                familySection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching family movies:', error);
+            const familySection = document.querySelector('.family .movie-list');
+            familySection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/biography-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch biography movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const biographySection = document.querySelector('.biography .movie-list');
+            biographySection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                biographySection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching biography movies:', error);
+            const biographySection = document.querySelector('.biography .movie-list');
+            biographySection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/animation-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch animation movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const animationSection = document.querySelector('.animation .movie-list');
+            animationSection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                animationSection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching animation movies:', error);
+            const animationSection = document.querySelector('.animation .movie-list');
+            animationSection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/adventure-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch adventure movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const adventureSection = document.querySelector('.adventure .movie-list');
+            adventureSection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                adventureSection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching adventure movies:', error);
+            const adventureSection = document.querySelector('.adventure .movie-list');
+            adventureSection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/history-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch history movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const historySection = document.querySelector('.history .movie-list');
+            historySection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                historySection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching history movies:', error);
+            const historySection = document.querySelector('.history .movie-list');
+            historySection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/mystery-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch mystery movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const mysterySection = document.querySelector('.mystery .movie-list');
+            mysterySection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                mysterySection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching mystery movies:', error);
+            const mysterySection = document.querySelector('.mystery .movie-list');
+            mysterySection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/romance-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch romance movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const romanceSection = document.querySelector('.romance .movie-list');
+            romanceSection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                romanceSection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching romance movies:', error);
+            const romanceSection = document.querySelector('.romance .movie-list');
+            romanceSection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/comedy-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch comedy movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const comedySection = document.querySelector('.comedy .movie-list');
+            comedySection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                comedySection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching comedy movies:', error);
+            const comedySection = document.querySelector('.comedy .movie-list');
+            comedySection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/thriller-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch thriller movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const thrillerSection = document.querySelector('.thriller .movie-list');
+            thrillerSection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                thrillerSection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching thriller movies:', error);
+            const thrillerSection = document.querySelector('.thriller .movie-list');
+            thrillerSection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/horror-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch horror movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const horrorSection = document.querySelector('.horror .movie-list');
+            horrorSection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                horrorSection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching horror movies:', error);
+            const horrorSection = document.querySelector('.horror .movie-list');
+            horrorSection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/drama-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch drama movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const dramaSection = document.querySelector('.drama .movie-list');
+            dramaSection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                dramaSection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching drama movies:', error);
+            const dramaSection = document.querySelector('.drama .movie-list');
+            dramaSection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/fantasy-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch fantasy movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const fantasySection = document.querySelector('.fantasy .movie-list');
+            fantasySection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                fantasySection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching fantasy movies:', error);
+            const fantasySection = document.querySelector('.fantasy .movie-list');
+            fantasySection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/action-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch action movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const actionSection = document.querySelector('.action .movie-list');
+            actionSection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                actionSection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching action movies:', error);
+            const actionSection = document.querySelector('.action .movie-list');
+            actionSection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // ฟังก์ชั่นเพื่อดึงข้อมูลหนังจาก API
+    fetch('http://localhost:5001/api/sci-fi-movies')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch sci-fi movies');
+            }
+            return response.json(); // แปลงข้อมูลจาก JSON
+        })
+        .then(movies => {
+            const sciFiSection = document.querySelector('.sci-fi .movie-list');
+            sciFiSection.innerHTML = '';  // เคลียร์ข้อมูลเก่า
+
+            // สำหรับทุกหนังในข้อมูลที่ได้รับ
+            movies.forEach(movie => {
+                const movieItem = document.createElement('div');
+                movieItem.classList.add('movie-item');
+                
+                // สร้างลิงก์ไปยังหน้า movie-details.html
+                const movieLink = document.createElement('a');
+                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
+                
+                // สร้างภาพโปสเตอร์หนัง
+                const movieImage = document.createElement('img');
+                movieImage.src = movie.Poster_Link || 'placeholder.png';  // ใช้ 'placeholder.png' หากไม่มี Poster_Link
+                movieImage.alt = movie.Series_Title;
+                
+                movieLink.appendChild(movieImage);
+                movieItem.appendChild(movieLink);
+                sciFiSection.appendChild(movieItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching sci-fi movies:', error);
+            const sciFiSection = document.querySelector('.sci-fi .movie-list');
+            sciFiSection.innerHTML = '<p>Error loading movies.</p>';  // แสดงข้อความ error หากดึงข้อมูลไม่ได้
+        });
+});
+
+
+function scrollLeft(sectionClass) {
+    const movieList = document.querySelector(`.${sectionClass} .movie-list`);
+    if (movieList) {
+        movieList.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+}
+
+function scrollRight(sectionClass) {
+    const movieList = document.querySelector(`.${sectionClass} .movie-list`);
+    if (movieList) {
+        movieList.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+}
+
 
 // Route สำหรับ mainpage.html พร้อม session validation
 app.get('/mainpage.html', validateSession, (req, res) => {
