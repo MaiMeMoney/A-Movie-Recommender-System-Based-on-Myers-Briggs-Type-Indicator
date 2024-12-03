@@ -155,20 +155,20 @@ main {
 }
 
 .movie-item {
-    width: 282px;
-    height: 435px;
+    width: 282px;             /* ขนาดของโปสเตอร์แต่ละตัว */
+    height: 435px;            /* ความสูงของโปสเตอร์ */
     background-color: #fff;
-    border-radius: 10px; 
+    border-radius: 10px;
     overflow: hidden;
-    flex-shrink: 0;
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* เพิ่มการเปลี่ยนแปลงสำหรับเอฟเฟกต์ hover */
+    flex-shrink: 0;           /* ป้องกันไม่ให้ขนาดย่อเมื่อมีการเลื่อน */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* การจัดการภาพ */
 .movie-item img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* รักษาสัดส่วน */
+    object-fit: cover;        /* รักษาสัดส่วนของภาพ */
 }
 
 
@@ -177,12 +177,26 @@ main {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* เพิ่มเงา */
 }
 
-.movie-list {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    margin-top: 20px;
-    scrollbar-width: none; /* สำหรับ Firefox */
+.movie-suggestions {
+    margin-bottom: 30px;
+    overflow: hidden;  /* ป้องกันการแสดง scroll แนวตั้ง */
+  }
+  
+  .movie-suggestions h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #f4a261;
+  }
+
+  .movie-list {
+    display: flex;            /* จัดการให้รายการแสดงเป็นแถวเดียว */
+    gap: 10px;                /* ช่องว่างระหว่างไอเท็ม */
+    overflow-x: auto;         /* เปิดการเลื่อนในแนวนอน */
+    flex-wrap: nowrap;        /* ห้ามให้รายการไปขึ้นแถวใหม่ */
+    padding: 10px 0;          /* ให้ช่องว่างด้านบนและล่าง */
+    scrollbar-width: none;    /* สำหรับ Firefox */
+    scroll-behavior: smooth;  /* เพิ่มการเลื่อนที่เรียบ */
+    flex-direction: row;
 }
 
 .movie-list::-webkit-scrollbar {
@@ -246,11 +260,7 @@ h2 a {
     position: relative;
 }
 
-.movie-list {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-}
+
 
 
 
@@ -369,8 +379,11 @@ h2 a {
 
 /* สำหรับอุปกรณ์ที่มีขนาดหน้าจอเล็ก */
 @media (max-width: 768px) {
-    #search-results .movie-item {
-        width: 45%; /* ใช้ 45% ของความกว้างหน้าจอสำหรับ 2 คอลัมน์ */
+    .movie-list {
+        flex-direction: column; /* เปลี่ยนให้เป็นแนวตั้งบนหน้าจอเล็ก */
+        gap: 15px;               /* เพิ่มระยะห่างระหว่างภาพยนตร์ */
+        width: 100%;             /* ความกว้างเต็มจอ */
+        overflow-x: visible;     /* ปิด scroll bar */
     }
 }
 
@@ -480,11 +493,4 @@ h2 a {
     }
 }
 
-@media (max-width: 768px) {
-    .movie-list {
-        flex-direction: column; /* เปลี่ยนให้เป็นแนวตั้งบนหน้าจอเล็ก */
-        gap: 15px; /* เพิ่มระยะห่างระหว่างภาพยนตร์ */
-        width: 100%; /* ความกว้างเต็มจอ */
-        overflow-x: visible; /* ปิด scroll bar */
-    }
-}
+

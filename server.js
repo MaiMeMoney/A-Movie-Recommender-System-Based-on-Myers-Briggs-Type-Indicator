@@ -765,6 +765,22 @@ app.delete('/api/delete-movie/:movieId', async (req, res) => {
     }
 });
 
+// สร้าง route เพื่อดึงข้อมูลหนังที่มี IMDB_Rating >= 8.0
+app.get('/api/get-movies-high-rating', async (req, res) => {
+    try {
+        // ค้นหาหนังที่มีคะแนน IMDB_Rating >= 8.0
+        const movies = await db.collection('movies_list').find({ IMDB_Rating: { $gte: 8.0 } })
+            .limit(8)  // จำกัดแค่ 8 รายการ
+            .toArray(); // เปลี่ยนผลลัพธ์ให้เป็น array
+        
+        res.json(movies);  // ส่งผลลัพธ์กลับไปยัง client
+    } catch (error) {
+        console.error('Error fetching high-rated movies:', error);
+        res.status(500).send('Error fetching movies');
+    }
+});
+
+
 // กรณีไม่มี API ที่ตรง ให้เสิร์ฟไฟล์ movie-detail.html
 app.get('/page/movie-details/movie-details.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'page', 'movie-details', 'movie-detail.html'));

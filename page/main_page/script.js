@@ -198,91 +198,38 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Fetch movies with IMDB Rating >= 8.0
+        const response = await fetch('http://localhost:5001/api/get-movies-high-rating');
+        const movies = await response.json();
 
-// document.addEventListener('DOMContentLoaded', function () {
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Sci-Fi
-//     document.getElementById('see-more-sci-fi').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=sci-fi';
-//     });
+        // Select the container where the movies will be displayed
+        const movieList = document.getElementById('movie-list');
+        movieList.innerHTML = ''; // Clear any existing content
 
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Action
-//     document.getElementById('see-more-action').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=action';
-//     });
+        if (movies.length === 0) {
+            movieList.innerHTML = `<p style="color: #f4a261; text-align: center;">No high-rated movies found.</p>`;
+            return;
+        }
 
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Romance
-//     document.getElementById('see-more-romance').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=romance';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Thriller
-//     document.getElementById('see-more-thriller').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=thriller';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Fantasy
-//     document.getElementById('see-more-fantasy').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=fantasy';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Mystery
-//     document.getElementById('see-more-mystery').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=mystery';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ History
-//     document.getElementById('see-more-history').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=history';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Adventure
-//     document.getElementById('see-more-adventure').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=adventure';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Animation
-//     document.getElementById('see-more-animation').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=animation';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Biography
-//     document.getElementById('see-more-biography').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=biography';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Family
-//     document.getElementById('see-more-family').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=family';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Crime
-//     document.getElementById('see-more-crime').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=crime';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Sport
-//     document.getElementById('see-more-sport').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=sport';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Musical
-//     document.getElementById('see-more-musical').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=musical';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Horror
-//     document.getElementById('see-more-horror').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=horror';
-//     });
-
-//     // กำหนดการทำงานเมื่อคลิกปุ่ม See More สำหรับ Drama
-//     document.getElementById('see-more-drama').addEventListener('click', function () {
-//         window.location.href = '/page/main_page/search-results.html?category=genre&query=drama';
-//     });
-// });
-
-
-
+        // Loop through the movies and add them to the DOM
+        movies.forEach((movie) => {
+            const movieItem = document.createElement('div');
+            movieItem.className = 'movie-item';
+            movieItem.innerHTML = `
+                <a href="/page/movie-details/movie-details.html?movieId=${movie._id}">
+                    <img src="${movie.Poster_Link}" alt="${movie.Series_Title}" title="${movie.Series_Title} (${movie.Released_Year})">
+                </a>
+            `;
+            movieList.appendChild(movieItem);
+        });
+    } catch (error) {
+        console.error('Error fetching high-rated movies:', error);
+        const movieList = document.getElementById('movie-list');
+        movieList.innerHTML = `<p style="color: #f4a261; text-align: center;">Failed to load movies. Please try again later.</p>`;
+    }
+});
 
 
 // Route สำหรับ mainpage.html พร้อม session validation
