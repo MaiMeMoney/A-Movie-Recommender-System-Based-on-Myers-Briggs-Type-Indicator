@@ -526,8 +526,6 @@ h2 a {
     cursor: pointer;
 }
 
-
-
 .movie-suggestions .slider-container::-webkit-scrollbar {
     display: none; /* ซ่อน scrollbar ใน Chrome, Safari */
 }

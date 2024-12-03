@@ -214,66 +214,66 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
 // document.addEventListener('DOMContentLoaded', () => {
 //     fetch('http://127.0.0.1:5001/movies/suggestions')
-//     .then(response => response.json())
-//     .then(data => {
-//         console.log(data);
+//         .then(response => response.json())
+//         .then(data => {
+//             const movieListContainer = document.querySelector('.movie-suggestions .slider-container');
+            
+//             data.forEach(movie => {
+//                 const movieElement = document.createElement('div');
+//                 movieElement.classList.add('movie-item');
+                
+//                 // สร้างลิงก์ที่เชื่อมไปยังหน้า movie-details
+//                 const movieLink = document.createElement('a');
+//                 movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;  // ใช้ _id ของ MongoDB เป็น movieId
+//                 movieLink.target = '_blank';  // เปิดในแท็บใหม่
 
-//         // แสดงแค่ 8 รายการ
-//         const movieSuggestionsContainer = document.querySelector('.movie-suggestions .slider-container');
-//         const moviesToDisplay = data.slice(0, 8); // จำกัดแค่ 8 รายการ
+//                 // สร้างโพสเตอร์
+//                 const posterImg = document.createElement('img');
+//                 posterImg.src = movie.Poster_Link;
+//                 posterImg.alt = movie.Series_Title;
 
-//         moviesToDisplay.forEach(movie => {
-//             const movieElement = document.createElement('div');
-//             movieElement.classList.add('movie-item');
-//             movieElement.innerHTML = `
-//                 <img src="${movie.Poster_Link}" alt="${movie.Series_Title}">
-//                 <h3>${movie.Series_Title}</h3>
-//                 <p>IMDB Rating: ${movie.IMDB_Rating}</p>
-//             `;
-//             movieSuggestionsContainer.appendChild(movieElement);
+//                 // เพิ่มภาพโพสเตอร์ไปยังลิงก์
+//                 movieLink.appendChild(posterImg);
+                
+//                 // เพิ่มลิงก์ของหนังไปยัง container
+//                 movieElement.appendChild(movieLink);
+//                 movieListContainer.appendChild(movieElement);
+//             });
+//         })
+//         .catch(error => {
+//             console.error('Error fetching movies:', error);
 //         });
-//     })
-//     .catch(error => {
-//         console.error("Error loading movie suggestions:", error);
-//     });
 // });
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch('http://127.0.0.1:5001/movies/suggestions')
-        .then(response => response.json())
-        .then(data => {
-            const movieListContainer = document.querySelector('.movie-suggestions .slider-container');
+    .then(response => response.json())
+    .then(data => {
+        const movieList = document.querySelector('.movie-suggestions .slider-container');
+        data.forEach(movie => {
+            const movieElement = document.createElement('div');
+            movieElement.classList.add('movie-item');
             
-            data.forEach(movie => {
-                const movieElement = document.createElement('div');
-                movieElement.classList.add('movie-item');
-                
-                // สร้างลิงก์ที่เชื่อมไปยังหน้า movie-details
-                const movieLink = document.createElement('a');
-                movieLink.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;  // ใช้ _id ของ MongoDB เป็น movieId
-                movieLink.target = '_blank';  // เปิดในแท็บใหม่
-
-                // สร้างโพสเตอร์
-                const posterImg = document.createElement('img');
-                posterImg.src = movie.Poster_Link;
-                posterImg.alt = movie.Series_Title;
-
-                // เพิ่มภาพโพสเตอร์ไปยังลิงก์
-                movieLink.appendChild(posterImg);
-                
-                // เพิ่มลิงก์ของหนังไปยัง container
-                movieElement.appendChild(movieLink);
-                movieListContainer.appendChild(movieElement);
+            // สร้างโพสเตอร์และใส่คลาสให้เหมาะสม
+            const poster = document.createElement('img');
+            poster.src = movie.Poster_Link;
+            poster.alt = movie.Series_Title;
+            
+            // ใส่ event listener ให้คลิกที่โพสเตอร์
+            poster.addEventListener('click', () => {
+                // นำทางไปยังหน้ารายละเอียดของหนัง
+                window.location.href = `/page/movie-details/movie-details.html?movieId=${movie._id}`;
             });
-        })
-        .catch(error => {
-            console.error('Error fetching movies:', error);
+            
+            movieElement.appendChild(poster);
+            movieList.appendChild(movieElement);
         });
+    })
+    .catch(error => console.error('Error fetching movies:', error));
 });
-
-
 
 
 
