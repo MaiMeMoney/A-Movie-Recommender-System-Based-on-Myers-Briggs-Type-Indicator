@@ -123,23 +123,45 @@ app.post('/login', [
         await client.connect();
         const database = client.db('user');
         const collection = database.collection('users');
+
+        // ค้นหาผู้ใช้จากฐานข้อมูล
         const user = await collection.findOne({ username });
 
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+        // ตรวจสอบว่าผู้ใช้มีอยู่หรือไม่
+        if (!user) {
+            return res.status(404).json({ message: '❌ User not found' });
+        }
+
+        // ตรวจสอบสถานะ banned
+        if (user.banned) {
+            return res.status(403).json({ message: '❌ Your account has been banned. Please contact support.' });
+        }
+
+        // ตรวจสอบรหัสผ่าน
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
             return res.status(401).json({ message: '❌ Invalid username or password' });
         }
 
-        // สร้าง JWT และส่งไปยัง Client
-        const token = jwt.sign({ id: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
+        // สร้าง JWT Token
+        const token = jwt.sign(
+            { id: user._id, username: user.username },
+            secretKey,
+            { expiresIn: '1h' }
+        );
 
-        res.status(200).json({ message: '✅ Login successful!', token });
+        return res.status(200).json({
+            message: '✅ Login successful!',
+            token,
+        });
     } catch (error) {
         console.error('❌ Error during login:', error);
-        res.status(500).json({ message: '❌ Internal server error' });
+        return res.status(500).json({ message: '❌ Internal server error' });
     } finally {
         await client.close();
     }
 });
+
 
 
 // ฟังก์ชันสำหรับการดึงข้อมูลผู้ใช้

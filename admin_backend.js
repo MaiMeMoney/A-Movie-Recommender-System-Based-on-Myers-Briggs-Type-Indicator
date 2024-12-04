@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
+const multer = require('multer');
+
 
 const app = express();
 app.use(express.json());
@@ -16,7 +18,7 @@ app.use(session({
 
 // เพิ่ม middleware CORS
 app.use(cors({
-    origin: 'http://127.0.0.1:5500', // ระบุ origin ที่ต้องการอนุญาต
+    origin: ['http://127.0.0.1:5500', 'http://localhost:5001'], // เพิ่ม origin ที่อนุญาต
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
@@ -25,6 +27,7 @@ app.use(cors({
 app.use('/page/admin_dashboard/dashboard_statistics', express.static(path.join(__dirname, 'page/admin_dashboard/dashboard_statistics')));
 app.use('/mainpage.html', express.static(path.join(__dirname, 'page/main_page')));
 app.use('/page/login_page', express.static(path.join(__dirname, 'page/login_page')));
+app.use('/uploads', express.static('uploads'));
 
 // MongoDB Connections
 const userDB = mongoose.createConnection('mongodb+srv://bankweerpt:ohMpYPUHkNoz0Ba3@movie-mbti.k3yt3.mongodb.net/user?retryWrites=true&w=majority', {
@@ -58,6 +61,7 @@ const userSchema = new mongoose.Schema({
     lastname: { type: String },
     email: { type: String },
     profileImage: { type: String },
+    banned: { type: Boolean, default: false },
 });
 const User = userDB.model('User', userSchema, 'users');
 
@@ -68,6 +72,23 @@ const mbtiSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
 });
 const MBTI = moviesListDB.model('MBTI', mbtiSchema, 'mbti_list');
+
+const storage = multer.diskStorage({
+    destination: 'uploads/',
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+const upload = multer({
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /jpeg|jpg|png/;
+        const valid = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        cb(null, valid);
+    }
+});
 
 // Middleware: ตรวจสอบ Role Admin
 function adminAuth(req, res, next) {
@@ -115,7 +136,31 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.post('/api/admin/ban/:id', async (req, res) => {
+    const userId = req.params.id;
 
+    try {
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Toggle สถานะ banned
+        const newStatus = !user.banned;
+        user.banned = newStatus;
+        await user.save();
+
+        return res.status(200).json({
+            message: newStatus
+                ? '✅ User has been banned successfully'
+                : '✅ User has been unbanned successfully',
+        });
+    } catch (error) {
+        console.error('Error toggling user ban status:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 // API: ตรวจสอบ Role
 app.get('/api/check-role', (req, res) => {
@@ -171,14 +216,20 @@ app.get('/api/search-stats', async (req, res) => {
             { $sort: { count: -1 } },
             { $limit: 10 }
         ]);
+        
+        if (!stats || stats.length === 0) {
+            return res.status(200).json([]); // ส่งarray ว่างถ้าไม่มีข้อมูล
+        }
+        
         res.status(200).json(stats);
     } catch (error) {
         console.error("Error fetching search stats:", error);
-        res.status(500).json({ message: "Failed to fetch search stats" });
+        res.status(500).json({ 
+            message: "Failed to fetch search stats",
+            error: error.message 
+        });
     }
 });
-
-
 
 // API: ดึงข้อมูลผู้ใช้ทั้งหมด
 app.get('/api/users', async (req, res) => {
@@ -530,6 +581,102 @@ app.post('/api/log-search', async (req, res) => {
     } catch (error) {
         console.error('Error logging search:', error);
         res.status(500).json({ message: 'Failed to log search' });
+    }
+});
+
+// เพิ่ม API endpoints ใหม่สำหรับจัดการ users
+// แก้ไข API endpoint นี้
+app.get('/api/admin/users', adminAuth, async (req, res) => { // ลบ adminAuth middleware ออกก่อนเพื่อทดสอบ
+    try {
+        // ดึงข้อมูล users ทั้งหมด
+        const users = await User.find({}).lean();  // เพิ่ม .lean() เพื่อให้ได้ plain JavaScript object
+        
+        // ดึงข้อมูล MBTI ทั้งหมด
+        const mbtiData = await MBTI.find({}).lean();
+        
+        // สร้าง map ของ MBTI types ตาม username
+        const mbtiMap = {};
+        mbtiData.forEach(item => {
+            mbtiMap[item.username] = item.mbti_type;
+        });
+        
+        // รวมข้อมูล user และ MBTI
+        const usersWithMBTI = users.map(user => ({
+            ...user,  // ไม่ต้องใช้ toObject() เพราะใช้ lean() แล้ว
+            mbti_type: mbtiMap[user.username] || null
+        }));
+        
+        console.log('Users data:', usersWithMBTI); // เพิ่ม log เพื่อดูข้อมูล
+        res.status(200).json(usersWithMBTI);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ message: 'Failed to fetch users', error: error.message });
+    }
+});
+
+app.put('/api/admin/users/:username', adminAuth, async (req, res) => {
+    try {
+        const { username } = req.params;
+        const { email, firstname, lastname, role, mbti_type } = req.body;
+
+        // อัพเดทข้อมูลใน users collection
+        const updatedUser = await User.findOneAndUpdate(
+            { username },
+            { 
+                email,
+                firstname,
+                lastname,
+                role: parseInt(role)
+            },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // อัพเดทหรือสร้าง MBTI type
+        if (mbti_type) {
+            await MBTI.findOneAndUpdate(
+                { username },
+                { 
+                    username,
+                    mbti_type,
+                    createdAt: new Date()
+                },
+                { upsert: true, new: true }
+            );
+        }
+
+        res.status(200).json({ message: 'User updated successfully' });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ message: 'Failed to update user' });
+    }
+});
+
+app.post('/api/admin/user/upload-image', upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ message: 'ไม่พบไฟล์รูปภาพ' });
+        
+        const userId = req.body.userId;
+        const imageUrl = `/uploads/${req.file.filename}`;
+        
+        await User.findByIdAndUpdate(userId, { profileImage: imageUrl });
+        res.json({ imageUrl });
+    } catch (error) {
+        res.status(500).json({ message: 'เกิดข้อผิดพลาดในการอัพโหลด' });
+    }
+});
+
+app.post('/api/admin/user/ban/:userId', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        user.banned = !user.banned;
+        await user.save();
+        res.json({ message: `${user.banned ? 'ระงับ' : 'ยกเลิกการระงับ'}ผู้ใช้สำเร็จ` });
+    } catch (error) {
+        res.status(500).json({ message: 'เกิดข้อผิดพลาดในการระงับผู้ใช้' });
     }
 });
 

@@ -6,6 +6,11 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" type="text/css" href="/page/admin_dashboard/dashboard_statistics/admin-dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="/page/admin_dashboard/dashboard_statistics/admin-dashboard.js" defer></script>    
+    
 </head>
 <body>
     <header>
@@ -25,7 +30,7 @@
             </div>
             <nav>
                 <ul>
-                    <li><button class="menu-btn">User account management</button></li>
+                    <button id="user-account-button" class="menu-btn">User account management</button>
                     <li><button class="menu-btn">Movie management</button></li>
                 </ul>
             </nav>
@@ -81,17 +86,9 @@
                 </div>
 
 
-                <!-- User Management Container -->
-                <div id="user-management" class="analytics-container" style="display: none;">
-                    <h3>User Management</h3>
-                    <div class="user-management-content">
-                        <!-- User management content will be loaded here -->
-                    </div>
+                <div id="user-management" class="analytics-container user-management-content" style="display: none;">
                 </div>
-            </section>
-        </main>
-    </div>
-
+        
     <script src="/page/admin_dashboard/dashboard_statistics/admin-dashboard.js"></script>
 </body>
 </html>
