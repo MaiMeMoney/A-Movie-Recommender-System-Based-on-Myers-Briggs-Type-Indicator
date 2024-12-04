@@ -1,4 +1,3 @@
-// login_user.js
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -7,19 +6,23 @@ const { MongoClient } = require('mongodb');
 const { body, validationResult } = require('express-validator');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
-const session = require('express-session');
+const jwt = require('jsonwebtoken');
 
-// ข้อมูลการเชื่อมต่อ MongoDB
+// MongoDB Connection
 const uri = 'mongodb+srv://bankweerpt:ohMpYPUHkNoz0Ba3@movie-mbti.k3yt3.mongodb.net/?retryWrites=true&w=majority';
 
+// App Initialization
 const app = express();
 app.use(express.json({ limit: '10mb' }));
-app.use(cors());
+app.use(cors({ origin: ['http://localhost:3000'], credentials: true })); // Update allowed origins as necessary
 app.use(helmet());
 app.use('/uploads', express.static('uploads'));
 
-// ตั้งค่า Multer สำหรับการจัดเก็บไฟล์รูปภาพ
+// JWT Configuration
+const secretKey = "your_secret_key";
+const refreshTokens = [];
+
+// Multer Setup for File Uploads
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
@@ -30,13 +33,12 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-    storage: storage,
+    storage,
     limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         const allowedTypes = /jpeg|jpg|png/;
         const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
         const mimetype = allowedTypes.test(file.mimetype);
-
         if (extname && mimetype) {
             cb(null, true);
         } else {
@@ -45,7 +47,21 @@ const upload = multer({
     }
 });
 
-// ฟังก์ชันสำหรับการสมัครสมาชิก
+// Middleware for Authentication
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (!token) return res.status(401).json({ message: '❌ Token is required' });
+
+    jwt.verify(token, secretKey, (err, user) => {
+        if (err) return res.status(403).json({ message: '❌ Invalid or expired token' });
+        req.user = user;
+        next();
+    });
+}
+
+// Routes
+// Register Route
 app.post('/register', 
     [
         body('username').trim().escape(),
@@ -56,34 +72,28 @@ app.post('/register',
     ],
     async (req, res) => {
         const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
         const { username, firstname, lastname, email, password } = req.body;
         const client = new MongoClient(uri);
 
         try {
             await client.connect();
-            const database = client.db('user');
-            const collection = database.collection('users');
+            const db = client.db('user');
+            const users = db.collection('users');
 
-            const existingUser = await collection.findOne({
-                $or: [{ username: username }, { email: email }]
-            });
-            if (existingUser) {
-                return res.status(400).send('❌ Username or Email already exists');
-            }
+            const existingUser = await users.findOne({ $or: [{ username }, { email }] });
+            if (existingUser) return res.status(400).send('❌ Username or Email already exists');
 
             const hashedPassword = await bcrypt.hash(password, 10);
-            await collection.insertOne({
-                username, 
-                firstname, 
-                lastname, 
-                email, 
+            await users.insertOne({
+                username,
+                firstname,
+                lastname,
+                email,
                 password: hashedPassword,
-                role : 0,
-                profileImage: ''
+                profileImage: '',
+                role: 0
             });
 
             res.status(201).send('✅ Registration successful!');
@@ -96,29 +106,24 @@ app.post('/register',
     }
 );
 
-app.use(session({
-    secret: 'yourSecretKey', // ใส่ค่า secret ที่เหมาะสม
-    resave: false, // ลดการบันทึก session ซ้ำ
-    saveUninitialized: true, // บันทึก session ใหม่ที่ยังไม่ได้ถูกแก้ไข
-    cookie: { secure: false } // เปลี่ยนเป็น true หากใช้ HTTPS
-}));
+// Login Route
+app.post('/login', 
+    [
+        body('username').trim().escape(),
+        body('password').trim().escape()
+    ], 
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-// ฟังก์ชันสำหรับการล็อกอิน
-const jwt = require('jsonwebtoken');
-const secretKey = "your_secret_key"; // ใช้คีย์ลับที่ปลอดภัย
+        const { username, password } = req.body;
+        const client = new MongoClient(uri);
 
-app.post('/login', [
-    body('username').trim().escape(),
-    body('password').trim().escape()
-], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { username, password } = req.body;
-    const client = new MongoClient(uri);
-
+        try {
+            await client.connect();
+            const db = client.db('user');
+            const users = db.collection('users');
+            const user = await users.findOne({ username });
     try {
         await client.connect();
         const database = client.db('user');
@@ -127,7 +132,7 @@ app.post('/login', [
         // ค้นหาผู้ใช้จากฐานข้อมูล
         const user = await collection.findOne({ username });
 
-        // ตรวจสอบว่าผู้ใช้มีอยู่หรือไม่
+            // ตรวจสอบว่าผู้ใช้มีอยู่หรือไม่
         if (!user) {
             return res.status(404).json({ message: '❌ User not found' });
         }
@@ -140,52 +145,58 @@ app.post('/login', [
         // ตรวจสอบรหัสผ่าน
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ message: '❌ Invalid username or password' });
+                return res.status(401).json({ message: '❌ Invalid username or password' });
+            }
+
+            const token = jwt.sign({ id: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
+            const refreshToken = jwt.sign({ id: user._id, username: user.username }, secretKey);
+            refreshTokens.push(refreshToken);
+
+            res.status(200).json({ message: '✅ Login successful!', token, refreshToken });
+        } catch (error) {
+            console.error('❌ Error during login:', error);
+            res.status(500).json({ message: '❌ Internal server error' });
+        } finally {
+            await client.close();
         }
-
-        // สร้าง JWT Token
-        const token = jwt.sign(
-            { id: user._id, username: user.username },
-            secretKey,
-            { expiresIn: '1h' }
-        );
-
-        return res.status(200).json({
-            message: '✅ Login successful!',
-            token,
-        });
-    } catch (error) {
-        console.error('❌ Error during login:', error);
-        return res.status(500).json({ message: '❌ Internal server error' });
-    } finally {
-        await client.close();
     }
+);
+
+// Refresh Token Route
+app.post('/refresh-token', (req, res) => {
+    const { token } = req.body;
+    if (!token || !refreshTokens.includes(token)) {
+        return res.status(403).json({ message: '❌ Invalid Refresh Token' });
+    }
+
+    jwt.verify(token, secretKey, (err, user) => {
+        if (err) return res.status(403).json({ message: '❌ Invalid or expired Refresh Token' });
+
+        const newAccessToken = jwt.sign({ id: user.id, username: user.username }, secretKey, { expiresIn: '1h' });
+        res.json({ token: newAccessToken });
+    });
 });
 
-
-
-// ฟังก์ชันสำหรับการดึงข้อมูลผู้ใช้
-app.get('/user/:username', async (req, res) => {
+// Get User Data
+app.get('/user/:username', authenticateToken, async (req, res) => {
     const { username } = req.params;
     const client = new MongoClient(uri);
 
     try {
         await client.connect();
-        const database = client.db('user');
-        const collection = database.collection('users');
-        const user = await collection.findOne({ username });
+        const db = client.db('user');
+        const users = db.collection('users');
+        const user = await users.findOne({ username });
 
-        if (user) {
-            res.status(200).json({
-                username: user.username,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                profileImage: user.profileImage || 'https://www.gravatar.com/avatar/?d=mp&f=y'  // URL รูปพื้นฐาน
-            });
-        } else {
-            res.status(404).send('❌ User not found');
-        }
+        if (!user) return res.status(404).send('❌ User not found');
+
+        res.status(200).json({
+            username: user.username,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            profileImage: user.profileImage || 'https://www.gravatar.com/avatar/?d=mp&f=y'
+        });
     } catch (error) {
         console.error('❌ Error fetching user:', error);
         res.status(500).send('❌ Internal server error');
@@ -194,84 +205,30 @@ app.get('/user/:username', async (req, res) => {
     }
 });
 
-// ฟังก์ชันสำหรับการอัปโหลดรูปโปรไฟล์
-app.post('/upload', (req, res) => {
-    upload.single('image')(req, res, async (err) => {
-        if (err) {
-            return res.status(400).send(`❌ Error: ${err.message}`);
-        }
-
-        if (!req.file) {
-            return res.status(400).send('❌ No file uploaded or invalid file type!');
-        }
-
-        const username = req.body.username;
-        const imageUrl = `/uploads/${req.file.filename}`;
-        const client = new MongoClient(uri);
-
-        try {
-            await client.connect();
-            const database = client.db('user');
-            const collection = database.collection('users');
-            const result = await collection.updateOne(
-                { username: username },
-                { $set: { profileImage: imageUrl } }
-            );
-
-            if (result.modifiedCount > 0) {
-                res.status(200).json({ imageUrl });
-            } else {
-                res.status(404).send('❌ User not found or no changes made');
-            }
-        } catch (error) {
-            console.error('❌ Error uploading image:', error);
-            res.status(500).send('❌ Internal server error');
-        } finally {
-            await client.close();
-        }
-    });
-});
-
-// ฟังก์ชันสำหรับการอัปเดทโปรไฟล์
-app.post('/update-profile', async (req, res) => {
-    const { username, email, firstName, lastName, password } = req.body;
+// Profile Image Upload
+app.post('/upload', upload.single('image'), async (req, res) => {
+    const username = req.body.username;
+    const imageUrl = `/uploads/${req.file.filename}`;
     const client = new MongoClient(uri);
 
     try {
         await client.connect();
-        const database = client.db('user');
-        const collection = database.collection('users');
+        const db = client.db('user');
+        const users = db.collection('users');
+        const result = await users.updateOne({ username }, { $set: { profileImage: imageUrl } });
 
-        const updateFields = {
-            email: email,
-            firstname: firstName,
-            lastname: lastName
-        };
+        if (result.modifiedCount === 0) return res.status(404).send('❌ User not found or no changes made');
 
-        // ถ้ามีการเปลี่ยนรหัสผ่าน ให้แฮชและอัปเดตรหัสผ่านใหม่
-        if (password) {
-            updateFields.password = await bcrypt.hash(password, 10);
-        }
-
-        const result = await collection.updateOne(
-            { username: username },
-            { $set: updateFields }
-        );
-
-        if (result.modifiedCount > 0) {
-            res.status(200).send('Profile updated successfully');
-        } else {
-            res.status(404).send('User not found or no changes made');
-        }
+        res.status(200).json({ imageUrl });
     } catch (error) {
-        console.error('Error updating profile:', error);
-        res.status(500).send('Internal server error');
+        console.error('❌ Error uploading image:', error);
+        res.status(500).send('❌ Internal server error');
     } finally {
         await client.close();
     }
 });
 
-// เริ่มเซิร์ฟเวอร์
+// Start Server
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

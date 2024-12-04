@@ -32,45 +32,53 @@
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault(); // ป้องกันการส่งฟอร์มแบบดั้งเดิม
+            e.preventDefault();
 
-            const username = document.getElementById('username').value;
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
 
+            if (!username || !password) {
+                showToast('❌ Please fill in all fields', 'error');
+                return;
+            }
+
+            const loginButton = document.querySelector('.login-button');
+            loginButton.disabled = true;
+            loginButton.textContent = 'Logging in...';
+
             try {
-                // ส่งคำขอ Login ไปยัง Backend
                 const response = await fetch('http://127.0.0.1:3000/login', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ username, password })
+                    body: JSON.stringify({ username, password }),
                 });
 
                 const result = await response.json();
 
                 if (response.ok) {
-                    // เก็บ JWT ใน Local Storage
-                    localStorage.setItem('token', result.token);
+                    sessionStorage.setItem('token', result.token); // เก็บ Token ใน sessionStorage
+                    sessionStorage.setItem('username', username); // เก็บ Username ใน sessionStorage
 
-                    // เก็บ Username ไว้ใน Local Storage (ถ้าจำเป็น)
-                    localStorage.setItem('username', username);
-
-                    showToast(result.message, 'success'); // Toast สำหรับกรณีสำเร็จ
+                    showToast(result.message, 'success');
                     setTimeout(() => {
-                        window.location.href = '../main_page/mainpage.html'; // ย้ายไปหน้าหลัก
+                        window.location.href = '../main_page/mainpage.html';
                     }, 3000);
                 } else {
                     const errorMessage = result.message || '❌ Invalid username or password';
-                    showToast(errorMessage, 'error'); // Toast สำหรับกรณีเกิดข้อผิดพลาด
+                    showToast(errorMessage, 'error');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showToast('❌ Failed to connect to the server', 'error'); // Toast สำหรับกรณีเชื่อมต่อไม่ได้
+                showToast('❌ Failed to connect to the server', 'error');
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent = 'LOGIN';
             }
         });
 
-        // ฟังก์ชันแสดง Toast Notification
+        // Toast Notification Function
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             toast.className = 'toast ' + type;
@@ -79,8 +87,9 @@
 
             setTimeout(() => {
                 toast.style.display = 'none';
-            }, 4000); // แสดง toast เป็นเวลา 4 วินาที
-        }
+            }, 4000);
+}
+
     </script>
 </body>
 </html>
