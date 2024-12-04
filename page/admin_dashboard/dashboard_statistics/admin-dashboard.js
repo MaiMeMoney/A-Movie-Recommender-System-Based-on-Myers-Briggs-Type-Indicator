@@ -7,31 +7,56 @@ document.addEventListener("DOMContentLoaded", () => {
     dataSelector.addEventListener('change', (e) => updateDashboard(e.target.value));
 
     // ตรวจสอบ role ของผู้ใช้
-    fetch(`/api/check-role?username=${username}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Failed to fetch user role.");
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.role !== 1) {
-                alert("Access Denied: Admins Only");
-                window.location.href = "/";
-            } else {
-                // แสดงข้อมูลแอดมิน
-                document.querySelector(".admin-image").innerHTML = `<img src="${data.profileImage}" alt="Admin Image">`;
-                document.querySelector("#admin-name").textContent = `${data.firstname} ${data.lastname}`;
-                
-                // โหลดข้อมูลครั้งแรก
-                loadMBTIStats();
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("You are not logged in!");
+    fetch(`/api/check-role?username=${username}`, {
+        credentials: 'include'
+     })
+     .then(response => {
+        if (!response.ok) {
+            throw new Error("Failed to fetch user role.");
+        }
+        return response.json();
+     })
+     .then(data => {
+        if (data.role !== 1) {
+            alert("Access Denied: Admins Only");
             window.location.href = "/";
-        });
+        } else {
+            // แสดงข้อมูลแอดมิน
+            const adminImage = document.querySelector(".admin-image");
+            if (data.profileImage) {
+                adminImage.innerHTML = `<img src="${data.profileImage}" alt="${data.username}" class="profile-image"/>`;
+            } else {
+                const initials = `${data.firstname?.[0] || ''}${data.lastname?.[0] || ''}` || data.username?.[0] || 'A';
+                adminImage.innerHTML = `<div class="placeholder-image">${initials.toUpperCase()}</div>`;
+            }
+            document.querySelector("#admin-name").textContent = `${data.firstname} ${data.lastname}`;
+            
+            document.querySelector('.logout-btn').addEventListener('click', async () => {
+                if (confirm('ต้องการออกจากระบบหรือไม่?')) {
+                    try {
+                        const response = await fetch('http://localhost:6001/logout', {
+                            method: 'POST',
+                            credentials: 'include'
+                        });
+                        if (response.ok) {
+                            window.location.href = 'http://127.0.0.1:5500/page/login_page/index.html';
+                        }
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                        alert('เกิดข้อผิดพลาดในการออกจากระบบ');
+                    }
+                }
+            });
+            
+            // โหลดข้อมูลครั้งแรก 
+            loadMBTIStats();
+        }
+     })
+     .catch(error => {
+        console.error("Error:", error);
+        alert("You are not logged in!");
+        window.location.href = "/";
+     });
 
     // ฟังก์ชันอัปเดท Dashboard
     async function updateDashboard(view) {
@@ -650,7 +675,7 @@ async function fetchUsers() {
     try {
         const currentUsername = urlParams.get("username");
         const response = await fetch(`/api/admin/users?username=${currentUsername}`, {
-            credentials: 'include',
+            credentials: 'include'
         });
 
         if (!response.ok) throw new Error('Failed to fetch users');
@@ -663,7 +688,7 @@ async function fetchUsers() {
             <div class="relative inline-block group">
                 ${user.profileImage ? 
                     `<img src="${user.profileImage}" alt="${user.username}" class="profile-image"/>` :
-                    `<div class="placeholder-image"></div>`
+                    `<div class="placeholder-image">${user.firstname?.[0] || user.username[0]}</div>`
                 }
             </div>
         </td>
@@ -688,6 +713,11 @@ async function fetchUsers() {
         </td>
         <td>
             <div class="flex gap-2">
+                <button onclick="editUser('${user.username}')" 
+                        class="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all flex items-center gap-1 shadow-md">
+                    <i class="fas fa-edit"></i>
+                    <span>แก้ไข</span>
+                </button>
                 <button onclick="handleBanUser('${user._id}')" 
                         class="px-3 py-1 ${user.banned ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600'} text-white rounded-lg transition-all flex items-center gap-1 shadow-md">
                     <i class="fas ${user.banned ? 'fa-user-check' : 'fa-ban'}"></i>
@@ -823,35 +853,35 @@ function editUser(username) {
         modal.className = 'modal';
         modal.innerHTML = `
             <div class="modal-content">
-                <h2>Edit User - ${userToEdit.username}</h2>
+                <h2>แก้ไขข้อมูลผู้ใช้ - ${userToEdit.username}</h2>
                 <form id="editUserForm">
                     <div class="form-group">
-                        <label>Username:</label>
+                        <label>ชื่อผู้ใช้:</label>
                         <input type="text" value="${userToEdit.username}" disabled class="disabled-input">
                     </div>
                     <div class="form-group">
-                        <label>Email:</label>
+                        <label>อีเมล:</label>
                         <input type="email" id="email" value="${userToEdit.email || ''}" class="form-input">
                     </div>
                     <div class="form-group">
-                        <label>First Name:</label>
+                        <label>ชื่อ:</label>
                         <input type="text" id="firstname" value="${userToEdit.firstname || ''}" class="form-input">
                     </div>
                     <div class="form-group">
-                        <label>Last Name:</label>
+                        <label>นามสกุล:</label>
                         <input type="text" id="lastname" value="${userToEdit.lastname || ''}" class="form-input">
                     </div>
                     <div class="form-group">
-                        <label>Role:</label>
+                        <label>ตำแหน่ง:</label>
                         <select id="role" class="form-select">
-                            <option value="0" ${userToEdit.role === 0 ? 'selected' : ''}>User</option>
-                            <option value="1" ${userToEdit.role === 1 ? 'selected' : ''}>Admin</option>
+                            <option value="0" ${userToEdit.role === 0 ? 'selected' : ''}>ผู้ใช้ทั่วไป</option>
+                            <option value="1" ${userToEdit.role === 1 ? 'selected' : ''}>ผู้ดูแลระบบ</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>MBTI Type:</label>
                         <select id="mbti_type" class="form-select">
-                            <option value="">Select MBTI</option>
+                            <option value="">เลือก MBTI</option>
                             ${mbtiTypes.map(type => `
                                 <option value="${type}" ${userToEdit.mbti_type === type ? 'selected' : ''}>
                                     ${type}
@@ -860,15 +890,14 @@ function editUser(username) {
                         </select>
                     </div>
                     <div class="button-group">
-                        <button type="button" class="cancel-btn" onclick="window.closeModal()">Cancel</button>
-                        <button type="submit" class="save-btn">Save Changes</button>
+                        <button type="button" class="cancel-btn" onclick="window.closeModal()">ยกเลิก</button>
+                        <button type="submit" class="save-btn">บันทึก</button>
                     </div>
                 </form>
             </div>
         `;
         document.body.appendChild(modal);
 
-        // Handle form submission
         const form = document.getElementById('editUserForm');
         form.onsubmit = async (e) => {
             e.preventDefault();
@@ -891,22 +920,22 @@ function editUser(username) {
                 });
 
                 if (response.ok) {
-                    alert('User updated successfully');
+                    alert('อัพเดทข้อมูลผู้ใช้สำเร็จ');
                     window.closeModal();
                     fetchUsers();
                 } else {
                     const error = await response.json();
-                    alert(`Failed to update user: ${error.message}`);
+                    alert(`ไม่สามารถอัพเดทข้อมูลผู้ใช้: ${error.message}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error updating user');
+                alert('เกิดข้อผิดพลาดในการอัพเดทข้อมูลผู้ใช้');
             }
         };
     })
     .catch(error => {
         console.error('Error:', error);
-        alert(`Error loading user data: ${error.message}`);
+        alert(`เกิดข้อผิดพลาดในการโหลดข้อมูลผู้ใช้: ${error.message}`);
     });
 }
 
@@ -945,30 +974,25 @@ function resizeCharts() {
 window.addEventListener('resize', resizeCharts);
 
 
-    // Event Listeners for Back and Logout buttons
-    document.getElementById('backToMainPage').addEventListener('click', async () => {
-        const username = localStorage.getItem('username');
-        if (!username) {
-            alert('Session expired. Please log in again.');
-            window.location.href = 'http://127.0.0.1:5500/page/login_page/index.html';
-            return;
+document.getElementById('backToMainPage').addEventListener('click', async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('username');
+    
+    try {
+        // Check if session is still valid
+        const response = await fetch('/api/check-role?username=' + username, {
+            credentials: 'include'
+        });
+        
+        if (response.ok) {
+            window.location.href = `http://127.0.0.1:5500/page/main_page/mainpage.html?username=${username}`;
+        } else {
+            throw new Error('Session invalid');
         }
-        window.location.href = `http://127.0.0.1:5500/page/main_page/mainpage.html?username=${username}`;
-    });
-
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-        try {
-            const response = await fetch('/logout', { method: 'POST' });
-            if (response.ok) {
-                localStorage.removeItem('username');
-                alert("You have been logged out.");
-                window.location.href = 'http://127.0.0.1:5500/page/login_page/index.html';
-            } else {
-                throw new Error('Failed to logout');
-            }
-        } catch (error) {
-            console.error("Error during logout:", error);
-            alert("An error occurred while logging out.");
-        }
-    });
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Session expired. Please log in again.');
+        window.location.href = 'http://127.0.0.1:5500/page/login_page/index.html';
+    }
+});
 });

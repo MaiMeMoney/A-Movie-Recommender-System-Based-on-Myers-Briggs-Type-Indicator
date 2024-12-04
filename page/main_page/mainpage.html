@@ -305,6 +305,28 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = `/page/Personal information editing page/index.html?username=${username}`;
     };
 
+    // ตรวจสอบ MBTI เมื่อคลิกปุ่ม Recommend Me
+    document.getElementById('recommend-me-btn').addEventListener('click', async function () {
+        try {
+            const response = await fetch('http://localhost:5001/api/check-mbti', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username }),
+            });
+
+            const data = await response.json();
+            if (data.hasMBTI) {
+                window.location.href = '/page/seemore_page/index.html'; // พาไปยังหน้าแนะนำหนัง
+            } else {
+                window.location.href = '/page/mbti_selection/mbti_selection.html'; // พาไปยังหน้าเลือก MBTI
+            }
+        } catch (error) {
+            console.error("Error checking MBTI:", error);
+            alert('An error occurred. Please try again later.');
+        }
+    });
 });
     </script>
     <script src="script.js"></script>

@@ -316,6 +316,16 @@ main {
     font-weight: bold;
 }
 
+.admin-image {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
 .profile-image,
 .placeholder-image {
     width: 64px;
