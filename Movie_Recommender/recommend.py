@@ -72,17 +72,31 @@ def get_recommendations(token):
 
         # ดึงหนังทั้งหมดและคำนวณคะแนน
         all_movies = movies_scores_collection.distinct("movieName")
-        recommendations = []
+        movie_scores = {}
 
         for movie in all_movies:
             if movie not in target_user_ratings:
                 predicted_rating = predict_rating(target_user_ratings, movie, neighbors)
                 if predicted_rating > 0:
-                    recommendations.append({"movieName": movie, "predictedRating": predicted_rating})
+                    # เก็บหนังที่มีคะแนนสูงสุด
+                    if movie not in movie_scores or movie_scores[movie] < predicted_rating:
+                        movie_scores[movie] = predicted_rating
+
+        # สร้างรายการคำแนะนำจากคะแนนสูงสุด
+        recommendations = [{"movieName": movie, "predictedRating": rating} for movie, rating in movie_scores.items()]
 
         # จัดลำดับผลลัพธ์
         sorted_recommendations = sorted(recommendations, key=lambda x: x["predictedRating"], reverse=True)[:10]
         return {"mbti_type": mbti_type, "recommendations": sorted_recommendations}, 200
+
+    except jwt.ExpiredSignatureError:
+        return {"error": "Token has expired"}, 401
+    except jwt.InvalidTokenError:
+        return {"error": "Invalid token"}, 401
+    except Exception as e:
+        print(f"Unexpected error in get_recommendations: {str(e)}")
+        return {"error": f"Unexpected error: {str(e)}"}, 500
+
 
     except jwt.ExpiredSignatureError:
         return {"error": "Token has expired"}, 401

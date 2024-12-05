@@ -1116,7 +1116,6 @@ app.listen(PORT, () => {
 app.post('/recommend', async (req, res) => {
     const { username } = req.body;
 
-    // ตรวจสอบว่าได้รับ username หรือไม่
     console.log('Received username for recommend:', username);
 
     if (!username) {
@@ -1124,20 +1123,17 @@ app.post('/recommend', async (req, res) => {
     }
 
     try {
-        // ค้นหา MBTI ของผู้ใช้
         const userMbti = await MBTI.findOne({ username });
         if (!userMbti || !userMbti.mbti_type) {
             console.error('User MBTI not found for username:', username);
             return res.status(404).json({ message: 'User MBTI not found!' });
         }
 
-        // ค้นหาผู้ใช้ที่มี MBTI เดียวกัน
         const sameMbtiUsers = await MBTI.find({ mbti_type: userMbti.mbti_type });
         const sameMbtiUsernames = sameMbtiUsers.map(user => user.username);
 
         console.log('Users with same MBTI:', sameMbtiUsernames);
 
-        // ดึงคะแนนหนังจาก movies_scores
         const recommendedMovies = await MovieScore.find({
             username: { $in: sameMbtiUsernames }
         }).sort({ score: -1 }).limit(10);
@@ -1147,21 +1143,29 @@ app.post('/recommend', async (req, res) => {
             return res.status(404).json({ message: 'No recommendations found!' });
         }
 
-        // ส่งรายชื่อหนังกลับ
-        console.log('Recommended movies:', recommendedMovies);
+        // เพิ่มส่วนนี้เพื่อต่อข้อมูล `Poster_Link`
+        const movieDetails = await Promise.all(
+            recommendedMovies.map(async (movieScore) => {
+                const movie = await Movie.findById(movieScore.movieId);
+                return {
+                    movieName: movieScore.movieName,
+                    score: movieScore.score,
+                    Poster_Link: movie ? movie.Poster_Link : null, // ดึง `Poster_Link` จากฐานข้อมูล
+                };
+            })
+        );
+
         res.status(200).json({
             mbti: userMbti.mbti_type,
-            recommendations: recommendedMovies.map(movie => ({
-                movieName: movie.movieName,
-                score: movie.score
-            }))
+            recommendations: movieDetails,
         });
     } catch (error) {
         console.error('Error in recommend API:', {
             message: error.message,
-            stack: error.stack
+            stack: error.stack,
         });
         res.status(500).json({ message: 'Failed to fetch recommendations.' });
     }
 });
+
 
