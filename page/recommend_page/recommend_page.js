@@ -61,25 +61,24 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-    function renderMovies(movies) {
-        movieGrid.innerHTML = ""; // Clear existing movies
-        movies.forEach(movie => {
-            const posterUrl = movie.Poster_Link && movie.Poster_Link.startsWith("http")
-                ? movie.Poster_Link
-                : "/path/to/placeholder.png"; // ใช้ placeholder หากไม่มีโปสเตอร์
-    
-            const movieItem = document.createElement("div");
-            movieItem.classList.add("movie-item");
-    
-            movieItem.innerHTML = `
-                <img src="${posterUrl}" alt="${movie.movieName}" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px;">
-                <div class="movie-info">
-                    <h3>${movie.movieName}</h3>
-                </div>
-            `;
-            movieGrid.appendChild(movieItem);
-        });
-    }
+    // Render Movies
+function renderMovies(movies) {
+    movieGrid.innerHTML = ""; // Clear existing movies
+
+    movies.forEach(movie => {
+        const movieItem = document.createElement("div");
+        movieItem.classList.add("movie-item");
+
+        // แสดงเฉพาะโปสเตอร์หนัง
+        movieItem.innerHTML = `
+            <img src="${movie.Poster_Link || 'placeholder.png'}" alt="Movie Poster" 
+                style="width: 100%; height: auto; object-fit: cover; border-radius: 10px;">
+        `;
+        
+        movieGrid.appendChild(movieItem);
+    });
+}
+
     
     
     
