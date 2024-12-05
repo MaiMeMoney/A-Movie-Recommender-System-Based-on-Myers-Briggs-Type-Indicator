@@ -596,26 +596,34 @@ const movieScoreSchema = new mongoose.Schema({
 // สร้าง Model
 const MovieScore = mongoose.model('movies_scores', movieScoreSchema);
 
-// API Endpoint เพื่อให้ผู้ใช้ให้คะแนนหนัง
+// API Endpoint เพื่อให้ผู้ใช้ให้คะแนนหนัง (bank update)
 app.post('/movies_list/movies/:movieId/rate', async (req, res) => {
     const { movieId } = req.params;
     const { username, score, movieName } = req.body;
-
-    console.log('Received Data:', { username, score, movieName }); // Debugging
 
     if (!username || !score || !movieName) {
         return res.status(400).json({ message: 'Username, score, and movieName are required.' });
     }
 
     try {
+        // เพิ่มหรืออัปเดตคะแนน
         const movieScore = await MovieScore.findOneAndUpdate(
             { movieId: new mongoose.Types.ObjectId(movieId), username },
-            { score, movieName }, // รวม movieName ที่นี่
+            { score, movieName },
             { new: true, upsert: true }
         );
 
-        console.log('Saved to DB:', movieScore); // Debugging
-        res.status(200).json({ message: 'Score submitted successfully', data: movieScore });
+        // อัปเดต IMDB Rating
+        await updateIMDBRating(movieId);
+
+        // ดึง IMDB Rating ล่าสุดจากฐานข้อมูล
+        const updatedMovie = await Movie.findById(movieId);
+        const imdbRating = updatedMovie ? updatedMovie.IMDB_Rating : null;
+
+        res.status(200).json({
+            message: 'Score submitted successfully',
+            data: { movieScore, IMDB_Rating: imdbRating },
+        });
     } catch (error) {
         console.error('Error while saving:', error);
         res.status(500).json({ message: 'Failed to submit score' });
@@ -1167,5 +1175,27 @@ app.post('/recommend', async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch recommendations.' });
     }
 });
+
+// ฟังก์ชันอัปเดต IMDB Rating
+async function updateIMDBRating(movieId) {
+    try {
+        const ratings = await MovieScore.find({ movieId: new mongoose.Types.ObjectId(movieId) });
+
+        if (ratings.length === 0) {
+            console.log(`No ratings found for movieId: ${movieId}`);
+            return;
+        }
+
+        const totalScore = ratings.reduce((sum, rating) => sum + rating.score, 0);
+        const averageScore = (totalScore / ratings.length).toFixed(1);
+
+        // อัปเดต IMDB Rating ในฐานข้อมูล
+        await Movie.findByIdAndUpdate(movieId, { IMDB_Rating: averageScore });
+        console.log(`Updated IMDB Rating for movieId ${movieId} to ${averageScore}`);
+    } catch (error) {
+        console.error("Error updating IMDB Rating:", error);
+    }
+}
+
 
 
