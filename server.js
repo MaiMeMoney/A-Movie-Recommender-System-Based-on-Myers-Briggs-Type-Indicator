@@ -596,26 +596,34 @@ const movieScoreSchema = new mongoose.Schema({
 // สร้าง Model
 const MovieScore = mongoose.model('movies_scores', movieScoreSchema);
 
-// API Endpoint เพื่อให้ผู้ใช้ให้คะแนนหนัง
+// API Endpoint เพื่อให้ผู้ใช้ให้คะแนนหนัง (bank update)
 app.post('/movies_list/movies/:movieId/rate', async (req, res) => {
     const { movieId } = req.params;
     const { username, score, movieName } = req.body;
-
-    console.log('Received Data:', { username, score, movieName }); // Debugging
 
     if (!username || !score || !movieName) {
         return res.status(400).json({ message: 'Username, score, and movieName are required.' });
     }
 
     try {
+        // เพิ่มหรืออัปเดตคะแนน
         const movieScore = await MovieScore.findOneAndUpdate(
             { movieId: new mongoose.Types.ObjectId(movieId), username },
-            { score, movieName }, // รวม movieName ที่นี่
+            { score, movieName },
             { new: true, upsert: true }
         );
 
-        console.log('Saved to DB:', movieScore); // Debugging
-        res.status(200).json({ message: 'Score submitted successfully', data: movieScore });
+        // อัปเดต IMDB Rating
+        await updateIMDBRating(movieId);
+
+        // ดึง IMDB Rating ล่าสุดจากฐานข้อมูล
+        const updatedMovie = await Movie.findById(movieId);
+        const imdbRating = updatedMovie ? updatedMovie.IMDB_Rating : null;
+
+        res.status(200).json({
+            message: 'Score submitted successfully',
+            data: { movieScore, IMDB_Rating: imdbRating },
+        });
     } catch (error) {
         console.error('Error while saving:', error);
         res.status(500).json({ message: 'Failed to submit score' });
@@ -1116,7 +1124,6 @@ app.listen(PORT, () => {
 app.post('/recommend', async (req, res) => {
     const { username } = req.body;
 
-    // ตรวจสอบว่าได้รับ username หรือไม่
     console.log('Received username for recommend:', username);
 
     if (!username) {
@@ -1124,20 +1131,17 @@ app.post('/recommend', async (req, res) => {
     }
 
     try {
-        // ค้นหา MBTI ของผู้ใช้
         const userMbti = await MBTI.findOne({ username });
         if (!userMbti || !userMbti.mbti_type) {
             console.error('User MBTI not found for username:', username);
             return res.status(404).json({ message: 'User MBTI not found!' });
         }
 
-        // ค้นหาผู้ใช้ที่มี MBTI เดียวกัน
         const sameMbtiUsers = await MBTI.find({ mbti_type: userMbti.mbti_type });
         const sameMbtiUsernames = sameMbtiUsers.map(user => user.username);
 
         console.log('Users with same MBTI:', sameMbtiUsernames);
 
-        // ดึงคะแนนหนังจาก movies_scores
         const recommendedMovies = await MovieScore.find({
             username: { $in: sameMbtiUsernames }
         }).sort({ score: -1 }).limit(10);
@@ -1147,21 +1151,51 @@ app.post('/recommend', async (req, res) => {
             return res.status(404).json({ message: 'No recommendations found!' });
         }
 
-        // ส่งรายชื่อหนังกลับ
-        console.log('Recommended movies:', recommendedMovies);
+        // เพิ่มส่วนนี้เพื่อต่อข้อมูล `Poster_Link`
+        const movieDetails = await Promise.all(
+            recommendedMovies.map(async (movieScore) => {
+                const movie = await Movie.findById(movieScore.movieId);
+                return {
+                    movieName: movieScore.movieName,
+                    score: movieScore.score,
+                    Poster_Link: movie ? movie.Poster_Link : null, // ดึง `Poster_Link` จากฐานข้อมูล
+                };
+            })
+        );
+
         res.status(200).json({
             mbti: userMbti.mbti_type,
-            recommendations: recommendedMovies.map(movie => ({
-                movieName: movie.movieName,
-                score: movie.score
-            }))
+            recommendations: movieDetails,
         });
     } catch (error) {
         console.error('Error in recommend API:', {
             message: error.message,
-            stack: error.stack
+            stack: error.stack,
         });
         res.status(500).json({ message: 'Failed to fetch recommendations.' });
     }
 });
+
+// ฟังก์ชันอัปเดต IMDB Rating
+async function updateIMDBRating(movieId) {
+    try {
+        const ratings = await MovieScore.find({ movieId: new mongoose.Types.ObjectId(movieId) });
+
+        if (ratings.length === 0) {
+            console.log(`No ratings found for movieId: ${movieId}`);
+            return;
+        }
+
+        const totalScore = ratings.reduce((sum, rating) => sum + rating.score, 0);
+        const averageScore = (totalScore / ratings.length).toFixed(1);
+
+        // อัปเดต IMDB Rating ในฐานข้อมูล
+        await Movie.findByIdAndUpdate(movieId, { IMDB_Rating: averageScore });
+        console.log(`Updated IMDB Rating for movieId ${movieId} to ${averageScore}`);
+    } catch (error) {
+        console.error("Error updating IMDB Rating:", error);
+    }
+}
+
+
 

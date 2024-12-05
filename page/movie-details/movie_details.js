@@ -259,30 +259,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ส่งคะแนนและปิดป๊อปอัปพร้อมแจ้งเตือน
     async function submitRating(rating) {
-        const username = localStorage.getItem('username'); // ใช้ username จาก localStorage
+        const username = localStorage.getItem('username');
         const movieId = new URLSearchParams(window.location.search).get('movieId');
         const movieNameElement = document.getElementById('movie-name');
         const movieName = movieNameElement ? movieNameElement.textContent : "Unknown Movie";
-
-        console.log('Sending Data:', { username, score: rating, movieName });
-
+    
         if (!username || !movieId || !movieName) {
             showToast('Please login, select a movie, and try again.', 'error');
             return;
         }
-
+    
         try {
             const response = await fetch(`http://localhost:5001/movies_list/movies/${movieId}/rate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, score: rating, movieName }),
             });
-
+    
             const result = await response.json();
-
+    
             if (response.ok) {
+                const imdbRating = result.data.IMDB_Rating || "N/A";
+                document.getElementById('movie-rating').textContent = `⭐ IMDB Rating ${imdbRating}/10`;
                 showToast(`You have rated ${rating} star${rating > 1 ? 's' : ''}!`, 'success');
-                closePopupWithAnimation(); // ปิดป๊อปอัปหลังให้คะแนนสำเร็จ
             } else {
                 console.error('API Error:', result);
                 showToast(result.message || 'Failed to submit rating.', 'error');
