@@ -272,7 +272,7 @@ button:hover {
 }
 
 .create-genre button:hover {
-    background-color: #1976D2 !important; /* น้ำเงินเข้มเมื่อ hover */
+    background-color: #54b81a !important; /* น้ำเงินเข้มเมื่อ hover */
 }
 
 .update {
@@ -640,4 +640,32 @@ button:hover {
 
 #cancel-delete-button:hover {
     background-color: #7f8c8d; /* สีเทาเข้มเมื่อ hover */
+}
+
+.genre-list li {
+    margin: 10px 0;
+    font-size: 18px;
+    color: #4CAF50; /* หรือสีที่คุณต้องการ */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.genre-list li:hover {
+    color: #1976D2; /* เปลี่ยนเป็นสีที่ต้องการเมื่อ hover เช่น น้ำเงินเข้ม */
+}
+
+/* ป้องกันการแสดงเมนูคลิกขวาปกติ */
+.genre-item {
+    cursor: pointer;
+    user-select: none;  /* ป้องกันการเลือกข้อความ */
+}
+
+.genre-item:active {
+    background-color: #f1f1f1;
+}
+
+/* เพิ่มเงาเมื่อคลิกขวาที่ item */
+.genre-item:hover {
+    background-color: #f9f9f9;
+    color: #1976D2;
 }

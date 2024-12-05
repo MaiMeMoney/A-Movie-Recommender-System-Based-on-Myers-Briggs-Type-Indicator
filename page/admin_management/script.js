@@ -429,10 +429,11 @@ createGenreForm.addEventListener('submit', (event) => {
         // เพิ่ม genre ที่สร้างขึ้นใหม่ใน sidebar
         const genreItem = document.createElement('li');
         genreItem.textContent = genreName;
-        genreItem.classList.add('genre-item');
-        genreItem.addEventListener('click', () => showMoviesByGenre(genreName)); // เมื่อคลิกจะเรียกฟังก์ชันแสดงหนังตาม genre
+        genreItem.classList.add('genre-item'); // เพิ่ม class
+        genreItem.style.color = "#FF5733"; // ตั้งสีที่ต้องการ เช่น สีส้ม
+        genreItem.addEventListener('click', () => showMoviesByGenre(genreName));
         genreListContainer.appendChild(genreItem);
-        
+
         // ซ่อน Modal
         createGenreModal.style.display = 'none';
 
@@ -440,6 +441,8 @@ createGenreForm.addEventListener('submit', (event) => {
         document.getElementById('genre-name').value = '';
     }
 });
+
+
 
 // ฟังก์ชันแสดงหนังตาม genre ที่เลือก
 async function showMoviesByGenre(genre) {
@@ -610,4 +613,60 @@ document.getElementById('update-movie-form').addEventListener('submit', (event) 
     showToastNotification('Movie update!', 'success');
     document.getElementById('updateMovieModal').style.display = 'none';
 });
+
+// เมื่อเพิ่ม genre ใหม่
+createGenreForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const genreName = document.getElementById('genre-name').value.trim();
+
+    if (genreName) {
+        // เพิ่ม genre ที่สร้างขึ้นใหม่ใน sidebar
+        const genreItem = document.createElement('li');
+        genreItem.textContent = genreName;
+        genreItem.classList.add('genre-item');
+        genreItem.addEventListener('click', () => showMoviesByGenre(genreName));
+        genreListContainer.appendChild(genreItem);
+        
+        // เก็บ genre ใน localStorage
+        const genreList = JSON.parse(localStorage.getItem('genreList')) || []; // ดึงข้อมูล genre เก่ามา (ถ้ามี)
+        genreList.push(genreName); // เพิ่ม genre ใหม่เข้าไป
+        localStorage.setItem('genreList', JSON.stringify(genreList)); // บันทึก genre ใหม่กลับไปใน localStorage
+
+        console.log("Saved genres:", genreList); // ตรวจสอบข้อมูลที่เก็บใน localStorage
+        
+        // ซ่อน Modal
+        createGenreModal.style.display = 'none';
+
+        // ล้างฟอร์ม
+        document.getElementById('genre-name').value = '';
+    }
+});
+
+// ฟังก์ชันโหลด genre จาก localStorage เมื่อหน้าเว็บโหลด
+document.addEventListener('DOMContentLoaded', () => {
+    const genreList = JSON.parse(localStorage.getItem('genreList')) || []; // ดึงข้อมูล genre จาก localStorage
+    console.log("Loaded genres:", genreList);  // ตรวจสอบว่า genreList มีข้อมูลหรือไม่
+
+    // หากมี genre ใน localStorage ให้เพิ่มลงใน DOM
+    genreList.forEach(genreName => {
+        const genreItem = document.createElement('li');
+        genreItem.textContent = genreName;
+        genreItem.classList.add('genre-item');
+        genreItem.addEventListener('click', () => showMoviesByGenre(genreName)); // เมื่อคลิกจะเรียกฟังก์ชันแสดงหนังตาม genre
+        genreListContainer.appendChild(genreItem);
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
