@@ -104,7 +104,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         if (response.ok) {
             showToast(result, "success");
             setTimeout(() => {
-                window.location.href = '../choose_mbti/choose_mbti.html';  // เปลี่ยนไปหน้า login
+                window.location.href = '../login_page/index.html';  // เปลี่ยนไปหน้า login
             }, 3000);
         } else {
             showToast(result, "error");
