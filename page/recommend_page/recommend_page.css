@@ -81,13 +81,12 @@ body {
 
 .account-icon {
     font-size: 18px;
-    margin-left: 10px;
+    margin-left: 5px; /* ลดระยะห่างซ้าย */
     background: transparent;
     border: none;
     cursor: pointer;
     color: white;
 }
-
 /* ปรับแต่งปุ่ม My List Icon */
 .my-list-icon {
     display: flex;
@@ -95,11 +94,12 @@ body {
     align-items: center;
     width: 40px;
     height: 40px;
-    background-color: transparent; /* พื้นหลังโปร่งใส */
-    color: white; /* สีของไอคอน */
+    background-color: transparent;
+    color: white;
     cursor: pointer;
     text-decoration: none;
-    font-size: 18px; /* ขนาดของไอคอน */
+    font-size: 18px;
+    margin-right: 5px; /* ลดระยะห่างขวา */
 }
 
 .my-list-icon i {
@@ -296,6 +296,23 @@ body {
     margin-top: 100px;
 }
 
+.mbti-container {
+    display: flex; /* ใช้ Flexbox */
+    justify-content: center; /* จัดให้อยู่ตรงกลาง */
+    align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+    gap: 20px; /* เพิ่มระยะห่างระหว่าง MBTI และปุ่ม */
+    margin-top: 20px; /* เพิ่มระยะห่างด้านบน */
+}
+
+.mbti-type {
+    font-size: 36px; /* ขนาดตัวอักษร */
+    font-weight: bold; /* ตัวหนา */
+    color: #f4a261; /* สีข้อความ */
+    text-align: center; /* จัดให้อยู่กลาง */
+    margin: 0; /* ลบระยะขอบเพิ่มเติม */
+}
+
+
 .mbti-info {
     margin: 20px;
     display: flex;
@@ -304,13 +321,19 @@ body {
 }
 
 .change-mbti, .recommend-me {
-    background-color: #B32121;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
+    background-color: #B32121; /* สีพื้นหลัง */
+    color: white; /* สีข้อความ */
+    border: none; /* ลบเส้นขอบ */
+    padding: 10px 20px; /* เพิ่มพื้นที่ภายใน */
+    border-radius: 20px; /* โค้งมน */
+    font-size: 16px; /* ขนาดฟอนต์ */
+    cursor: pointer; /* ทำให้เป็นปุ่มคลิกได้ */
 }
+
+.change-mbti:hover, .recommend-me:hover {
+    background-color: #D13434; /* สีเมื่อ Hover */
+}
+
 
 /* Movie Grid */
 .movie-grid {
