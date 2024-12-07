@@ -40,18 +40,21 @@ document.addEventListener('DOMContentLoaded', () => {
 document.getElementById('search-button').addEventListener('click', async () => {
     const query = document.getElementById('search-bar').value.trim();
     const category = document.getElementById('search-category').value;
+    const username = localStorage.getItem('username');  // เพิ่มการดึง username
 
     if (!query) {
         alert('Please enter a search term');
         return;
     }
-    
-    // บันทึกการค้นหาพร้อม movieId (ถ้ามี)
+
+    // บันทึกการค้นหา
     try {
-        const searchData = { 
+        const searchData = {
             query,
-            // เพิ่ม movieId ถ้าเป็นการค้นหาจากหน้าหนัง
-            movieId: new URLSearchParams(window.location.search).get('movieId')
+            category,
+            username,
+            movieId: new URLSearchParams(window.location.search).get('movieId'),
+            timestamp: new Date()
         };
 
         await fetch('http://localhost:5001/api/log-search', {

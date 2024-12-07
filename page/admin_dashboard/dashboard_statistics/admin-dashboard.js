@@ -6,17 +6,53 @@ document.addEventListener("DOMContentLoaded", () => {
     const dataSelector = document.getElementById('data-selector');
     dataSelector.addEventListener('change', (e) => updateDashboard(e.target.value));
 
+    // เพิ่ม Event Listeners สำหรับปุ่มทั้งหมด
+    const mbtiButton = document.getElementById('mbti-distribution-button');
+    const movieAnalyticsButton = document.getElementById('movie-analytics-button');
+    const searchAnalyticsButton = document.getElementById('search-analytics-button');
+    const popularMoviesButton = document.getElementById('popular-movies-button');
+    const userManagementButton = document.getElementById('user-management-button');
+    const userAccountButton = document.getElementById('user-account-button');
+
+    if (mbtiButton) {
+        mbtiButton.addEventListener('click', () => updateDashboard('mbti'));
+    }
+    if (movieAnalyticsButton) {
+        movieAnalyticsButton.addEventListener('click', () => updateDashboard('movies'));
+    }
+    if (searchAnalyticsButton) {
+        searchAnalyticsButton.addEventListener('click', () => updateDashboard('search'));
+    }
+    if (popularMoviesButton) {
+        popularMoviesButton.addEventListener('click', () => updateDashboard('popular-movies'));
+    }
+    if (userManagementButton) {
+        userManagementButton.addEventListener('click', () => updateDashboard('user-management'));
+    }
+    if (userAccountButton) {
+        userAccountButton.addEventListener('click', () => {
+            document.querySelectorAll('.analytics-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            document.getElementById('user-management').style.display = 'block';
+            const userManagementContainer = document.querySelector('.user-management-content');
+            if (userManagementContainer) {
+                loadUserManagement(userManagementContainer);
+            }
+        });
+    }
+
     // ตรวจสอบ role ของผู้ใช้
     fetch(`/api/check-role?username=${username}`, {
         credentials: 'include'
-     })
-     .then(response => {
+    })
+    .then(response => {
         if (!response.ok) {
             throw new Error("Failed to fetch user role.");
         }
         return response.json();
-     })
-     .then(data => {
+    })
+    .then(data => {
         if (data.role !== 1) {
             alert("Access Denied: Admins Only");
             window.location.href = "/";
@@ -30,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 adminImage.innerHTML = `<div class="placeholder-image">${initials.toUpperCase()}</div>`;
             }
             document.querySelector("#admin-name").textContent = `${data.firstname} ${data.lastname}`;
-            
+
             document.querySelector('.logout-btn').addEventListener('click', async () => {
                 if (confirm('ต้องการออกจากระบบหรือไม่?')) {
                     try {
@@ -47,16 +83,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
             });
-            
-            // โหลดข้อมูลครั้งแรก 
+
+            // โหลดข้อมูลครั้งแรก
             loadMBTIStats();
         }
-     })
-     .catch(error => {
+    })
+    .catch(error => {
         console.error("Error:", error);
         alert("You are not logged in!");
         window.location.href = "/";
-     });
+    });
+});
 
     // ฟังก์ชันอัปเดท Dashboard
     async function updateDashboard(view) {
@@ -106,13 +143,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const mbtiStats = await response.json();
             const mbtiLabels = Object.keys(mbtiStats);
             const mbtiCounts = Object.values(mbtiStats);
-
+            const totalUsers = mbtiCounts.reduce((a, b) => a + b, 0);
+    
             // ลบกราฟเก่าถ้ามี
             const oldChart = Chart.getChart("mbti-chart");
             if (oldChart) {
                 oldChart.destroy();
             }
-
+    
             const ctx = document.getElementById("mbti-chart").getContext("2d");
             new Chart(ctx, {
                 type: "bar",
@@ -121,30 +159,66 @@ document.addEventListener("DOMContentLoaded", () => {
                     datasets: [{
                         label: "จำนวนผู้ใช้",
                         data: mbtiCounts,
-                        backgroundColor: "rgba(75, 192, 192, 0.2)",
+                        backgroundColor: "rgba(75, 192, 192, 0.7)",
                         borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 1
+                        borderWidth: 1,
+                        borderRadius: 5
                     }]
                 },
                 options: {
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: true },
+                        legend: { 
+                            display: true,
+                            position: 'top',
+                            labels: { color: "#fff" }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    const percentage = ((value / totalUsers) * 100).toFixed(1);
+                                    return `จำนวน: ${value} คน (${percentage}%)`;
+                                }
+                            }
+                        },
                         title: {
                             display: true,
-                            text: "MBTI Distribution",
-                            color: "#fff"
+                            text: 'การกระจายของ MBTI Types',
+                            color: "#fff",
+                            font: { size: 16, weight: 'bold' }
                         }
                     },
                     scales: {
                         x: { 
-                            ticks: { color: "#fff" },
+                            title: {
+                                display: true,
+                                text: 'MBTI Types',
+                                color: '#fff',
+                                font: { size: 14 }
+                            },
+                            ticks: { 
+                                color: "#fff",
+                                maxRotation: 45,
+                                minRotation: 45
+                            },
                             grid: { color: "rgba(255, 255, 255, 0.1)" }
                         },
                         y: { 
+                            title: {
+                                display: true,
+                                text: 'จำนวนผู้ใช้',
+                                color: '#fff',
+                                font: { size: 14 }
+                            },
                             beginAtZero: true,
-                            ticks: { color: "#fff" },
+                            ticks: { 
+                                color: "#fff",
+                                callback: function(value) {
+                                    return value + " คน";
+                                }
+                            },
                             grid: { color: "rgba(255, 255, 255, 0.1)" }
                         }
                     }
@@ -159,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ปรับปรุงฟังก์ชัน loadMovieAnalytics
 async function loadMovieAnalytics() {
     try {
-        console.log('เริ่มโหลดข้อมูลการวิเคราะห์ภาพยนตร์...');
+        const urlParams = new URLSearchParams(window.location.search);
         const username = urlParams.get("username");
         const response = await fetch(`/api/analytics/dashboard?username=${username}`);
         
@@ -172,66 +246,97 @@ async function loadMovieAnalytics() {
         // ลบกราฟเก่า
         ['topRatedChart', 'watchlistChart'].forEach(chartId => {
             const oldChart = Chart.getChart(chartId);
-            if (oldChart) {
-                oldChart.destroy();
-            }
+            if (oldChart) oldChart.destroy();
         });
+
+        // สร้าง Container ใหม่สำหรับแต่ละกราฟ
+        const container = document.querySelector('.movie-analytics-grid');
+        container.innerHTML = `
+            <div class="movie-chart-container" style="background-color: #2d2d2d; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                <h3 class="chart-title" style="color: white; font-size: 18px; margin-bottom: 16px; text-align: center;">อันดับภาพยนตร์ที่ได้รับคะแนนสูงสุด</h3>
+                <div style="position: relative; height: 400px;">
+                    <canvas id="topRatedChart"></canvas>
+                </div>
+            </div>
+            <div class="movie-chart-container" style="background-color: #2d2d2d; border-radius: 12px; padding: 24px;">
+                <h3 class="chart-title" style="color: white; font-size: 18px; margin-bottom: 16px; text-align: center;">ภาพยนตร์ยอดนิยมใน Watchlist</h3>
+                <div style="position: relative; height: 400px;">
+                    <canvas id="watchlistChart"></canvas>
+                </div>
+            </div>
+        `;
 
         if (data.topRatedMovies && data.topRatedMovies.length > 0) {
             const topRatedCtx = document.getElementById('topRatedChart').getContext('2d');
+            const sortedMovies = [...data.topRatedMovies]
+                .sort((a, b) => b.averageRating - a.averageRating)
+                .slice(0, 10);
+
             new Chart(topRatedCtx, {
                 type: 'bar',
                 data: {
-                    labels: data.topRatedMovies.map(m => m.title || m.movieName),
+                    labels: sortedMovies.map(m => m.title || m.movieName),
                     datasets: [{
                         label: 'คะแนนเฉลี่ย',
-                        data: data.topRatedMovies.map(m => m.averageRating),
-                        backgroundColor: "rgba(54, 162, 235, 0.5)",
+                        data: sortedMovies.map(m => m.averageRating),
+                        backgroundColor: "rgba(54, 162, 235, 0.8)",
                         borderColor: "rgba(54, 162, 235, 1)",
-                        borderWidth: 1,
-                        borderRadius: 5
-                    }, {
-                        label: 'จำนวนผู้ให้คะแนน',
-                        data: data.topRatedMovies.map(m => m.totalRatings),
-                        backgroundColor: "rgba(255, 159, 64, 0.5)",
-                        borderColor: "rgba(255, 159, 64, 1)",
-                        borderWidth: 1,
-                        borderRadius: 5
+                        borderWidth: 1
                     }]
                 },
                 options: {
-                    indexAxis: 'y',  // แสดงแนวนอน
+                    indexAxis: 'y',
                     responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 15,
+                            right: 25,
+                            top: 0,
+                            bottom: 0
+                        }
+                    },
                     scales: {
                         x: {
                             beginAtZero: true,
-                            grid: { color: "rgba(255, 255, 255, 0.1)" },
-                            ticks: { color: "#fff" }
+                            grid: {
+                                color: "rgba(255, 255, 255, 0.1)"
+                            },
+                            ticks: {
+                                color: "#fff",
+                                font: {
+                                    size: 12
+                                }
+                            }
                         },
                         y: {
-                            grid: { display: false },
-                            ticks: { color: "#fff" }
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: "#fff",
+                                font: {
+                                    size: 12,
+                                    weight: 'bold'
+                                }
+                            }
                         }
                     },
                     plugins: {
                         legend: {
-                            labels: { color: "#fff" }
-                        },
-                        title: {
-                            display: true,
-                            text: 'อันดับภาพยนตร์ที่ได้รับคะแนนสูงสุด',
-                            color: "#fff",
-                            font: { size: 16 }
+                            display: false
                         },
                         tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
                             callbacks: {
                                 label: function(context) {
-                                    const label = context.dataset.label;
-                                    const value = context.raw;
-                                    if (label === 'คะแนนเฉลี่ย') {
-                                        return `${label}: ${value.toFixed(2)} คะแนน`;
-                                    }
-                                    return `${label}: ${value} คน`;
+                                    const movie = sortedMovies[context.dataIndex];
+                                    return [
+                                        `คะแนนเฉลี่ย: ${context.raw.toFixed(2)} คะแนน`,
+                                        `จำนวนผู้ให้คะแนน: ${movie.totalRatings.toLocaleString()} คน`
+                                    ];
                                 }
                             }
                         }
@@ -242,53 +347,82 @@ async function loadMovieAnalytics() {
 
         if (data.popularWatchlistMovies && data.popularWatchlistMovies.length > 0) {
             const watchlistCtx = document.getElementById('watchlistChart').getContext('2d');
-            const total = data.popularWatchlistMovies.reduce((sum, movie) => sum + movie.count, 0);
+            const sortedWatchlist = [...data.popularWatchlistMovies]
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 8);
             
             new Chart(watchlistCtx, {
-                type: 'doughnut',
+                type: 'bar',
                 data: {
-                    labels: data.popularWatchlistMovies.map(w => w.movieTitle),
+                    labels: sortedWatchlist.map(w => w.movieTitle),
                     datasets: [{
-                        data: data.popularWatchlistMovies.map(w => w.count),
+                        label: 'จำนวนครั้ง',
+                        data: sortedWatchlist.map(w => w.count),
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.8)',
                             'rgba(54, 162, 235, 0.8)',
                             'rgba(255, 206, 86, 0.8)',
                             'rgba(75, 192, 192, 0.8)',
                             'rgba(153, 102, 255, 0.8)',
-                            'rgba(255, 159, 64, 0.8)',
-                            'rgba(255, 99, 132, 0.8)',
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(255, 206, 86, 0.8)',
-                            'rgba(75, 192, 192, 0.8)'
+                            'rgba(255, 159, 64, 0.8)'
                         ],
-                        borderColor: '#fff',
-                        borderWidth: 2
+                        borderWidth: 1
                     }]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
-                    cutout: '60%',
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 15,
+                            right: 25,
+                            top: 0,
+                            bottom: 0
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: {
+                                color: "rgba(255, 255, 255, 0.1)"
+                            },
+                            ticks: {
                                 color: "#fff",
-                                font: { size: 12 }
+                                font: {
+                                    size: 12
+                                }
                             }
                         },
-                        title: {
-                            display: true,
-                            text: 'ภาพยนตร์ยอดนิยมใน Watchlist',
-                            color: "#fff",
-                            font: { size: 16 }
+                        y: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: "#fff",
+                                font: {
+                                    size: 12,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
                         },
                         tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
                             callbacks: {
                                 label: function(context) {
-                                    const value = context.raw;
-                                    const percentage = ((value / total) * 100).toFixed(1);
-                                    return `${context.label}: ${value} ครั้ง (${percentage}%)`;
+                                    const total = sortedWatchlist.reduce((sum, movie) => sum + movie.count, 0);
+                                    const percentage = ((context.raw / total) * 100).toFixed(1);
+                                    return [
+                                        `จำนวน: ${context.raw} ครั้ง`,
+                                        `คิดเป็น: ${percentage}%`
+                                    ];
                                 }
                             }
                         }
@@ -319,8 +453,9 @@ async function loadSearchAnalytics() {
             throw new Error("ยังไม่มีข้อมูลการค้นหา");
         }
  
-        const labels = searchStats.map(stat => stat._id); 
+        const labels = searchStats.map(stat => stat._id);
         const counts = searchStats.map(stat => stat.count);
+        const totalSearches = counts.reduce((a, b) => a + b, 0);
  
         const ctx = document.getElementById('searchQueryChart').getContext('2d');
         const oldChart = Chart.getChart("searchQueryChart");
@@ -334,26 +469,33 @@ async function loadSearchAnalytics() {
                     label: 'จำนวนการค้นหา',
                     data: counts,
                     backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                    borderColor: 'rgba(54, 162, 235, 1)', 
-                    borderWidth: 2,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
                     borderRadius: 5
                 }]
             },
             options: {
-                indexAxis: 'y',  // แสดงแนวนอน
+                indexAxis: 'y',
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     x: { 
-                        ticks: { color: '#fff' },
-                        grid: { color: 'rgba(255,255,255,0.1)' },
                         title: {
                             display: true,
                             text: 'จำนวนครั้งที่ค้นหา',
                             color: '#fff',
                             font: { size: 14 }
-                        }
+                        },
+                        ticks: { color: '#fff' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
                     },
                     y: { 
+                        title: {
+                            display: true,
+                            text: 'คำค้นหา',
+                            color: '#fff',
+                            font: { size: 14 }
+                        },
                         ticks: { color: '#fff', font: { size: 12 } },
                         grid: { color: 'rgba(255,255,255,0.1)' }
                     }
@@ -371,7 +513,9 @@ async function loadSearchAnalytics() {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                return `ค้นหา ${context.raw} ครั้ง`;
+                                const value = context.raw;
+                                const percentage = ((value / totalSearches) * 100).toFixed(1);
+                                return `ค้นหา ${value} ครั้ง (${percentage}%)`;
                             }
                         }
                     }
@@ -382,7 +526,7 @@ async function loadSearchAnalytics() {
         console.error('Error loading search analytics:', error);
         alert('ไม่สามารถโหลดข้อมูลการค้นหาได้');
     }
- }
+}
 
  function addSearchFunctionality(users) {
     const searchInput = document.getElementById('searchInput');
@@ -673,6 +817,7 @@ window.editUser = editUser;  // ทำให้ฟังก์ชัน editUser
 window.closeModal = closeModal;  // ทำให้ฟังก์ชัน closeModal เป็น global
 async function fetchUsers() {
     try {
+        const urlParams = new URLSearchParams(window.location.search);
         const currentUsername = urlParams.get("username");
         const response = await fetch(`/api/admin/users?username=${currentUsername}`, {
             credentials: 'include'
@@ -837,7 +982,7 @@ function editUser(username) {
         "ISTJ", "ISFJ", "ESTJ", "ESFJ",
         "ISTP", "ISFP", "ESTP", "ESFP"
     ];
-
+    const urlParams = new URLSearchParams(window.location.search);
     const currentUsername = urlParams.get("username");
     fetch(`http://localhost:6001/api/admin/users?username=${currentUsername}`, {
         credentials: 'include'
@@ -994,5 +1139,4 @@ document.getElementById('backToMainPage').addEventListener('click', async () => 
         alert('Session expired. Please log in again.');
         window.location.href = 'http://127.0.0.1:5500/page/login_page/index.html';
     }
-});
 });

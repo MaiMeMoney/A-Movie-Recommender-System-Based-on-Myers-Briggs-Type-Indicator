@@ -41,38 +41,172 @@ const movieSchema = new mongoose.Schema({
     Star4: String,
     No_of_Votes: Number,
     Gross: String,
-    link_movies: String
+    link_movies: String,
+    viewCount: { type: Number, default: 0 } // เพิ่ม field viewCount พร้อมค่าเริ่มต้น
 });
+
+// เพิ่มต่อจาก Schema อื่นๆ
+const searchLogSchema = new mongoose.Schema({
+    query: { type: String, required: true },
+    category: { type: String, required: true },
+    username: String,
+    timestamp: { type: Date, default: Date.now }
+});
+
+const SearchLog = mongoose.model('SearchLog', searchLogSchema, 'searchlogs');
 
 const Movie = mongoose.model('movies_list', movieSchema, 'movies');
 
-// API to fetch a movie by movieId
-app.get('/movies_list/movies/:movieId', async (req, res) => {
+
+app.post('/movies_list/movies/:movieId/view', async (req, res) => {
     try {
         const movieId = req.params.movieId;
-
-        // ตรวจสอบว่า movieId มีรูปแบบที่ถูกต้อง
+        
         if (!ObjectId.isValid(movieId)) {
             return res.status(400).json({ message: 'Invalid movie ID format' });
         }
 
-        // ค้นหาใน MongoDB
-        const movie = await Movie.findOne({ _id: new ObjectId(movieId) });
+        // Increment view count and get the updated document
+        const updatedMovie = await Movie.findOneAndUpdate(
+            { _id: new ObjectId(movieId) },
+            { $inc: { viewCount: 1 } }, // ใช้ $inc เพื่อเพิ่มค่า viewCount ขึ้นที่ละ 1
+            { 
+                new: true, // return อัพเดทล่าสุด
+                upsert: false, // ไม่สร้างใหม่ถ้าไม่เจอ
+            }
+        );
 
-        if (!movie) {
-            console.log("Movie not found");
+        if (!updatedMovie) {
             return res.status(404).json({ message: 'Movie not found' });
         }
 
-        // Log ข้อมูลหนังเพื่อตรวจสอบว่ามี link_movies หรือไม่
-        console.log("Fetched movie data:", movie);
-
-        res.json(movie);
+        console.log(`View count incremented for movie ${movieId}. New count: ${updatedMovie.viewCount}`);
+        
+        res.status(200).json({ 
+            message: 'View recorded successfully',
+            viewCount: updatedMovie.viewCount 
+        });
+        
     } catch (error) {
-        console.error("Error fetching movie data:", error);
+        console.error("Error recording view:", error);
+        res.status(500).json({ message: 'Error recording view' });
+    }
+});
+
+app.post('/api/log-search', async (req, res) => {
+    try {
+        const { query, category, username } = req.body;
+
+        if (!query) {
+            return res.status(400).json({ message: 'Search query is required' });
+        }
+
+        const searchLog = new SearchLog({
+            query: query.toLowerCase(),
+            category: category || 'title',
+            username,
+            timestamp: new Date()
+        });
+
+        await searchLog.save();
+        console.log('Search logged:', searchLog);
+        res.status(201).json({ message: 'Search logged successfully' });
+    } catch (error) {
+        console.error('Error logging search:', error);
+        res.status(500).json({ message: 'Failed to log search' });
+    }
+});
+
+app.get('/api/search-stats', async (req, res) => {
+    try {
+        const stats = await SearchLog.aggregate([
+            {
+                $match: {
+                    timestamp: {
+                        $gte: new Date(new Date().setDate(new Date().getDate() - 30))
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        query: "$query",
+                        category: "$category"
+                    },
+                    count: { $sum: 1 },
+                    lastSearched: { $max: "$timestamp" },
+                    users: { $addToSet: "$username" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    query: "$_id.query",
+                    category: "$_id.category",
+                    count: 1,
+                    lastSearched: 1,
+                    uniqueUsers: { $size: "$users" }
+                }
+            },
+            { $sort: { count: -1, lastSearched: -1 } },
+            { $limit: 10 }
+        ]);
+
+        res.status(200).json(stats);
+    } catch (error) {
+        console.error("Error fetching search stats:", error);
+        res.status(500).json({ 
+            message: "Failed to fetch search stats",
+            error: error.message
+        });
+    }
+});
+
+app.get('/movies_list/movies/:movieId', async (req, res) => {
+    try {
+        const movieId = req.params.movieId;
+        
+        if (!ObjectId.isValid(movieId)) {
+            return res.status(400).json({ message: 'Invalid movie ID format' });
+        }
+
+        const movie = await Movie.findById(movieId);
+        
+        if (!movie) {
+            console.log(`Movie not found with ID: ${movieId}`);
+            return res.status(404).json({ message: 'Movie not found' });
+        }
+
+        // Log successful fetch
+        console.log('Successfully fetched movie:', {
+            id: movie._id,
+            title: movie.Series_Title,
+            viewCount: movie.viewCount
+        });
+
+        res.status(200).json(movie);
+        
+    } catch (error) {
+        console.error("Error fetching movie details:", error);
         res.status(500).json({ message: 'Error fetching movie details' });
     }
 });
+
+async function migrateViewCounts() {
+    try {
+        // อัปเดตเฉพาะ documents ที่ยังไม่มี viewCount
+        const result = await Movie.updateMany(
+            { viewCount: { $exists: false } },
+            { $set: { viewCount: 0 } }
+        );
+        console.log('Successfully migrated viewCount field:', result);
+    } catch (error) {
+        console.error('Error migrating viewCount:', error);
+    }
+}
+
+// เรียกใช้ migration เมื่อเริ่ม server
+migrateViewCounts();
 
 app.get('/movies', async (req, res) => {
     try {

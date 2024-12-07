@@ -78,15 +78,15 @@ header .title {
 }
 
 .logout-btn {
-    background-color: #ff5c5c;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
+    background-color: #ff5c5c;    /* พื้นหลังสีแดง */
 }
+
+.logout-btn:hover {
+    background-color: #ff3333;    /* สีแดงเข้มขึ้นเมื่อชี้ */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 
 nav ul {
     list-style: none;
@@ -96,23 +96,135 @@ nav ul {
 }
 
 nav ul li {
-    margin-bottom: 1rem;
+    margin-bottom: 0.7rem;      /* ระยะห่างระหว่างรายการ */
+    width: 100%;               /* ความกว้างเต็มพื้นที่ */
 }
 
+.sidebar-buttons {
+    width: 100%;               /* ความกว้างเต็มพื้นที่ */
+    padding: 0 1rem;          /* ระยะห่างซ้าย-ขวา */
+    box-sizing: border-box;   /* คำนวณขนาดรวมขอบและพื้นที่ภายใน */
+}
+
+.menu-btn, .logout-btn, .back-btn {
+    width: 100%;                    /* ความกว้าง 100% ของพื้นที่ */
+    padding: 0.8rem;               /* ระยะห่างขอบด้านใน */
+    border: none;                  /* ไม่มีเส้นขอบ */
+    color: #ffffff;                /* สีตัวอักษรขาว */
+    cursor: pointer;               /* เปลี่ยนเคอร์เซอร์เมื่อชี้ */
+    text-align: center;            /* จัดข้อความกึ่งกลาง */
+    font-size: 1rem;              /* ขนาดตัวอักษร */
+    font-weight: 500;             /* ความหนาตัวอักษร */
+    border-radius: 5px;           /* มุมโค้ง */
+    margin-bottom: 0.7rem;        /* ระยะห่างด้านล่าง */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);  /* เงาตัวอักษร */
+    transition: all 0.3s ease;    /* เอฟเฟกต์การเปลี่ยนแปลง */
+    letter-spacing: 0.5px;        /* ระยะห่างตัวอักษร */
+    display: block;               /* แสดงแบบบล็อก */
+    box-sizing: border-box;       /* คำนวณขนาดรวมขอบและพื้นที่ภายใน */
+}
+
+/* สไตล์เฉพาะสำหรับปุ่มเมนู (MBTI Distribution และอื่นๆ) */
 .menu-btn {
-    width: 100%;
-    padding: 0.7rem;
-    background-color: #000;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    text-align: center;
-    font-size: 0.95rem;
-    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.7);  /* พื้นหลังสีดำโปร่งใส */
 }
 
 .menu-btn:hover {
-    background-color: #444;
+    background-color: #444;               /* สีเมื่อชี้เมาส์ */
+    transform: translateY(-2px);          /* ยกขึ้นเล็กน้อย */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* เงาเมื่อชี้ */
+}
+
+.movie-analytics-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    margin: 0 auto;
+    max-width: 1400px;
+}
+
+.movie-chart-container {
+    background-color: #2d2d2d;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+
+.movie-chart-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.chart-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+/* Style สำหรับ Top Rated Movies */
+.top-rated-container {
+    margin-bottom: 2rem;
+}
+
+/* Style สำหรับ Watchlist Analytics */
+.watchlist-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* ปรับแต่ง Legend */
+.chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+/* ปรับแต่ง Tooltip */
+.chart-tooltip {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
+    padding: 0.5rem;
+    color: white;
+    font-size: 0.875rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.logout-btn, .back-btn {
+    width: 230px;  /* กำหนดความกว้างให้เท่ากับความกว้างของ sidebar */
+    padding: 0.8rem;
+    margin: 0.7rem auto;  /* ใช้ margin auto เพื่อจัดกึ่งกลาง */
+    display: block;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Main Content */
@@ -162,19 +274,13 @@ main {
 }
 
 .back-btn {
-    display: block;
-    margin: 10px auto;
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    background-color: #4CAF50;    /* พื้นหลังสีเขียว */
 }
 
 .back-btn:hover {
-    background-color: #45a049;
+    background-color: #45a049;    /* สีเขียวเข้มขึ้นเมื่อชี้ */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .analytics-grid {

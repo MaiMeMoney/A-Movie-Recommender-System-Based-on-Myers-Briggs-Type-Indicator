@@ -30,8 +30,12 @@
             </div>
             <nav>
                 <ul>
-                    <button id="user-account-button" class="menu-btn">User account management</button>
-                    <li><button class="menu-btn">Movie management</button></li>
+                    <li><button id="mbti-distribution-button" class="menu-btn">MBTI Distribution</button></li>
+                    <li><button id="movie-analytics-button" class="menu-btn">Movie Analytics</button></li>
+                    <li><button id="search-analytics-button" class="menu-btn">Search Analytics</button></li>
+                    <li><button id="popular-movies-button" class="menu-btn">Popular Movies</button></li>
+                    <li><button id="user-account-button" class="menu-btn">User account management</button></li>
+                    <li><button id="movie-management-button" class="menu-btn">Movie management</button></li>
                 </ul>
             </nav>
         </aside>
@@ -52,15 +56,11 @@
 
                 <!-- Movie Analytics Container -->
                 <div id="movie-analytics" class="analytics-container" style="display: none;">
-                    <div class="analytics-grid">
-                        <div class="chart-container">
-                            <h3>Top Rated Movies</h3>
-                            <!-- เพิ่ม canvas สำหรับ Top Rated Movies -->
+                    <div class="movie-analytics-grid">
+                        <div class="movie-chart-container">
                             <canvas id="topRatedChart"></canvas>
                         </div>
-                        <div class="chart-container">
-                            <h3>Most Added to Watchlists</h3>
-                            <!-- เพิ่ม canvas สำหรับ Watchlist -->
+                        <div class="movie-chart-container">
                             <canvas id="watchlistChart"></canvas>
                         </div>
                     </div>
