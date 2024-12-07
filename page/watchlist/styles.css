@@ -129,31 +129,38 @@ body {
     margin-left: 15px;
 }
 
-.account-icon {
-    font-size: 18px;
-    margin-left: 10px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: white;
-    transition: transform 0.2s;
-}
-
-.account-icon:hover {
-    transform: scale(1.1);
-}
-
 .my-list button {
     margin-left: 10px;
     padding: 8px 12px;
-    background-color: #e63946;
+    background-color: transparent;
     border: none;
     border-radius: 5px;
     color: white;
     cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s, transform 0.2s;
 }
+
+.account-icon {
+    font-size: 24px;
+    /* padding: 8px 12px; */
+    margin-left: 10px;
+    background: transparent;  /* เอาพื้นหลังออก */
+    border: none;             /* เอาขอบออก */
+    cursor: pointer;
+    color: white;             /* สีของไอคอน */
+}
+
+/* กำจัดการเปลี่ยนพื้นหลังเมื่อ hover หรือ focus */
+.account-icon:hover,
+.account-icon:focus {
+    background: transparent;  /* เอาพื้นหลังออกเมื่อ hover หรือ focus */
+    outline: none;             /* เอาเส้นที่เกิดจากการ focus ออก */
+}
+.account-icon:hover {
+   
+    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ Hover */
+}
+
+
 
 .my-list button:hover {
     background-color: #d62828;

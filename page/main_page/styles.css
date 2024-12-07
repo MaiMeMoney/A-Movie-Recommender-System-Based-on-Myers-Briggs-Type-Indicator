@@ -64,31 +64,58 @@ body {
     align-items: center;
 }
 
-.my-list button {
-    margin-left: 10px;
-    padding: 8px 12px;
-    background-color: #e63946;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-}
+
 
 .my-list i {
     margin-right: 5px;
     color: white; /* สีของไอคอน */
     font-size: 16px; /* ขนาดของไอคอน */
 }
-
+.my-list button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
 
 .account-icon {
-    font-size: 18px;
+    font-size: 24px;
+    /* padding: 8px 12px; */
     margin-left: 10px;
-    background: transparent;
-    border: none;
+    background: transparent;  /* เอาพื้นหลังออก */
+    border: none;             /* เอาขอบออก */
     cursor: pointer;
-    color: white;
+    color: white;             /* สีของไอคอน */
 }
+
+/* กำจัดการเปลี่ยนพื้นหลังเมื่อ hover หรือ focus */
+.account-icon:hover,
+.account-icon:focus {
+    background: transparent;  /* เอาพื้นหลังออกเมื่อ hover หรือ focus */
+    outline: none;             /* เอาเส้นที่เกิดจากการ focus ออก */
+}
+.account-icon:hover {
+   
+    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ Hover */
+}
+
+.admin-icon {
+    font-size: 24px;
+    margin-left: 10px;
+    /* padding: 8px 12px; */
+    background: transparent;  /* เอาพื้นหลังออก */
+    border: none;             /* เอาขอบออก */
+    cursor: pointer;
+    color: white;             /* สีของไอคอน */
+}
+.admin-icon:hover {
+   
+    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ Hover */
+}
+
 
 
 main {

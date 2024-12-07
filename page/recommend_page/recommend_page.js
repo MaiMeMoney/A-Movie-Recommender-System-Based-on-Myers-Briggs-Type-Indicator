@@ -9,6 +9,14 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "/page/login_page/index.html";
         return;
     }
+
+    // โหลดข้อมูล Recommended Movies จาก localStorage
+    const storedMovies = localStorage.getItem("recommendedMovies");
+    if (storedMovies) {
+        const movies = JSON.parse(storedMovies);
+        renderMovies(movies);
+    }
+
     // Load MBTI Type
     async function loadUserMBTI() {
         try {
@@ -49,13 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 });
     
-                const moviesArray = Array.from(uniqueMovies.values());
-            
-            // บันทึกข้อมูลใน localStorage
-            localStorage.setItem("recommendedMovies", JSON.stringify(moviesArray));
-
-            renderMovies(Array.from(uniqueMovies.values()));
-
+                renderMovies(Array.from(uniqueMovies.values()));
             } else {
                 console.error("Failed to fetch recommendations");
             }
@@ -64,25 +66,30 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     
+
+
     // Render Movies
 function renderMovies(movies) {
-    const movieGrid = document.querySelector('.movie-grid');
-    movieGrid.innerHTML = ''; // ล้างข้อมูลเก่า
+    movieGrid.innerHTML = ""; // Clear existing movies
 
-    movies.forEach((movie) => {
-        const movieItem = document.createElement('div');
-        movieItem.classList.add('movie-item');
+    movies.forEach(movie => {
+        const movieItem = document.createElement("div");
+        movieItem.classList.add("movie-item");
 
-        // HTML ของแต่ละหนัง พร้อมลิงก์ไปหน้า movie_details
+        // แสดงเฉพาะโปสเตอร์หนัง
         movieItem.innerHTML = `
-            <a href="/page/movie-details/movie-details.html?movieId=${movie.movieId}" style="text-decoration: none; color: inherit;">
-                <img src="${movie.Poster_Link || 'placeholder.png'}" alt="Movie Poster" style="width: 100%; height: auto; object-fit: cover; border-radius: 10px;">
-            </a>
+            <img src="${movie.Poster_Link || 'placeholder.png'}" alt="Movie Poster" 
+                style="width: 100%; height: auto; object-fit: cover; border-radius: 10px;">
         `;
-
+        
         movieGrid.appendChild(movieItem);
     });
 }
+
+    
+    
+    
+    
 
 
     // Add Event Listeners

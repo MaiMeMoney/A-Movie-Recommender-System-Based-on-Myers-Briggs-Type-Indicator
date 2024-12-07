@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('movieId');
+    
 
     if (!movieId) {
         alert("Movie not found.");
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // ตั้งค่าข้อมูลทั่วไป
         document.getElementById('movie-name').textContent = movie.Series_Title;
-        document.getElementById('movie-info').textContent = `${movie.Released_Year} · ${movie.Certificate} · ${movie.Runtime}`;
+        document.getElementById('movie-info').textContent = `${movie.Released_Year} · ${movie.Runtime}`;
         document.getElementById('movie-rating').textContent = `⭐ IMDB Rating ${movie.IMDB_Rating}/10`;
         document.getElementById('movie-poster').src = movie.Poster_Link;
         document.getElementById('movie-description').textContent = movie.Overview;
@@ -39,7 +40,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('meta-score').textContent = `Metascore: ${movie.Meta_score}`;
         document.getElementById('gross-amount').textContent = movie.Gross;
         document.getElementById('genre').textContent = movie.Genre;
-        
         // แสดง Video Trailer
         if (movie.link_movies) {
             const videoEmbed = `
@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         } else {
             document.getElementById('movie-video').textContent = "No trailer available";
         }
+        
     } catch (error) {
         console.error("Error fetching movie data:", error);
         alert("Failed to load movie details.");
@@ -124,6 +125,7 @@ function loadMovieDetails(movieId) {
             document.getElementById('movie-gross').textContent = `$${movie.Gross || "N/A"}`;
             document.getElementById('meta-score').textContent = `Metascore: ${movie.Meta_Score || "N/A"}`;
             document.getElementById('movie-poster').src = movie.Poster_Link || "placeholder.jpg";
+
         })
         .catch(error => {
             console.error("Error loading movie details:", error);
@@ -259,29 +261,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ส่งคะแนนและปิดป๊อปอัปพร้อมแจ้งเตือน
     async function submitRating(rating) {
-        const username = localStorage.getItem('username');
+        const username = localStorage.getItem('username'); // ใช้ username จาก localStorage
         const movieId = new URLSearchParams(window.location.search).get('movieId');
         const movieNameElement = document.getElementById('movie-name');
         const movieName = movieNameElement ? movieNameElement.textContent : "Unknown Movie";
-    
+
+        console.log('Sending Data:', { username, score: rating, movieName });
+
         if (!username || !movieId || !movieName) {
             showToast('Please login, select a movie, and try again.', 'error');
             return;
         }
-    
+
         try {
             const response = await fetch(`http://localhost:5001/movies_list/movies/${movieId}/rate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, score: rating, movieName }),
             });
-    
+
             const result = await response.json();
-    
+
             if (response.ok) {
-                const imdbRating = result.data.IMDB_Rating || "N/A";
-                document.getElementById('movie-rating').textContent = `⭐ IMDB Rating ${imdbRating}/10`;
+                document.getElementById('user-rating').textContent = `Your rating is ${rating}`;
                 showToast(`You have rated ${rating} star${rating > 1 ? 's' : ''}!`, 'success');
+                closePopupWithAnimation(); // ปิดป๊อปอัปหลังให้คะแนนสำเร็จ
             } else {
                 console.error('API Error:', result);
                 showToast(result.message || 'Failed to submit rating.', 'error');
@@ -315,5 +319,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3000);
     }
 });
+
 
 

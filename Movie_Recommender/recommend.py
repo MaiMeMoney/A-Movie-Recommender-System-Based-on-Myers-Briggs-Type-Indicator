@@ -70,30 +70,20 @@ def get_recommendations(token):
             if similarity > 0:
                 neighbors.append({"username": user["username"], "similarity": similarity})
 
-        # ดึงหนังทั้งหมดพร้อม `movieId` และคำนวณคะแนน
-        all_movies = movies_scores_collection.aggregate([
-            {"$group": {"_id": "$movieName", "movieId": {"$first": "$movieId"}}}
-        ])
-
+        # ดึงหนังทั้งหมดและคำนวณคะแนน
+        all_movies = movies_scores_collection.distinct("movieName")
         movie_scores = {}
 
         for movie in all_movies:
-            movie_name = movie["_id"]
-            movie_id = str(movie["movieId"])  # แปลง `ObjectId` เป็น `str`
-            if movie_name not in target_user_ratings:
-                predicted_rating = predict_rating(target_user_ratings, movie_name, neighbors)
+            if movie not in target_user_ratings:
+                predicted_rating = predict_rating(target_user_ratings, movie, neighbors)
                 if predicted_rating > 0:
                     # เก็บหนังที่มีคะแนนสูงสุด
-                    movie_scores[movie_name] = {
-                        "movieId": movie_id,
-                        "predictedRating": predicted_rating
-                    }
+                    if movie not in movie_scores or movie_scores[movie] < predicted_rating:
+                        movie_scores[movie] = predicted_rating
 
         # สร้างรายการคำแนะนำจากคะแนนสูงสุด
-        recommendations = [
-            {"movieName": movie, "movieId": details["movieId"], "predictedRating": details["predictedRating"]}
-            for movie, details in movie_scores.items()
-        ]
+        recommendations = [{"movieName": movie, "predictedRating": rating} for movie, rating in movie_scores.items()]
 
         # จัดลำดับผลลัพธ์
         sorted_recommendations = sorted(recommendations, key=lambda x: x["predictedRating"], reverse=True)[:10]
@@ -106,6 +96,8 @@ def get_recommendations(token):
     except Exception as e:
         print(f"Unexpected error in get_recommendations: {str(e)}")
         return {"error": f"Unexpected error: {str(e)}"}, 500
+
+
 
 # Flask API
 app = Flask(__name__)
