@@ -182,6 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // กำหนดปุ่ม "See More" ของแต่ละ genre
     const seeMoreButtons = [
+        // { id: 'see-more-movie-suggestions', category: 'genre', query: 'movie-suggestions' },
         { id: 'see-more-action', category: 'genre', query: 'action' },
         { id: 'see-more-fantasy', category: 'genre', query: 'fantasy' },
         { id: 'see-more-sci-fi', category: 'genre', query: 'sci-fi' },
@@ -240,6 +241,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// document.addEventListener('DOMContentLoaded', () => {
+//     const loader = document.querySelector('.loading-spinner');  // สมมติว่ามี element ที่แสดงการโหลด
+//     loader.style.display = 'block';  // แสดง spinner ขณะโหลดข้อมูล
+
+//     fetch('http://127.0.0.1:5001/movies/suggestions')
+//     .then(response => response.json())
+//     .then(data => {
+//         loader.style.display = 'none';  // ซ่อน spinner หลังจากโหลดเสร็จ
+
+//         // จำกัดให้แสดงแค่ 10 รายการ
+//         const limitedData = data.slice(0, 10);
+
+//         limitedData.forEach(movie => {
+//             const movieElement = document.createElement('div');
+//             movieElement.classList.add('movie-item');
+//             movieElement.innerHTML = `
+//                 <a href="/page/movie-details/movie-details.html?movieId=${movie._id}">
+//                     <img src="${movie.Poster_Link}" alt="${movie.Series_Title}" class="movie-poster">
+//                     <p>${movie.Series_Title}</p>
+//                     <p>IMDB Rating: ${movie.IMDB_Rating}</p>
+//                 </a>
+//             `;
+//             document.querySelector('.movie-suggestions .slider-container').appendChild(movieElement);
+//         });
+//     })
+//     .catch(error => {
+//         loader.style.display = 'none';  // ซ่อน spinner เมื่อเกิดข้อผิดพลาด
+//         console.error('Error fetching movies:', error);
+//         document.querySelector('.movie-suggestions .slider-container').innerHTML = '<p>เกิดข้อผิดพลาดในการดึงข้อมูลหนัง</p>';
+//     });
+// });
 document.addEventListener('DOMContentLoaded', function() {
     // ฟังก์ชันเพื่อดึงข้อมูลหนังจาก API
 fetch('http://localhost:5001/api/crime-movies')
