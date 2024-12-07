@@ -389,12 +389,19 @@ button:hover {
     margin-bottom: 5px;
 }
 
+/* ปรับความกว้างของช่องใส่ข้อความใน Modal */
 .modal form input,
-.modal form select {
+.modal form select,
+.modal form textarea {
+    width: 100%;  /* ทำให้ความกว้างเต็ม 100% */
+    max-width: 730px;  /* ตั้งขีดจำกัดความกว้างสูงสุด (หากต้องการ) */
     padding: 10px;
     margin-bottom: 20px;
     border-radius: 5px;
     border: 1px solid #ccc;
+}
+.modal form textarea {
+    height: 100%;
 }
 
 .modal form button {
