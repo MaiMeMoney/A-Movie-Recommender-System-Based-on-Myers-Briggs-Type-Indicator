@@ -107,8 +107,6 @@ def get_recommendations(token):
         print(f"Unexpected error in get_recommendations: {str(e)}")
         return {"error": f"Unexpected error: {str(e)}"}, 500
 
-
-
 # Flask API
 app = Flask(__name__)
 
@@ -143,8 +141,6 @@ def recommend():
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
-
-
 
 if __name__ == "__main__":
     app.run(debug=True, port=5003)

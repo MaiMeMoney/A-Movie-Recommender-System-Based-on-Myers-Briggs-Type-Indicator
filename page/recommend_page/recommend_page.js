@@ -9,14 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "/page/login_page/index.html";
         return;
     }
-
-    // โหลดข้อมูล Recommended Movies จาก localStorage
-    const storedMovies = localStorage.getItem("recommendedMovies");
-    if (storedMovies) {
-        const movies = JSON.parse(storedMovies);
-        renderMovies(movies);
-    }
-
     // Load MBTI Type
     async function loadUserMBTI() {
         try {
