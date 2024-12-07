@@ -681,3 +681,62 @@ button:hover {
     color: red;
     font-weight: bold;
   }
+
+/* ปรับไอคอน hint */
+.hint-icon {
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+    color: #007bff;
+    transition: color 0.3s ease;
+}
+
+.hint-icon:hover {
+    color: #0056b3;
+}
+
+#hint {
+    display: none;
+}
+
+#hint.show {
+    display: block;
+}
+
+#hint img {
+    display: block; /* ตรวจสอบว่า display: block; อยู่ */
+    width: 100%;     /* หรือกำหนดขนาดที่เหมาะสม */
+    max-width: 500px; /* ขนาดภาพที่ต้องการ */
+}
+
+
+/* ซ่อน Hint โดยเริ่มต้น */
+.hint {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    z-index: 10;
+}
+
+.hint-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* จัดตำแหน่ง Hint ให้อยู่ใต้ Label */
+label {
+    position: relative;
+    display: inline-block;
+}
+
+.hint {
+    top: 30px;  /* ปรับระยะห่างจาก label */
+    left: 0;
+}
+

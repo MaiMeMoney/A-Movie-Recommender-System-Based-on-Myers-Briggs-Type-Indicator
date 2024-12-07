@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // ตั้งค่าข้อมูลทั่วไป
         document.getElementById('movie-name').textContent = movie.Series_Title;
-        document.getElementById('movie-info').textContent = `${movie.Released_Year} · ${movie.Certificate} · ${movie.Runtime}`;
+        document.getElementById('movie-info').textContent = `${movie.Released_Year} · ${movie.Runtime}`;
         document.getElementById('movie-rating').textContent = `⭐ IMDB Rating ${movie.IMDB_Rating}/10`;
         document.getElementById('movie-poster').src = movie.Poster_Link;
         document.getElementById('movie-description').textContent = movie.Overview;

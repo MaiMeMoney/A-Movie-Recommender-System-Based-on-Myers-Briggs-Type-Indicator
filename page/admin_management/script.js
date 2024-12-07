@@ -655,6 +655,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// ค้นหาปุ่มและองค์ประกอบที่เกี่ยวข้อง
+const hintIcon = document.getElementById('hint-icon');
+const hint = document.getElementById('hint');
+
+// เพิ่ม event listener ให้กับปุ่ม
+hintIcon.addEventListener('click', () => {
+    // สลับการแสดงผลของ hint
+    if (hint.style.display === 'block') {
+        hint.style.display = 'none';  // ซ่อน hint
+    } else {
+        hint.style.display = 'block';  // แสดง hint
+    }
+});
+
+
+
+
+
 
 
 

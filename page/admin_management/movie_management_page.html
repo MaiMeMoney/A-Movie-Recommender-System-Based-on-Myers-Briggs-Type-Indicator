@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -82,7 +83,7 @@
             <!-- <label for="certificate">Certificate:</label>
             <input type="text" id="certificate" name="certificate" required> -->
 
-            <label for="runtime">Runtime <span class="required">*</span> :</label>
+            <label for="runtime">Runtime (Minutes) <span class="required">*</span> :</label>
             <input type="text" id="runtime" name="runtime" required>
 
             <label for="imdb-rating">IMDB Rating (decimal) <span class="required">*</span> :</label>
@@ -97,10 +98,10 @@
             <label for="meta-score">Meta Score <span class="required">*</span> :</label>
             <input type="number" id="meta-score" name="meta-score" required>
 
-            <label for="director">Directors <span class="required">*</span> :</label>
+            <label for="director">Director (s) <span class="required">*</span> :</label>
             <input type="text" id="director" name="director" required>
 
-            <label for="star1">Stars <span class="required">*</span> :</label>
+            <label for="star1">Star (s) <span class="required">*</span> :</label>
             <input type="text" id="star1" name="star1" required>
 
             <!-- <label for="star2">Star 2:</label>
@@ -112,7 +113,7 @@
             <label for="star4">Star 4:</label>
             <input type="text" id="star4" name="star4" required> -->
 
-            <label for="gross">Gross <span class="required">*</span> : (USD)</label>
+            <label for="gross">Gross (USD) <span class="required">*</span> :</label>
             <input type="text" id="gross" name="gross" required>
 
             <label for="link-movies">Link to Movie <span class="required">*</span> :</label>
@@ -141,7 +142,7 @@
             <!-- <label for="update-certificate">Certificate:</label>
             <input type="text" id="update-certificate" name="update-certificate" required> -->
 
-            <label for="update-runtime">Runtime :</label>
+            <label for="update-runtime">Runtime (Minutes) :</label>
             <input type="text" id="update-runtime" name="update-runtime" required>
 
             <label for="update-imdb-rating">IMDB Rating :</label>
@@ -156,10 +157,10 @@
             <label for="update-meta-score">Meta Score :</label>
             <input type="number" id="update-meta-score" name="update-meta-score">
 
-            <label for="update-director">Director :</label>
+            <label for="update-director">Director (s) :</label>
             <input type="text" id="update-director" name="update-director">
 
-            <label for="update-star1">Stars :</label>
+            <label for="update-star1">Stars (s) :</label>
             <input type="text" id="update-star1" name="update-star1">
 
             <!-- <label for="update-star2">Star 2:</label>
@@ -171,12 +172,22 @@
             <label for="update-star4">Star 4:</label>
             <input type="text" id="update-star4" name="update-star4"> -->
 
-            <label for="gross">Gross : (USD)</label>
+            <label for="gross">Gross (USD) :</label>
             <input type="text" id="update-gross" name="update-gross">
-
-            <label for="update-link-movies">Link to Movie :</label>
+            <!-- Hint (ซ่อนเริ่มต้น) -->
+            <div id="hint" style="display:none;">
+                <img src="hint1.png" alt="Hint Image" />
+                <!-- หรือ ถ้าเป็นตัวอักษร -->
+                <p>ให้ใช้รหัสที่อยู่ระหว่าง https://youtu.be/...? เป็นต้น ดังที่ขีดเส้นใต้ในภาพ</p>
+            </div>
+            
+            <label for="update-link-movies">Link to Movie :
+                <span class="hint-icon" id="hint-icon"><i class="fa fa-question-circle"></i></span> <!-- ใช้ FontAwesome icon -->
+            </label>
             <input type="text" id="update-link-movies" name="update-link-movies">
-
+        
+            
+            
             <button type="submit">Update Movie</button>
         </form>
     </div>
