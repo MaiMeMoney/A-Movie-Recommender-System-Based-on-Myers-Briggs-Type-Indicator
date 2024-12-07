@@ -669,3 +669,8 @@ button:hover {
     background-color: #f9f9f9;
     color: #1976D2;
 }
+
+.required {
+    color: red;
+    font-weight: bold;
+  }

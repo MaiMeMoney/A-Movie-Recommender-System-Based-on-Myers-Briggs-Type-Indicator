@@ -62,7 +62,7 @@ addMovieForm.addEventListener('submit', async (event) => {
     const seriesTitle = document.getElementById('series-title').value;
     const releasedYear = document.getElementById('released-year').value;
 
-    const certificate = document.getElementById('certificate').value;
+    // const certificate = document.getElementById('certificate').value;
     const runtime = document.getElementById('runtime').value;
 
 
@@ -72,9 +72,9 @@ addMovieForm.addEventListener('submit', async (event) => {
     const metaScore = document.getElementById('meta-score').value;
     const director = document.getElementById('director').value;
     const star1 = document.getElementById('star1').value;
-    const star2 = document.getElementById('star2').value;
-    const star3 = document.getElementById('star3').value;
-    const star4 = document.getElementById('star4').value;
+    // const star2 = document.getElementById('star2').value;
+    // const star3 = document.getElementById('star3').value;
+    // const star4 = document.getElementById('star4').value;
     const gross = document.getElementById('gross').value;
     const linkMovies = document.getElementById('link-movies').value;
 
@@ -97,9 +97,6 @@ addMovieForm.addEventListener('submit', async (event) => {
         metaScore,
         director,
         star1,
-        star2,
-        star3,
-        star4,
         gross,
         linkMovies
     };
@@ -176,7 +173,7 @@ function openUpdateModal(movieId) {
             document.getElementById('update-series-title').value = movie.Series_Title;
             document.getElementById('update-released-year').value = movie.Released_Year;
 
-            document.getElementById('update-certificate').value = movie.Certificate;
+            // document.getElementById('update-certificate').value = movie.Certificate;
             document.getElementById('update-runtime').value = movie.Runtime;
 
 
@@ -186,9 +183,9 @@ function openUpdateModal(movieId) {
             document.getElementById('update-meta-score').value = movie.Meta_score;
             document.getElementById('update-director').value = movie.Director;
             document.getElementById('update-star1').value = movie.Star1;
-            document.getElementById('update-star2').value = movie.Star2;
-            document.getElementById('update-star3').value = movie.Star3;
-            document.getElementById('update-star4').value = movie.Star4;
+            // document.getElementById('update-star2').value = movie.Star2;
+            // document.getElementById('update-star3').value = movie.Star3;
+            // document.getElementById('update-star4').value = movie.Star4;
             document.getElementById('update-gross').value = movie.Gross;
             document.getElementById('update-link-movies').value = movie.link_movies;
         })
@@ -217,7 +214,7 @@ updateMovieForm.addEventListener('submit', (event) => {
         posterLink: document.getElementById('update-poster-link').value,
         seriesTitle: document.getElementById('update-series-title').value,
         releasedYear: document.getElementById('update-released-year').value,
-        certificate: document.getElementById('update-certificate').value,
+        // certificate: document.getElementById('update-certificate').value,
         runtime: document.getElementById('update-runtime').value,
         imdbRating: parseFloat(document.getElementById('update-imdb-rating').value),
         genre: document.getElementById('update-genre').value,
@@ -225,9 +222,9 @@ updateMovieForm.addEventListener('submit', (event) => {
         metaScore: document.getElementById('update-meta-score').value,
         director: document.getElementById('update-director').value,
         star1: document.getElementById('update-star1').value,
-        star2: document.getElementById('update-star2').value,
-        star3: document.getElementById('update-star3').value,
-        star4: document.getElementById('update-star4').value,
+        // star2: document.getElementById('update-star2').value,
+        // star3: document.getElementById('update-star3').value,
+        // star4: document.getElementById('update-star4').value,
         gross: document.getElementById('update-gross').value,
         linkMovies: document.getElementById('update-link-movies').value
     };
