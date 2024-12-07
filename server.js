@@ -1149,15 +1149,23 @@ app.post('/recommend', async (req, res) => {
             return res.status(404).json({ message: 'No recommendations found!' });
         }
 
-        // ส่งรายชื่อหนังกลับ
-        console.log('Recommended movies:', recommendedMovies);
+                // ใน API /recommend
+        const movieDetails = await Promise.all(
+            recommendedMovies.map(async (movieScore) => {
+                const movie = await Movie.findById(movieScore.movieId);
+                return {
+                    movieId: movie._id, // เพิ่ม movieId ที่นี่
+                    movieName: movieScore.movieName,
+                    Poster_Link: movie ? movie.Poster_Link : null,
+                };
+            })
+        );
+
         res.status(200).json({
             mbti: userMbti.mbti_type,
-            recommendations: recommendedMovies.map(movie => ({
-                movieName: movie.movieName,
-                score: movie.score
-            }))
+            recommendations: movieDetails,
         });
+
     } catch (error) {
         console.error('Error in recommend API:', {
             message: error.message,

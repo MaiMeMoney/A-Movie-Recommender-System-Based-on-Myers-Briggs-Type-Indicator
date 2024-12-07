@@ -10,13 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    // โหลดข้อมูล Recommended Movies จาก localStorage
-    const storedMovies = localStorage.getItem("recommendedMovies");
-    if (storedMovies) {
-        const movies = JSON.parse(storedMovies);
-        renderMovies(movies);
-    }
-
     // Load MBTI Type
     async function loadUserMBTI() {
         try {
@@ -78,8 +71,9 @@ function renderMovies(movies) {
 
         // แสดงเฉพาะโปสเตอร์หนัง
         movieItem.innerHTML = `
-            <img src="${movie.Poster_Link || 'placeholder.png'}" alt="Movie Poster" 
-                style="width: 100%; height: auto; object-fit: cover; border-radius: 10px;">
+            <a href="/page/movie-details/movie-details.html?movieId=${movie.movieId}" style="text-decoration: none; color: inherit;">
+                <img src="${movie.Poster_Link || 'placeholder.png'}" alt="Movie Poster" style="width: 100%; height: auto; object-fit: cover; border-radius: 10px;">
+            </a>
         `;
         
         movieGrid.appendChild(movieItem);
