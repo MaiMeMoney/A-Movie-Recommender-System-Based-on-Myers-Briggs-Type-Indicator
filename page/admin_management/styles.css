@@ -34,21 +34,25 @@ header {
     overflow: hidden; /* Prevents the content from overflowing */
 }
 
-/* Left Sidebar */
+/* ปรับสไตล์ของ Left Sidebar */
 .left-sidebar {
-    width: 250px; /* Fixed width for the sidebar */
-    background-color: #32834F; /* Green */
+    width: 250px;
+    background-color: #32834F; /* สีเขียวเข้ม */
     padding: 20px;
     color: white;
     display: flex;
     flex-direction: column;
-    flex-shrink: 0; /* Prevents sidebar from shrinking */
+    flex-shrink: 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
 }
 
+/* ปรับสไตล์ Genre Header */
 .genre-header {
-    font-size: 20px;
-    margin-bottom: 20px;
-    text-align: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-align: left;
+    font-weight: bold;
     color: black;
 }
 
@@ -99,12 +103,15 @@ button:hover {
     background-color: #cc0000;
 }
 
+/* สไตล์ของรายการ Genre List */
 .genre-list {
-    flex-grow: 1;
-    overflow-y: auto;
     background-color: white;
     padding: 10px;
     margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    overflow-y: auto; /* Scroll หากรายการเกิน */
+    max-height: 300px; /* กำหนดความสูง */
 }
 
 .genre-list ul {
@@ -115,7 +122,13 @@ button:hover {
 
 .genre-list li {
     margin: 10px 0;
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+    padding: 8px 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .create-genre {
@@ -267,12 +280,21 @@ button:hover {
     cursor: pointer;
 }
 
+/* ปุ่ม Create Movie List */
 .create-genre button {
-    background-color: #4CAF50 !important; /* สีน้ำเงิน */
+    background-color: black;
+    color: white;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .create-genre button:hover {
-    background-color: #54b81a !important; /* น้ำเงินเข้มเมื่อ hover */
+    background-color: #333333; /* สีดำเข้ม */
 }
 
 .update {
@@ -417,12 +439,14 @@ button:hover {
     background-color: #45a049;
 }
 
-/* กำหนดสไตล์ของโปสเตอร์เมื่อเลือก */
+
 .movie-poster.selected {
-    border: 2px solid #1665db;  /* เพิ่มขอบสีน้ำเงินเพื่อแสดงการเลือก */
-    transform: scale(1.05);  /* ขยายโปสเตอร์เล็กน้อยเมื่อเลือก */
-    transition: transform 0.3s ease, border 0.3s ease;  /* เพิ่มการเคลื่อนไหว */
+    border: 2px solid #006400; /* เพิ่มขอบสีเขียว */
+    background-color: #d1ffd1; /* เพิ่มสีพื้นหลัง */
+    transform: scale(1.05); /* ขยายเล็กน้อย */
+    transition: transform 0.3s ease, border 0.3s ease, background-color 0.3s ease;
 }
+
 
 /* ปรับขนาดของ movie poster */
 .movie-poster img {
@@ -649,17 +673,30 @@ button:hover {
     background-color: #7f8c8d; /* สีเทาเข้มเมื่อ hover */
 }
 
+/* ปรับสีตัวอักษรใน Genre List */
 .genre-list li {
     margin: 10px 0;
-    font-size: 18px;
-    color: #4CAF50; /* หรือสีที่คุณต้องการ */
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000; /* สีตัวอักษรปกติ */
+    padding: 8px 10px;
+    border-bottom: 1px solid #ccc;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Hover Effects */
 .genre-list li:hover {
-    color: #1976D2; /* เปลี่ยนเป็นสีที่ต้องการเมื่อ hover เช่น น้ำเงินเข้ม */
+    background-color: #d1ffd1; /* สีพื้นหลังเมื่อ hover */
+    color: #006400; /* สีเขียวเข้มเมื่อ hover */
 }
+
+/* Active State (ถ้าต้องการแสดงผลเมื่อเลือก) */
+.genre-list li.active {
+    background-color: #32834F; /* สีพื้นหลังเมื่อ active */
+    color: white; /* สีตัวอักษรเมื่อ active */
+}
+
 
 /* ป้องกันการแสดงเมนูคลิกขวาปกติ */
 .genre-item {

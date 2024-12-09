@@ -669,6 +669,159 @@ hintIcon.addEventListener('click', () => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const genreItems = document.querySelectorAll(".genre-list li");
+    const rightContent = document.getElementById("right-content");
+
+    // Add event listeners to all genre items
+    genreItems.forEach(item => {
+        item.addEventListener("click", async () => {
+            const genre = item.getAttribute("data-genre"); // ดึง genre ที่คลิก
+            const movies = await fetchMoviesByGenre(genre); // เรียก API
+
+            // Clear the right content area
+            rightContent.innerHTML = "";
+
+            // Render movies in the right content area
+            if (movies.length > 0) {
+                movies.forEach(movie => {
+                    const movieCard = document.createElement("div");
+                    movieCard.className = "movie-poster";
+
+                    movieCard.innerHTML = `
+                        <img src="${movie.poster || 'placeholder.jpg'}" alt="${movie.title}">
+                        <div class="movie-title">${movie.title}</div>
+                    `;
+                    rightContent.appendChild(movieCard);
+                });
+            } else {
+                rightContent.innerHTML = `<p>No movies found for "${genre}"</p>`;
+            }
+        });
+    });
+});
+
+// ฟังก์ชันสำหรับดึงหนังตาม Genre
+async function fetchMoviesByGenre(genre) {
+    try {
+        const response = await fetch(`http://localhost:5001/api/movies/${genre}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const movies = await response.json();
+        const rightContent = document.querySelector('.right-content');
+        rightContent.innerHTML = ''; // ล้างเนื้อหาเดิมก่อน
+
+        if (movies.length > 0) {
+            movies.forEach(movie => {
+                const moviePoster = document.createElement('div');
+                moviePoster.classList.add('movie-poster');
+                moviePoster.setAttribute('data-movie-id', movie._id);
+                moviePoster.innerHTML = `
+                    <img src="${movie.Poster_Link}" alt="${movie.Series_Title}">
+                    <div class="movie-title">${movie.Series_Title}</div>
+                `;
+                rightContent.appendChild(moviePoster);
+            });
+
+            // เพิ่ม Event Listener สำหรับโปสเตอร์ที่โหลดใหม่
+            addPosterSelectionEvent();
+        } else {
+            rightContent.innerHTML = '<p>No movies found for this genre.</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching movies:', error);
+    }
+}
+
+
+// Add click event to movie posters for selection
+function addMovieSelectionEvent() {
+    const moviePosters = document.querySelectorAll('.movie-poster');
+    moviePosters.forEach(poster => {
+        poster.addEventListener('click', () => {
+            // ลบคลาส selected จากโปสเตอร์ทั้งหมด
+            document.querySelectorAll('.movie-poster').forEach(item => item.classList.remove('selected'));
+
+            // เพิ่มคลาส selected ให้กับโปสเตอร์ที่ถูกคลิก
+            poster.classList.add('selected');
+        });
+    });
+}
+
+// Call this function after rendering movies
+function renderMovies(movies) {
+    const rightContent = document.getElementById('right-content');
+    rightContent.innerHTML = '';
+
+    if (movies.length === 0) {
+        rightContent.innerHTML = '<p>No movies found for this genre.</p>';
+        return;
+    }
+
+    movies.forEach(movie => {
+        const moviePoster = document.createElement('div');
+        moviePoster.className = 'movie-poster';
+        moviePoster.setAttribute('data-id', movie._id); // เก็บ ID ของหนัง
+        moviePoster.innerHTML = `
+            <img src="${movie.Poster_Link}" alt="${movie.Series_Title}">
+            <h3>${movie.Series_Title}</h3>
+        `;
+        rightContent.appendChild(moviePoster);
+    });
+
+    // Add selection event to newly rendered movie posters
+    addMovieSelectionEvent();
+}
+
+// Event Listener สำหรับ Genre List
+document.querySelectorAll('.genre-list li').forEach(genreItem => {
+    genreItem.addEventListener('click', () => {
+        // ลบคลาส active จาก genre อื่น
+        document.querySelectorAll('.genre-list li').forEach(item => item.classList.remove('active'));
+        genreItem.classList.add('active');
+
+        const genre = genreItem.textContent.trim(); // อ่าน genre ที่เลือก
+        fetchMoviesByGenre(genre); // โหลดหนังตาม genre
+    });
+});
+
+
+
+function getSelectedMovie() {
+    const selectedPoster = document.querySelector('.movie-poster.selected');
+    if (!selectedPoster) {
+        alert('Please select a movie first.');
+        return null;
+    }
+
+    const movieId = selectedPoster.getAttribute('data-id');
+    return movieId;
+}
+
+function addPosterSelectionEvent() {
+    const posters = document.querySelectorAll('.movie-poster');
+    posters.forEach(poster => {
+        poster.addEventListener('click', () => {
+            // ลบคลาส selected จากโปสเตอร์ทั้งหมด
+            document.querySelectorAll('.movie-poster').forEach(p => p.classList.remove('selected'));
+
+            // เพิ่มคลาส selected ให้กับโปสเตอร์ที่ถูกคลิก
+            poster.classList.add('selected');
+            const selectedMovieId = poster.getAttribute('data-movie-id'); // เก็บ movieId
+            console.log('Selected Movie ID:', selectedMovieId); // Log เพื่อดีบัก
+        });
+    });
+}
+
+
+
+
+
+
+
+
 
 
 

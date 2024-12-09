@@ -1341,3 +1341,43 @@ app.get('/movies_list/movies_scores/:movieId/rating', async (req, res) => {
         res.status(500).json({ message: 'Failed to fetch rating.' });
     }
 });
+
+
+app.get('/api/movies/:genre', async (req, res) => {
+    try {
+        const genre = req.params.genre;
+        const movies = await Movie.find({ Genre: new RegExp(genre, 'i') });
+        if (movies.length === 0) {
+            return res.status(404).json({ message: 'No movies found' });
+        }
+        res.status(200).json(movies);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching movies', error: err.message });
+    }
+});
+
+app.delete('/api/movies/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await Movie.findByIdAndDelete(id);
+        if (!result) {
+            return res.status(404).json({ message: 'Movie not found' });
+        }
+        res.status(200).json({ message: 'Movie deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error deleting movie', error: err.message });
+    }
+});
+
+app.get('/api/movies/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const movie = await Movie.findById(id);
+        if (!movie) {
+            return res.status(404).json({ message: 'Movie not found' });
+        }
+        res.status(200).json(movie);
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching movie', error: err.message });
+    }
+});
