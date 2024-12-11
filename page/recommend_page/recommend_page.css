@@ -14,14 +14,15 @@ body {
     left: 0;
     width: 100%;
     display: flex;
-    justify-content: space-between; /* จัดวางองค์ประกอบด้านซ้ายและด้านขวา */
+    justify-content: space-between; /* จัดวางซ้าย-ขวา */
     align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
     background-color: #32834F;
-    padding: 10px 20px;
+    padding: 10px 20px; /* เพิ่มระยะห่างด้านใน */
     z-index: 1000;
-    border: none;
-    box-shadow: none;
+    box-sizing: border-box; /* เพื่อให้ padding รวมในความกว้าง */
 }
+
+
 
 .logo {
     font-size: 24px;
@@ -60,16 +61,23 @@ body {
 .my-list {
     display: flex;
     align-items: center;
+    gap: 15px;
 }
 
 .my-list button {
     margin-left: 10px;
     padding: 8px 12px;
-    background-color: #e63946;
-    border: none;
+    background: transparent !important; /* ลบพื้นหลัง */
+    border: none; /* ลบขอบ */
     border-radius: 5px;
-    color: white;
+    color: white; /* สีของข้อความหรือไอคอน */
     cursor: pointer;
+}
+
+.navbar .my-list-icon {
+    background: transparent !important; /* !important จะบังคับให้ใช้ค่านี้ */
+    border: none; /* ลบขอบที่อาจปรากฏ */
+    color: white; /* ยืนยันสีของไอคอน */
 }
 
 .my-list i {
@@ -78,39 +86,89 @@ body {
     font-size: 16px; /* ขนาดของไอคอน */
 }
 
+.account-icon:hover {
+    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ Hover */
+}
+/* กำจัดการเปลี่ยนพื้นหลังเมื่อ hover หรือ focus */
+.my-list-icon:hover,
+.my-list-icon:focus,
+.my-list-icon:active {
+    background: transparent !important; /* ลบพื้นหลังในทุกสถานะ */
+    outline: none; /* ลบเส้นที่เกิดจาก focus */
+    color: #f4a261; /* เพิ่มสีไอคอนเมื่อ hover ถ้าต้องการ */
+}
 
 .account-icon {
-    font-size: 18px;
-    margin-left: 5px;
+    font-size: 22px;
     background: transparent;
     border: none;
     cursor: pointer;
     color: white;
 }
 
-/* ปรับแต่งปุ่ม My List Icon */
+.admin-icon {
+    font-size: 24px;
+    margin-left: 10px;
+    background: transparent;  /* เอาพื้นหลังออก */
+    border: none;             /* เอาขอบออก */
+    cursor: pointer;
+    color: white;             /* สีของไอคอน */
+}
+
+.admin-icon:hover {
+    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ Hover */
+}
+
+.username-display {
+    margin-right: 15px;
+    font-size: 16px;
+    color: #fff;
+}
+
 .my-list-icon {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 40px;
     height: 40px;
-    background-color: transparent; /* พื้นหลังโปร่งใส */
-    color: white; /* สีของไอคอน */
+    background: transparent !important; /* ลบพื้นหลังสีแดง */
+    color: white;
     cursor: pointer;
     text-decoration: none;
-    font-size: 18px; /* ขนาดของไอคอน */
-    margin-right: 5px;
+    font-size: 22px;
+    border: none;
+    outline: none;
 }
+
+.my-list-icon:hover,
+.my-list-icon:focus,
+.my-list-icon:active {
+    background: transparent !important; /* ยืนยันว่าไม่มีพื้นหลัง */
+    color: #f4a261; /* สีเมื่อ hover */
+    outline: none; /* ลบเส้นขอบเมื่อ focus */
+}
+
+
+
+.my-list-icon:hover {
+    background: transparent !important; /* ยืนยันว่าไม่มีพื้นหลัง */
+    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ hover */
+    color: #f4a261; /* เปลี่ยนสีไอคอนเมื่อ hover */
+}
+
+
+a.my-list-icon {
+    background: transparent !important; /* บังคับลบพื้นหลัง */
+}
+
+
 
 .my-list-icon i {
     font-size: 22px; /* ขนาดของไอคอน */
 }
 
-.my-list-icon:hover {
-   
-    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ Hover */
-}
+
+
 
 .search-container {
     display: flex; /* ใช้ flexbox เพื่อให้อยู่ในแถวเดียวกัน */

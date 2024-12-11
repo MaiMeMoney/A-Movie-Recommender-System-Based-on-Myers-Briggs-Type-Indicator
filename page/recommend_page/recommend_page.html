@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MovieMingle - Recommended</title>
     <link rel="stylesheet" href="recommend_page.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Top Navigation Bar -->
@@ -16,27 +17,29 @@
             <div class="search-container">
                 <select id="search-category">
                     <option value="title">Movie Title</option>
-                    <option value="director">Director</option>
                     <option value="actor">Actor</option>
+                    <option value="director">Director</option>
                     <option value="genre">Genre</option>
                 </select>
                 <input type="text" id="search-bar" class="search-bar" placeholder="Search Movie...">
-                <div id="suggestion-box"></div>
                 <button id="search-button">Search</button>
             </div>
             <div class="my-list">
-                <span id="username-display" class="username-display"></span>
+                <span id="username-display" class="username-display">Welcome, MaiMeMoney</span>
                 <a href="/page/watchlist/index.html" class="my-list-icon">
                     <i class="fas fa-bookmark"></i>
                 </a>
                 <button class="account-icon" onclick="goToProfile()">👤</button>
-                 <!-- เพิ่มปุ่มมงกุฏ -->
-                 <button id="admin-icon" class="admin-icon" onclick="goToAdminDashboard()" style="display: none;">
+
+            
+                <button id="admin-icon" class="admin-icon" onclick="goToAdminDashboard()" style="display: none;">
                     👑
                 </button>
             </div>
         </div>
     </header>
+    
+    
 
     <!-- Main Section -->
     <main>

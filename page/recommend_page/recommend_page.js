@@ -94,3 +94,21 @@ function renderMovies(movies) {
 
     loadUserMBTI();
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const username = localStorage.getItem('username');
+
+    if (!username) {
+        alert('You are not logged in!');
+        window.location.href = '/page/login_page/index.html';
+        return;
+    }
+
+    document.getElementById('username-display').textContent = `Welcome, ${username}`;
+
+    window.goToProfile = function () {
+        window.location.href = `/page/Personal information editing page/index.html?username=${username}`;
+    };
+});
+
+
