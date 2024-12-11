@@ -10,6 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    // โหลดข้อมูล Recommended Movies จาก localStorage
+    const storedMovies = localStorage.getItem("recommendedMovies");
+    if (storedMovies) {
+        const movies = JSON.parse(storedMovies);
+        renderMovies(movies);
+    }
+
     // Load MBTI Type
     async function loadUserMBTI() {
         try {
@@ -49,6 +56,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         uniqueMovies.set(movie.movieName, movie);
                     }
                 });
+
+                const moviesArray = Array.from(uniqueMovies.values());
+                
+                localStorage.setItem("recommendedMovies", JSON.stringify(moviesArray));
     
                 renderMovies(Array.from(uniqueMovies.values()));
             } else {
