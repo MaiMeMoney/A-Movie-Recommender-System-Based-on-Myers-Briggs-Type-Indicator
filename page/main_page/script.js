@@ -17,6 +17,38 @@ function scrollRight(sectionClass) {
     }
 }
 
+document.addEventListener('DOMContentLoaded', async function () {
+    const username = localStorage.getItem('username');
+    const adminIcon = document.querySelector('.admin-icon');
+
+    if (!username) {
+        alert('You are not logged in!');
+        window.location.href = '/page/login_page/index.html';
+        return;
+    }
+
+    // แสดง username บนหน้า
+    document.getElementById('username-display').textContent = `Welcome, ${username}`;
+
+    try {
+        // เช็ค role ของผู้ใช้ผ่าน API
+        const response = await fetch(`http://localhost:6001/api/check-role?username=${username}`);
+        const data = await response.json();
+
+        if (data.role === 1) { // role = 1 หมายถึง admin
+            console.log(`User ${username} is an admin. Showing admin icon.`);
+            adminIcon.style.display = 'block'; // แสดงปุ่มมงกุฏสำหรับ admin
+            adminIcon.addEventListener('click', function () {
+                window.location.href = `http://localhost:6001/admin/dashboard?username=${username}`;
+            });
+        } else {
+            console.log(`User ${username} is not an admin.`);
+        }
+    } catch (error) {
+        console.error('Error fetching role data:', error);
+    }
+});
+
 // Display recommended movies from localStorage
 document.addEventListener('DOMContentLoaded', function () {
     const recommendedMovies = localStorage.getItem('recommendedMovies'); // Fetch data from localStorage
