@@ -1140,3 +1140,14 @@ document.getElementById('backToMainPage').addEventListener('click', async () => 
         window.location.href = 'http://127.0.0.1:5500/page/login_page/index.html';
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const movieManagementButton = document.getElementById('movie-management-button');
+    
+    if (movieManagementButton) {
+        movieManagementButton.addEventListener('click', () => {
+            // เปลี่ยนเส้นทางไปยังหน้า movie_management_page
+            window.location.href = 'http://127.0.0.1:5500/page/admin_management/movie_management_page.html'; // แก้ URL ตามตำแหน่งจริง
+        });
+    }
+});
