@@ -89,7 +89,6 @@ addMovieForm.addEventListener('submit', async (event) => {
         posterLink,
         seriesTitle,
         releasedYear,
-        certificate,
         runtime,
         imdbRating,
         genre,
