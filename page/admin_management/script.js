@@ -610,6 +610,8 @@ document.getElementById('update-movie-form').addEventListener('submit', (event) 
     document.getElementById('updateMovieModal').style.display = 'none';
 });
 
+
+
 // เมื่อเพิ่ม genre ใหม่
 createGenreForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -799,20 +801,107 @@ function getSelectedMovie() {
     return movieId;
 }
 
-function addPosterSelectionEvent() {
-    const posters = document.querySelectorAll('.movie-poster');
-    posters.forEach(poster => {
-        poster.addEventListener('click', () => {
-            // ลบคลาส selected จากโปสเตอร์ทั้งหมด
-            document.querySelectorAll('.movie-poster').forEach(p => p.classList.remove('selected'));
+// Setup Modal for Deleting Movie
+// Setup Modal for Deleting Movie
+function setupDeleteMovieModal() {
+    const modal = document.getElementById('deleteMovieModal');
+    const closeModal = document.getElementById('close-delete-modal');
+    const cancelDeleteButton = document.getElementById('cancel-delete-button');
+    const confirmDeleteButton = document.getElementById('confirm-delete-button');
+    
+    // When Cancel or Close button is clicked, close modal
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+    cancelDeleteButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
 
-            // เพิ่มคลาส selected ให้กับโปสเตอร์ที่ถูกคลิก
+    // When Confirm button is clicked, delete selected movie and close modal
+    confirmDeleteButton.addEventListener('click', () => {
+        const selectedPoster = document.querySelector('.movie-poster.selected');
+        
+        if (!selectedPoster) {
+            alert('Please select a movie to delete');
+            modal.style.display = 'none';
+            return;
+        }
+
+        const selectedMovieId = selectedPoster.getAttribute('data-movie-id');
+        console.log(`Deleting movie with ID: ${selectedMovieId}`);
+
+        // Remove the selected movie poster from DOM
+        selectedPoster.remove();
+
+        // Close the modal after deletion
+        modal.style.display = 'none';
+
+        // Show success notification after movie is deleted
+        showNotification('Movie deleted successfully', 'success');
+    });
+}
+
+// Function to display the modal when user clicks delete button
+function showDeleteModal() {
+    const modal = document.getElementById('deleteMovieModal');
+    const selectedPoster = document.querySelector('.movie-poster.selected');
+    
+    // If a poster is selected, show the modal
+    if (selectedPoster) {
+        modal.style.display = 'block';
+    } else {
+        alert('Please select a movie to delete');
+    }
+}
+
+// Function to show notification
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    
+    // Set the message text
+    notification.textContent = message;
+    
+    // Set the notification type class (success or error)
+    notification.className = `notification show ${type}`;
+    
+    // Hide the notification after 3 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+// Add event listener for the Delete button
+document.getElementById('delete-movie-button').addEventListener('click', showDeleteModal);
+
+// Event listener for the Cancel button inside modal
+document.getElementById('cancel-delete-button').addEventListener('click', () => {
+    document.getElementById('deleteMovieModal').style.display = 'none';
+});
+
+// Function to add event listeners for selecting movie posters
+function addPosterSelectionEvent() {
+    const moviePosters = document.querySelectorAll('.movie-poster');
+
+    moviePosters.forEach(poster => {
+        poster.addEventListener('click', () => {
+            // Deselect previously selected poster
+            document.querySelectorAll('.movie-poster').forEach(p => p.classList.remove('selected'));
             poster.classList.add('selected');
-            const selectedMovieId = poster.getAttribute('data-movie-id'); // เก็บ movieId
-            console.log('Selected Movie ID:', selectedMovieId); // Log เพื่อดีบัก
         });
     });
 }
+
+// When the page loads, set up poster selection and delete modal
+document.addEventListener('DOMContentLoaded', () => {
+    setupDeleteMovieModal(); // Setup modal for deleting
+    addPosterSelectionEvent(); // Setup movie poster selection
+});
+
+// Event listener for closing modal with 'X' button
+document.getElementById('close-delete-modal').addEventListener('click', () => {
+    document.getElementById('deleteMovieModal').style.display = 'none';
+});
+
 
 function goBack() {
     if (window.history.length > 1) {
